@@ -1,34 +1,48 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-    <!--Страница с приветствием и входом + возможность регистрации-->
-    <meta charset="UTF-8">
-    <title>Authentications</title>
-    <script src="script.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign in</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <!-- Favicons -->
+    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon.ico">
+    <meta name="theme-color" content="#712cf9">
+
+    <!-- Custom styles for this template -->
+    <link href="css/signin.css" rel="stylesheet">
 </head>
-<body>
-    <p><h1>Приветствие!</h1>
 
-    <p><h2>Вход</h2>
-    <form action = "">
-        <fieldset>
-            <!--div допишу, как изучу css-->
-            <div>
-               <label for = "username">Логин:</label>
-                <input id = "username" type = "text" name = "username" placeholder = "логин">
-            </div>
-            <div>
-                <label for = "password">Пароль:</label>
-                <input id = "password" type = "password" name = "password" placeholder = "пароль">
-            </div>
-            <input type="button" value="Log In" onclick="login();">
-        </fieldset>
-        <div>
-            <input type="button" value="Ping server" onclick="ping1();">
-        </div>
-    </form>
+<body class="text-center">
 
-    <p><a href = "Registration_page.html">Регистрация</a></p>
+    <main class="form-signin w-100 m-auto">
+        <form>
+            <img class="mb-4 " class="center" src="/images/icon1.svg" alt="" width="350" height="350" ce>
+            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+            <div class="form-floating">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">Email address</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                <label for="floatingPassword">Password</label>
+            </div>
+
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" value="remember-me"> Remember me
+                </label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+            <p class="mt-5 mb-3 text-muted">Успехов! и точка.&copy; 2022</p>
+        </form>
+    </main>
+
+
 
 </body>
+
 </html>
