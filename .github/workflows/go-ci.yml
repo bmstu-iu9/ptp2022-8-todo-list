@@ -1,0 +1,27 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  ci:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_BUILDKIT: "1"
+    defaults:
+      run:
+        working-directory: backend/
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run linter
+      run: make lint
+    - name: Run unit tests
+      run: make unit-test
+    - name: Get unit test coverage
+      run: make unit-test-coverage
+    - name: Build containers
+      run: make
