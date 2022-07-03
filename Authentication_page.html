@@ -4,6 +4,7 @@
     <!--Страница с приветствием и входом + возможность регистрации-->
     <meta charset="UTF-8">
     <title>Authentications</title>
+    <script src="script.js"></script>
 </head>
 <body>
     <p><h1>Приветствие!</h1>
@@ -13,15 +14,18 @@
         <fieldset>
             <!--div допишу, как изучу css-->
             <div>
-               <label for = "login">Логин:</label>
-                <input id = "login" type = "text" name = "login" placeholder = "логин">
+               <label for = "username">Логин:</label>
+                <input id = "username" type = "text" name = "username" placeholder = "логин">
             </div>
             <div>
                 <label for = "password">Пароль:</label>
                 <input id = "password" type = "password" name = "password" placeholder = "пароль">
             </div>
-            <input type="submit">
+            <input type="button" value="Log In" onclick="login();">
         </fieldset>
+        <div>
+            <input type="button" value="Ping server" onclick="ping1();">
+        </div>
     </form>
 
     <p><a href = "Registration_page.html">Регистрация</a></p>
