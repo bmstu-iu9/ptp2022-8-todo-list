@@ -16,3 +16,6 @@
 *.json
 *.lock
 *.ejs
+*.jpg
+*.svg
+*.webp
