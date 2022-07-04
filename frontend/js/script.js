@@ -55,7 +55,7 @@ var login = function () {
 
     var json = JSON.stringify({
         name: username,
-        password: sha256(password),
+        password: sha256(pswd),
     })
 
     xhr.open('POST', 'https://localhost:8080', true)
