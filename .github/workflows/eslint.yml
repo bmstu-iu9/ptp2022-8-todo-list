@@ -1,0 +1,62 @@
+name: Linting
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    linting:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                node-version: [12.x]
+
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  ref: ${{ github.head_ref }}
+
+            - name: Staring Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node-version }}
+
+            - name: Restoring Yarn cache
+              uses: actions/cache@v2
+              with:
+                  path: '**/node_modules'
+                  key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+            - name: Bootstraping packages
+              if: steps.yarn-cache.outputs.cache-hit != 'true'
+              run: yarn install
+
+            - name: Get file changes
+              id: get_file_changes
+              uses: trilom/file-changes-action@v1.2.3
+              with:
+                  output: ' '
+
+            - name: Echo file changes
+              id: hello
+              run: |
+                  echo Added files: ${{ steps.get_file_changes.outputs.files_added }}
+                  echo Changed files: ${{ steps.get_file_changes.outputs.files_modified }}
+                  echo Removed files: ${{ steps.get_file_changes.outputs.files_removed }}
+            - name: Prettier Checking
+              if: ${{ always() && (steps.get_file_changes.outputs.files_added || steps.get_file_changes.outputs.files_modified) }}
+              run: yarn prettier --config ./prettier.config.js --ignore-path ./.prettierignore  ${{ steps.get_file_changes.outputs.files_added }} ${{ steps.get_file_changes.outputs.files_modified }} --fix
+
+            - name: ESLint Checking
+              if: ${{ always() && (steps.get_file_changes.outputs.files_added || steps.get_file_changes.outputs.files_modified) }}
+              run: yarn eslint --config ./.eslintrc.js --ignore-path ./.eslintignore ${{ steps.get_file_changes.outputs.files_added }} ${{ steps.get_file_changes.outputs.files_modified }} --fix
+
+            - name: Commit changes
+              if: always()
+              uses: stefanzweifel/git-auto-commit-action@v4.1.2
+              with:
+                  commit_message: Apply formatting changes
+#           branch: ${{ github.head_ref }}
