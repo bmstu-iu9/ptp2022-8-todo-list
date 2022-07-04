@@ -1,51 +1,49 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Sign in</title>
+        <link
+            href="/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+            crossorigin="anonymous"
+        />
+        <!-- Favicons -->
+        <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon.ico" />
+        <meta name="theme-color" content="#712cf9" />
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sign in</title>
-    <link href="/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <!-- Favicons -->
-    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon.ico">
-    <meta name="theme-color" content="#712cf9">
+        <!-- Custom styles for this template -->
+        <link href="css/signin.css" rel="stylesheet" />
+        <script src="js/remember.js"></script>
+    </head>
 
-    <!-- Custom styles for this template -->
-    <link href="css/signin.css" rel="stylesheet">
-    <script src="js/remember.js"></script>
-</head>
+    <body class="text-center bg-dark text-white">
+        <main class="form-signin w-100 m-auto">
+            <form>
+                <img class="mb-4" class="center" src="/images/icon1.svg" alt="" width="350" height="350" ce />
+                <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
-<body class="text-center bg-dark text-white">
+                <div class="form-floating">
+                    <input type="email" class="form-control" id="email" placeholder="name@example.com" />
+                    <label for="floatingInput" class="text-dark">Email address</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password" />
+                    <label for="floatingPassword" class="text-dark">Password</label>
+                </div>
 
-    <main class="form-signin w-100 m-auto">
-        <form>
-            <img class="mb-4 " class="center" src="/images/icon1.svg" alt="" width="350" height="350" ce>
-            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-
-            <div class="form-floating">
-                <input type="email" class="form-control" id="email" placeholder="name@example.com">
-                <label for="floatingInput" class="text-dark">Email address</label>
-            </div>
-            <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                <label for="floatingPassword" class="text-dark">Password</label>
-            </div>
-
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" value="remember-me" id="remember"> Remember me
-                </label>
-            </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-            <br><br>
-            <a href="Registration_page.html" class="w-75 btn btn-lg btn-secondary" type="submit">Зарегистрироваться</a>
-            <p class="mt-5 mb-3 text-white">Успехов! и точка.&copy; 2022</p>
-        </form>
-    </main>
-
-
-
-</body>
-
+                <div class="checkbox mb-3">
+                    <label> <input type="checkbox" value="remember-me" id="remember" /> Remember me </label>
+                </div>
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+                <br /><br />
+                <a href="Registration_page.html" class="w-75 btn btn-lg btn-secondary" type="submit"
+                    >Зарегистрироваться</a
+                >
+                <p class="mt-5 mb-3 text-white">Успехов! и точка.&copy; 2022</p>
+            </form>
+        </main>
+    </body>
 </html>
