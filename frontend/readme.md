@@ -8,6 +8,20 @@
 
 В браузере открыть [http;//localhost:1234](http;//localhost:1234) для просмотра.
 
+Если браузер вдруг перестал отображать ваши изменения в коде(и вы уверены, что всё написали правильно) необходимо поменять порт вывода в `package.json`:
+
+```json
+
+"scripts": {
+    "dev": "parcel ./frontend/index.html -p 8000 --open", //меняем значение после -p, перезапускаем
+    "start": "parcel build --public-url ./ ./frontend/index.html ",
+    "lint": "npx eslint ./frontend/js/*.js"
+  },
+
+```
+
+
+
 ## `npm run build`
 
 Собирает приложение для деплоя в папку `build`.
