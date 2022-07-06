@@ -25,3 +25,4 @@ tsconfig.json
 *.jpg
 *.svg
 *.webp
+backend/**
