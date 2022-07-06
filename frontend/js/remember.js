@@ -16,6 +16,5 @@ rememeberButton.addEventListener('click', () => {
     } else {
         localStorage.username = ''
         localStorage.checkbox = ''
-        createClsasa.sasa =sasa
     }
 })
