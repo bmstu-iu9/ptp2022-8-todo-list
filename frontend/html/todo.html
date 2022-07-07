@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <meta name="theme-color" content="#712cf9" />
+
+  <title>Document</title>
+  <link href="../scss/todo.scss" rel="stylesheet" />
+</head>
+
+<body class="bg-dark w-100 h-100 row">
+  <div class="menu">
+
+    <input id="menu__toggle" class="d-none" type="checkbox" />
+    <label class="menu__btn" for="menu__toggle">
+      <span></span>
+    </label>
+    <ul class="menu__box nav flex-column">
+
+     <li class="nav-item">
+        <a class="nav-link active" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-app" viewBox="0 0 16 16">
+            <path d="M11 2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3h6zM5 1a4 4 0 0 0-4 4v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4V5a4 4 0 0 0-4-4H5z"/>
+          </svg><p>Профиль</p>
+        </a>
+      </li>
+
+      <li class="nav-item open">
+        <a class="nav-link active" href="todo.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-app" viewBox="0 0 16 16">
+            <path d="M11 2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3h6zM5 1a4 4 0 0 0-4 4v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4V5a4 4 0 0 0-4-4H5z"/>
+          </svg> <p>Список дел</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-app" viewBox="0 0 16 16">
+            <path d="M11 2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3h6zM5 1a4 4 0 0 0-4 4v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4V5a4 4 0 0 0-4-4H5z"/>
+          </svg> <p>Магазин</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-app" viewBox="0 0 16 16">
+            <path d="M11 2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3h6zM5 1a4 4 0 0 0-4 4v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4V5a4 4 0 0 0-4-4H5z"/>
+          </svg> <p>Выход</p>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="body">
+
+  </div>
+
+</body>
+
+</html>
