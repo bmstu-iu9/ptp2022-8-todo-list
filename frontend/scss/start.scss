@@ -4,7 +4,7 @@ body {
   margin: 0;
   background-size: cover;
   width: 100%;
-  background-image: url(../index.html);
+  background-image: url(../images/index-bg.jpg);
 }
 
 header {
@@ -13,6 +13,17 @@ header {
 
 .menu {
   margin-bottom: 5vw;
+  @media screen and (max-width: 768px) {
+    .signin{
+      margin-top: 15px;
+    }
+  }
+  @media screen and (min-width: 768px){
+    .signin{
+      margin-right: 5vw;
+    }
+  }
+  
 }
 
 .btn-secondary,
@@ -72,11 +83,12 @@ header {
 }
 
 .images {
-  .end-block {
-    margin-bottom: 6vw;
+  .img{
+    margin: 10px 20px;
+    padding: 10px 10px;
   }
-
   h1 {
+    margin-top: 10vw;
     font-size: max(30px, min(60px, 10vw))
   }
 
