@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "parcel ./frontend/index.html -p 8000 --open",
     "start": "parcel build --public-url ./ ./frontend/index.html ",
-    "lint": "npx eslint ./frontend/js/*.js"
+    "lint": "npx eslint ./frontend/js/*"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/stewkk/minimal-login-page#readme",
   "devDependencies": {
+    "@parcel/transformer-sass": "^2.6.2",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
     "eslint": "^8.19.0",
