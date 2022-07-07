@@ -13,39 +13,76 @@
         <meta name="theme-color" content="#712cf9" />
 
         <!-- Custom styles for this template -->
-        <link href="../css/signin.css" rel="stylesheet" />
-        <script src="../js/remember.js"></script>
+        <link href="../scss/signin.scss" rel="stylesheet" />
+        <script src="../js/register.ts"></script>
     </head>
-
     <body class="text-center bg-dark text-white">
-        <main class="form-signin mw-100 m-auto">
-            <form>
-                <img class="mb-4" class="center" src="../images/icon1.svg"
-                    alt="" width="350" height="350" ce />
-                <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+        <div class="mw-90 form-signin">
+            <div class="login">
+                <form>
+                    <img class="mb-4" class="center" src="../images/icon1.svg"
+                        alt="" width="350" height="350" ce />
+                    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
-                <div class="form-floating">
-                    <input type="email" class="form-control" id="email"
-                        placeholder="name@example.com" />
-                    <label for="floatingInput" class="text-dark">Email address</label>
-                </div>
-                <div class="form-floating">
-                    <input type="password" class="form-control"
-                        id="floatingPassword" placeholder="Password" />
-                    <label for="floatingPassword" class="text-dark">Password</label>
-                </div>
+                    <div class="form-floating">
+                        <input type="email" class="form-control" id="email"
+                            placeholder="name@example.com" />
+                        <label for="floatingInput" class="text-dark">Email
+                            address</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password-2" class="form-control"
+                            id="floatingPassword" placeholder="Password" />
+                        <label for="floatingPassword" class="text-dark">Password</label>
+                    </div>
 
-                <div class="checkbox mb-3">
-                    <label> <input type="checkbox" value="remember-me"
-                            id="remember" /> Remember me </label>
-                </div>
-                <button class="w-100 btn btn-lg btn-primary" type="submit">Sign
-                    in</button>
-                <br /><br />
-                <a href="Registration_page.html" class="w-75 btn btn-lg
-                    btn-secondary" type="submit">Зарегистрироваться</a>
-                <p class="mt-5 mb-3 text-white">Успехов! и точка.&copy; 2022</p>
-            </form>
-        </main>
+                    <div class="checkbox mb-3">
+                        <label> <input type="checkbox" value="remember-me"
+                                id="remember" /> Remember me </label>
+                    </div>
+                    <button class="w-100 btn btn-lg btn-primary" id="login"
+                        type="submit">Sign
+                        in</button>
+                    <br /><br />
+                    <a class="w-75 btn btn-lg
+                        btn-secondary btn-login" type="">Зарегистрироваться</a>
+                </form>
+            </div>
+            <div class="register hidden">
+                <form>
+                    <img class="mb-4" class="center" src="../images/icon1.svg"
+                        alt="" width="350" height="350" ce />
+                    <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+
+                    <div class="form-floating">
+                        <input type="email" class="form-control" id="email"
+                            placeholder="name@example.com" />
+                        <label for="floatingInput" class="text-dark">Email
+                            address</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password-1" class="form-control"
+                            id="floatingPassword" placeholder="Password" />
+                        <label for="floatingPassword" class="text-dark">Password</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password-2" class="form-control"
+                            id="floatingPassword" placeholder="Password" />
+                        <label for="floatingPassword" class="text-dark"> Confirm
+                            password</label>
+                        <p class="password-check">Пароли не совпадают</p>
+                        <button class="w-100 btn btn-lg btn-primary"
+                            id="register"
+                            type="submit">Sign up</button>
+                        <br /><br />
+                        <a class="w-75 btn btn-lg btn-secondary btn-regis"
+                            type="submit">Уже с нами? Войти</a>
+                    </div>
+                </form>
+
+            </div>
+            <br><br>
+            <p class="mt-5 mb-3 text-white">Успехов! и точка.&copy; 2022</p>
+        </div>
     </body>
 </html>
