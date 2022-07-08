@@ -3,7 +3,7 @@
 body {
     margin: 0;
     position: relative;
-    $width_menu: 100px;
+    $width_menu: 110px;
     .menu {
         .open{
             background-color: #0d6efd;
@@ -96,6 +96,15 @@ body {
                 // padding: 20px 0;
                 left: 0;
                 width: $width_menu;
+
+                .nav-item-end{
+                    position: absolute;
+                    bottom: 0;
+                    width: $width_menu;
+                    a{
+                        color: $danger;
+                    }
+                }
             }
 
             display: block;
@@ -123,7 +132,7 @@ body {
             font-family: 'Roboto', sans-serif; 
             @media screen and (min-width: 769px) {
                 font-size: 14px;
-                font-weight: 400;
+                font-weight: 600;
 
                 .nav-link{
                     text-align: center;
