@@ -28,3 +28,5 @@ tsconfig.json
 backend/**
 **/Dockerfile
 **/Makefile
+*.go
+*.mod
