@@ -1,10 +1,20 @@
-name: Linting
+name: Frontend
 
 on:
     push:
         branches: [main]
     pull_request:
         branches: [main]
+        paths:
+          - "frontend/**"
+          - ".eslintignore"
+          - ".eslintrc.js"
+          - "package.json"
+          - "package-lock.json"
+          - "prettier.config.js"
+          - ".prettierignore"
+          - ".prettierrc"
+          - "yarn.lock"
 
 jobs:
     linting:
