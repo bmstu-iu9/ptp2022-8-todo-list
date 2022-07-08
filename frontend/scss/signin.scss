@@ -26,12 +26,12 @@ body {
 		border-bottom-right-radius: 0;
 		border-bottom-left-radius: 0;
 	}
-	input[type="password-1"] {
+	.password-1 {
 		margin-bottom: -1px;
 		border-top-left-radius: 0;
 		border-top-right-radius: 0;
 	}
-	input[type="password-2"] {
+	input[type="password"]:not(.password-1) {
 		margin-bottom: 10px;
 		border-top-left-radius: 0;
 		border-top-right-radius: 0;
