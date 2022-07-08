@@ -5,9 +5,11 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+    paths:
+      - "**.go"
+      - "go.**"
 
 jobs:
-
   ci:
     runs-on: ubuntu-latest
     env:
@@ -21,7 +23,3 @@ jobs:
       run: make lint
     - name: Run unit tests
       run: make unit-test
-    - name: Get unit test coverage
-      run: make unit-test-coverage
-    - name: Build containers
-      run: make
