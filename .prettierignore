@@ -20,4 +20,5 @@
 *.svg
 *.webp
 backend/**
-Dockerfile
+**/Dockerfile
+**/Makefile
