@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: backend/
+    container_name: api
+    ports:
+      - 8080:8080
+    deploy:
+      restart_policy:
+        condition: on-failure
+  frontend:
+    build:
+      context: .
+    container_name: frontend
+    volumes:
+      - .:/code
+    ports:
+      - 80:8000
+    deploy:
+      restart_policy:
+        condition: on-failure
