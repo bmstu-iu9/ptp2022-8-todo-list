@@ -18,6 +18,8 @@ var entries = []entry{
 	{ID: "351", Value: "pukpuk"},
 }
 
+// Тестируем запуск CI
+
 func main() {
 	router := gin.Default()
 	router.GET("/entries", getEntries)
