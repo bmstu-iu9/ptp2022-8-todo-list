@@ -5,6 +5,7 @@ body {
     position: relative;
     $width_menu: 115px;
     .menu {
+        z-index: 1;
         .open{
             background-color: #0d6efd;
             a{
@@ -162,10 +163,14 @@ body {
     }
 
     .body {
-        position: absolute;
         @media screen and (min-width: 769px) {
             left: $width_menu;
             max-width: calc(100% - $width_menu);
+            padding: 0;
+            position: absolute;
+        }
+        @media screen and (max-width: 768px) {
+            padding-top: 66px;
         }
     }
 }
