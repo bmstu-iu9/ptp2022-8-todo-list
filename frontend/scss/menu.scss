@@ -1,0 +1,171 @@
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+body {
+    margin: 0;
+    position: relative;
+    $width_menu: 115px;
+    .menu {
+        .open{
+            background-color: #0d6efd;
+            a{
+                color: #ECEFF1;
+            }
+        }
+        height: 0;
+
+        #menu__toggle {
+            width: 0;
+        }
+
+        @media screen and (max-width: 768px) {
+
+            p{
+                display: inline;
+                margin-left: 6px;
+            }
+
+            #menu__toggle:checked~.menu__btn>span {
+                transform: rotate(45deg);
+            }
+
+            #menu__toggle:checked~.menu__btn>span::before {
+                top: 0;
+                transform: rotate(0);
+            }
+
+            #menu__toggle:checked~.menu__btn>span::after {
+                top: 0;
+                transform: rotate(90deg);
+            }
+
+            #menu__toggle:checked~.menu__box {
+                visibility: visible;
+                left: 0;
+            }
+
+            .menu__btn {
+                display: flex;
+                align-items: center;
+                position: fixed;
+                top: 20px;
+                left: 20px;
+
+                width: 26px;
+                height: 26px;
+
+                cursor: pointer;
+                z-index: 1;
+            }
+
+            .menu__btn>span,
+            .menu__btn>span::before,
+            .menu__btn>span::after {
+                display: block;
+                position: absolute;
+
+                width: 100%;
+                height: 2px;
+
+                background-color: #616161;
+
+                transition-duration: .25s;
+            }
+
+            .menu__btn>span::before {
+                content: '';
+                top: -8px;
+            }
+
+            .menu__btn>span::after {
+                content: '';
+                top: 8px;
+            }
+
+            .menu__box {
+                visibility: hidden;
+                left: -100%;
+                padding: 80px 0;
+                width: 300px;
+            }
+
+
+        }
+
+        .menu__box {
+            @media screen and (min-width: 768px) {
+                // padding: 20px 0;
+                left: 0;
+                width: $width_menu;
+
+                .nav-item-end{
+                    position: absolute;
+                    bottom: 0;
+                    width: $width_menu;
+                    a{
+                        color: $danger;
+                    }
+                }
+            }
+
+            display: block;
+            position: fixed;
+            top: 0;
+
+            height: 100%;
+
+            margin: 0;
+
+            list-style: none;
+
+            background-color: #ECEFF1;
+            box-shadow: 1px 0px 6px rgba(0, 0, 0, .2);
+
+            transition-duration: .25s;
+        }
+
+        .nav-item {
+            display: block;
+            padding: calc(16px + 5%) auto;
+
+            color: #333;
+
+            font-family: 'Roboto', sans-serif; 
+            @media screen and (min-width: 769px) {
+                font-size: 14px;
+                font-weight: 600;
+
+                .nav-link{
+                    text-align: center;
+                }
+
+                svg{
+                    width: max(30px, min(50px, 5vw));
+                    height: max(30px, min(50px, 5vw));
+                    display: block;
+                    margin: 1em auto 0;
+                }
+            }
+            @media screen and (max-width: 768px) {
+                font-size: 21px;
+                font-weight: 600;
+            }
+
+            text-decoration: none;
+
+            transition-duration: .25s;
+
+        }
+
+        .nav-item:not(.open):hover {
+            background-color: #CFD8DC;
+        }
+    }
+
+    .body {
+        position: absolute;
+        @media screen and (min-width: 769px) {
+            left: $width_menu;
+            max-width: calc(100% - $width_menu);
+        }
+    }
+}
