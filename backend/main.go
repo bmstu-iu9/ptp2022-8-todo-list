@@ -19,6 +19,7 @@ func main() {
 
 func hello(w http.ResponseWriter, r *http.Request) {
 	counter++
+	w.Header().Add("Access-Control-Allow-Origin", "*")
 	_, err := w.Write([]byte(fmt.Sprintf("Георгий, вот ваш API. (%v)", counter)))
 	if err != nil {
 		log.Fatal("Failed to write response")
