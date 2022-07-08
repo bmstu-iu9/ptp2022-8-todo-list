@@ -1,9 +1,0 @@
-mode: set
-minimal-login-page/backend/data-provider/main.go:21.13,27.16 5 0
-minimal-login-page/backend/data-provider/main.go:31.2,32.16 2 0
-minimal-login-page/backend/data-provider/main.go:36.2,37.16 2 0
-minimal-login-page/backend/data-provider/main.go:27.16,29.3 1 0
-minimal-login-page/backend/data-provider/main.go:32.16,34.3 1 0
-minimal-login-page/backend/data-provider/main.go:37.16,39.3 1 0
-minimal-login-page/backend/data-provider/main.go:42.33,44.2 1 0
-minimal-login-page/backend/data-provider/main.go:46.27,48.2 1 0
