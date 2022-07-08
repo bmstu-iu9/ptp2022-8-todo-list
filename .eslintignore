@@ -26,3 +26,4 @@ tsconfig.json
 *.svg
 *.webp
 backend/**
+Dockerfile

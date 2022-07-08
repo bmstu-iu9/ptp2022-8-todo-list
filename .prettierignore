@@ -20,3 +20,4 @@
 *.svg
 *.webp
 backend/**
+Dockerfile
