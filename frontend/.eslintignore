@@ -26,3 +26,8 @@ tsconfig.json
 *.svg
 *.webp
 backend/**
+**/Dockerfile
+**/Makefile
+*.go
+*.mod
+**/CNAME
