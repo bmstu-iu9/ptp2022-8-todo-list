@@ -17,7 +17,7 @@ services:
     volumes:
       - ./frontend:/code/frontend
     ports:
-      - 80:8000
+      - 8000:8000
     deploy:
       restart_policy:
         condition: on-failure

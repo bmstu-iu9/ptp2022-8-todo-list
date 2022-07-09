@@ -98,7 +98,7 @@ RESTful API на Go.
 | `make frontend` | Запускает frontend с realtime обновлениями                                               |
 | `make lint`     | Запускает линтер для frontend                                                            |
 
-Frontend доступен на [localhost](http://localhost), а api на [localhost:8080](http://localhost:8080).
+Frontend доступен на [localhost:8000](http://localhost:8000), а api на [localhost:8080](http://localhost:8080).
 
 В папке `backend/`:
 

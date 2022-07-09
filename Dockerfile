@@ -18,4 +18,4 @@ CMD npm run lint
 
 FROM base
 CMD npm run dev
-EXPOSE 80
+EXPOSE 8000
