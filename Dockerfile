@@ -14,8 +14,8 @@ COPY frontend/ /code/frontend/
 
 FROM base AS lint
 ADD .prettierrc /code
-CMD npm run lint
+CMD ["npm", "run", "lint"]
 
 FROM base
-CMD npm run dev
+CMD ["npm", "run", "dev"]
 EXPOSE 8000
