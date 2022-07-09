@@ -24,3 +24,4 @@ backend/**
 **/Makefile
 *.go
 *.mod
+**/CNAME
