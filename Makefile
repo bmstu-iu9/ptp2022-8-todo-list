@@ -8,6 +8,10 @@ dev:
 frontend:
 	@docker compose up frontend
 
+.PHONY: build-lint
+build-lint:
+	@docker build --target lint . 2>&1 >/dev/null | tee .build.log
+
 .PHONY: lint
-lint:
-	@docker run -it --rm $$(docker build --target lint -q .)
+lint: build-lint
+	@docker run --rm -it $(shell grep "writing image" .build.log | head -n 1 | cut -d ' ' -f 4)

@@ -13,11 +13,7 @@ RUN yarn install
 COPY frontend/ /code/frontend/
 
 FROM base AS lint
-ADD .eslintignore /code
-ADD .eslintrc.js /code
-ADD prettier.config.js /code
 ADD .prettierrc /code
-ADD .prettierignore /code
 CMD npm run lint
 
 FROM base
