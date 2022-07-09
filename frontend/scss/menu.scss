@@ -98,13 +98,16 @@ body {
                 left: 0;
                 width: $width_menu;
 
-                .nav-item-end{
+                .exit{
                     position: absolute;
                     bottom: 0;
                     width: $width_menu;
-                    a{
-                        color: $danger;
-                    }
+                }
+            }
+
+            .exit{
+                a{
+                    color: $danger;
                 }
             }
 
