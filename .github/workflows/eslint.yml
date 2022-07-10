@@ -5,12 +5,6 @@ on:
         branches: [main]
     pull_request:
         branches: [main]
-        paths:
-          - "frontend/**"
-          - "package.json"
-          - "package-lock.json"
-          - ".prettierrc"
-          - "yarn.lock"
 
 jobs:
     linting:
@@ -21,9 +15,9 @@ jobs:
                 node-version: [12.x]
 
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
               with:
-                  ref: ${{ github.head_ref }}
+                  fetch-depth: 0
 
             - name: Staring Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v1
@@ -40,12 +34,14 @@ jobs:
               if: steps.yarn-cache.outputs.cache-hit != 'true'
               run: yarn install
 
-            - name: Get file changes
-              id: get_file_changes
+            - name: Get specific changed files
+              id: changed-files
               uses: tj-actions/changed-files@v23.1
               with:
-                  files: 'frontend/**' 
-                  output: ' '
+                files: |
+                  **/*.html
+                  **/*.css
+                  **/*.js
 
             - name: Echo file changes
               id: hello
@@ -53,6 +49,7 @@ jobs:
                   echo Added files: ${{ steps.changed-files.outputs.added_files }}
                   echo Changed files: ${{ steps.changed-files.outputs.modified_files }}
                   echo Removed files: ${{ steps.changed-files.outputs.deleted_files }}
+
             - name: Prettier Checking
               if: ${{ always() && (steps.get_file_changes.outputs.files_added || steps.get_file_changes.outputs.files_modified) }}
               run: yarn prettier --config ./prettier.config.js --ignore-path ./.prettierignore  ${{ steps.get_file_changes.outputs.files_added }} ${{ steps.get_file_changes.outputs.files_modified }} --fix
