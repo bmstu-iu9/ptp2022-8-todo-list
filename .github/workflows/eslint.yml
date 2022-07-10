@@ -7,12 +7,8 @@ on:
         branches: [main]
         paths:
           - "frontend/**"
-          - ".eslintignore"
-          - ".eslintrc.js"
           - "package.json"
           - "package-lock.json"
-          - "prettier.config.js"
-          - ".prettierignore"
           - ".prettierrc"
           - "yarn.lock"
 
@@ -25,7 +21,7 @@ jobs:
                 node-version: [12.x]
 
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v2
               with:
                   ref: ${{ github.head_ref }}
 
@@ -46,23 +42,24 @@ jobs:
 
             - name: Get file changes
               id: get_file_changes
-              uses: trilom/file-changes-action@v1.2.4
+              uses: tj-actions/changed-files@v23.1
               with:
+                  files: 'frontend/**' 
                   output: ' '
 
             - name: Echo file changes
               id: hello
               run: |
-                  echo Added files: ${{ steps.get_file_changes.outputs.files_added }}
-                  echo Changed files: ${{ steps.get_file_changes.outputs.files_modified }}
-                  echo Removed files: ${{ steps.get_file_changes.outputs.files_removed }}
+                  echo Added files: ${{ steps.changed-files.outputs.added_files }}
+                  echo Changed files: ${{ steps.changed-files.outputs.modified_files }}
+                  echo Removed files: ${{ steps.changed-files.outputs.deleted_files }}
             - name: Prettier Checking
               if: ${{ always() && (steps.get_file_changes.outputs.files_added || steps.get_file_changes.outputs.files_modified) }}
-              run: yarn prettier --config ./frontend/prettier.config.js --ignore-path ./frontend/.prettierignore  ${{ steps.get_file_changes.outputs.files_added }} ${{ steps.get_file_changes.outputs.files_modified }} --fix
+              run: yarn prettier --config ./prettier.config.js --ignore-path ./.prettierignore  ${{ steps.get_file_changes.outputs.files_added }} ${{ steps.get_file_changes.outputs.files_modified }} --fix
 
             - name: ESLint Checking
               if: ${{ always() && (steps.get_file_changes.outputs.files_added || steps.get_file_changes.outputs.files_modified) }}
-              run: yarn eslint --config ./frontend/.eslintrc.js --ignore-path ./frontend/.eslintignore ${{ steps.get_file_changes.outputs.files_added }} ${{ steps.get_file_changes.outputs.files_modified }} --fix
+              run: yarn eslint --config ./.eslintrc.js --ignore-path ./.eslintignore ${{ steps.get_file_changes.outputs.files_added }} ${{ steps.get_file_changes.outputs.files_modified }} --fix
 
             - name: Commit changes
               if: always()
