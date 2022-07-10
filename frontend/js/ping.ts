@@ -6,7 +6,8 @@ window.onload = function () {
 
     pingBtn.addEventListener('click', () => {
         const http = new XMLHttpRequest()
-        
+        const host = 'localhost'
+        const port = 8080
 
         http.open('GET', 'http://' + host + ':' + port + '/hello', /*async*/ true)
         try {
