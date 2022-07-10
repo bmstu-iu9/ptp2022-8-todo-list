@@ -5,6 +5,12 @@ on:
         branches: [main]
     pull_request:
         branches: [main]
+        paths:
+          - "frontend/**"
+          - "package.json"
+          - "package-lock.json"
+          - ".prettierrc"
+          - "yarn.lock"
 
 jobs:
     linting:
