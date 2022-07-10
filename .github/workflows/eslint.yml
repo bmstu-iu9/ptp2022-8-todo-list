@@ -45,8 +45,6 @@ jobs:
               uses: tj-actions/changed-files@v23.1
               with:
                 files: |
-                  **/*.html
-                  **/*.css
                   **/*.js
                   **/*.ts
 
@@ -57,13 +55,31 @@ jobs:
                   echo Changed files: ${{ steps.changed-files.outputs.modified_files }}
                   echo Removed files: ${{ steps.changed-files.outputs.deleted_files }}
 
+            - name: Get specific changed files
+              id: changed-files-js
+              uses: tj-actions/changed-files@v23.1
+              with:
+                files: |
+                  **/*.js
+            
             - name: Prettier Checking
-              if: ${{ always() && (steps.changed-files.outputs.added_files || steps.changed-files.outputs.modified_files) }}
-              run: yarn prettier --config ./frontend/prettier.config.js --ignore-path ./frontend/.prettierignore  ${{ steps.changed-files.outputs.modified_files }} ${{ steps.changed-files.outputs.deleted_files }} --fix
+              if: ${{ always() && (steps.changed-files-js.outputs.added_files || steps.changed-files-js.outputs.modified_files) }}
+              run: yarn prettier --config ./frontend/prettier.config.js --ignore-path ./frontend/.prettierignore  ${{ steps.changed-files-js.outputs.modified_files }} ${{ steps.changed-files-js.outputs.deleted_files }} --fix
 
             - name: ESLint Checking
-              if: ${{ always() && (steps.changed-files.outputs.added_files || steps.changed-files.outputs.modified_files) }}
-              run: yarn eslint --config ./frontend/.eslintrc.js --ignore-path ./frontend/.eslintignore ${{ steps.changed-files.outputs.modified_files }} ${{ steps.changed-files.outputs.deleted_files }} --fix
+              if: ${{ always() && (steps.changed-files-js.outputs.added_files || steps.changed-files-js.outputs.modified_files) }}
+              run: yarn eslint --config ./frontend/.eslintrc.js --ignore-path ./frontend/.eslintignore ${{ steps.changed-files-js.outputs.modified_files }} ${{ steps.changed-files-js.outputs.deleted_files }} --fix
+
+            - name: Get specific changed files
+              id: changed-files-ts
+              uses: tj-actions/changed-files@v23.1
+              with:
+                files: |
+                  **/*.ts
+
+            - name: TsLint Checking
+              if: ${{ always() && (steps.changed-files-ts.outputs.added_files || steps.changed-files-ts.outputs.modified_files) }} 
+              run: yarn tsc --noEmit ${{ steps.changed-files-ts.outputs.modified_files }} ${{ steps.changed-files-ts.outputs.deleted_files }}
 
             - name: Commit changes
               if: always()
