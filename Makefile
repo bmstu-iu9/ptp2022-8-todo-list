@@ -10,8 +10,8 @@ frontend:
 
 .PHONY: build-lint
 build-lint:
-	@docker build --target lint . 2>&1 >/dev/null | tee .build.log
+	@docker build --target lint -t frontend-lint .
 
 .PHONY: lint
 lint: build-lint
-	@docker run --rm -it $(shell grep "writing image" .build.log | head -n 1 | cut -d ' ' -f 4)
+	@docker run --rm -it frontend-lint

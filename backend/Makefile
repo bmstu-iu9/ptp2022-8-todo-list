@@ -3,11 +3,11 @@ test: lint unit-test
 
 .PHONY: build
 build:
-	@docker build . 2>&1 >/dev/null | tee .build.log
+	@docker build -t backend .
 
 .PHONY: run
 run: build
-	@docker run --rm -it -p 127.0.0.1:8080:8080 $(shell grep "writing image" .build.log | head -n 1 | cut -d ' ' -f 4)
+	@docker run --rm -it -p 127.0.0.1:8080:8080 backend
 
 .PHONY: containers
 containers:
