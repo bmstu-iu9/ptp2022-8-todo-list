@@ -4,14 +4,18 @@ body {
     margin: 0;
     position: relative;
     $width_menu: 115px;
+
     .menu {
         z-index: 1;
-        .open{
+
+        .open {
             background-color: #0d6efd;
-            a{
+
+            a {
                 color: #ECEFF1;
             }
         }
+
         height: 0;
 
         #menu__toggle {
@@ -20,7 +24,7 @@ body {
 
         @media screen and (max-width: 768px) {
 
-            p{
+            p {
                 display: inline;
                 margin-left: 6px;
             }
@@ -93,20 +97,22 @@ body {
         }
 
         .menu__box {
-            @media screen and (min-width: 768px) {
+            z-index: 2;
+
+            @media screen and (min-width: 769px) {
                 // padding: 20px 0;
                 left: 0;
                 width: $width_menu;
 
-                .exit{
+                .exit {
                     position: absolute;
                     bottom: 0;
                     width: $width_menu;
                 }
             }
 
-            .exit{
-                a{
+            .exit {
+                a {
                     color: $danger;
                 }
             }
@@ -133,22 +139,24 @@ body {
 
             color: #333;
 
-            font-family: 'Roboto', sans-serif; 
+            font-family: 'Roboto', sans-serif;
+
             @media screen and (min-width: 769px) {
                 font-size: 14px;
                 font-weight: 600;
 
-                .nav-link{
+                .nav-link {
                     text-align: center;
                 }
 
-                svg{
+                svg {
                     width: max(30px, min(50px, 5vw));
                     height: max(30px, min(50px, 5vw));
                     display: block;
                     margin: 1em auto 0;
                 }
             }
+
             @media screen and (max-width: 768px) {
                 font-size: 21px;
                 font-weight: 600;
@@ -168,10 +176,11 @@ body {
     .body {
         @media screen and (min-width: 769px) {
             left: $width_menu;
-            max-width: calc(100% - $width_menu);
+            width: calc(100% - $width_menu);
             padding: 0;
             position: absolute;
         }
+
         @media screen and (max-width: 768px) {
             padding-top: 66px;
         }

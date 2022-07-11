@@ -1,0 +1,83 @@
+.todo {
+    @media screen and (max-width: 768px) {
+        width: 90%;
+    }
+
+    @media screen and (min-width: 769px) {
+        width: 80%;
+    }
+
+    margin: calc(30px + 5% + max(30px, min(50px, 5vw))) auto;
+
+    .todo_input {
+        position: relative;
+
+        .todo_text {
+            width: calc(100% - 55px);
+            height: 30px;
+        }
+
+        .add {
+            z-index: 1;
+            position: absolute;
+            padding: 0px;
+            margin-left: -4px;
+            border: 1px solid gray;
+        }
+
+        .expansion {
+            position: absolute;
+            margin-left: 20px;
+            height: 30px;
+            border: 1px solid gray;
+            padding: 0 4px 8px 9px;
+            border-radius: 4px;
+        }
+    }
+
+    ul {
+        list-style: none;
+
+        li {
+            position: relative;
+            padding-right: 55px;
+
+            .time {
+                white-space: nowrap;
+                margin-left: 15px;
+
+                .important {
+                    color: red;
+                    margin-bottom: 2px;
+                }
+
+                .non-urgent {
+                    color: #0d6efd;
+                    margin-bottom: 2px;
+                }
+
+            }
+
+            .category {
+                margin-left: 15px;
+                padding: 2px 4px;
+                border-radius: 4px;
+            }
+
+            .edit {
+
+                margin-top: -30px;
+                margin-right: 5px;
+
+            }
+
+            .delete {
+                margin-top: -30px;
+                margin-right: -40px;
+
+            }
+
+        }
+
+    }
+}
