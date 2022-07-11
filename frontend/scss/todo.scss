@@ -13,8 +13,16 @@
         position: relative;
 
         .todo_text {
-            width: calc(100% - 55px);
-            height: 30px;
+            @media screen and (max-width: 768px) {
+                height: 30px;
+                width: calc(100% - 55px);
+            }
+
+            @media screen and (min-width: 769px) {
+                height: 50px;
+                width: calc(100% - 95px);
+                font-size: 20px;
+            }
         }
 
         .add {
@@ -23,20 +31,111 @@
             padding: 0px;
             margin-left: -4px;
             border: 1px solid gray;
+
+            @media screen and (max-width: 768px) {
+                svg {
+                    width: 28;
+                    height: 28;
+                }
+            }
+
+            @media screen and (min-width: 769px) {
+                svg {
+                    width: 48;
+                    height: 48;
+                }
+            }
         }
 
         .expansion {
             position: absolute;
-            margin-left: 20px;
-            height: 30px;
             border: 1px solid gray;
-            padding: 0 4px 8px 9px;
-            border-radius: 4px;
+
+            @media screen and (max-width: 768px) {
+                svg {
+                    width: 20;
+                    height: 20;
+                }
+
+                margin-left: 20px;
+                padding: 0 4px 8px 9px;
+                border-radius: 4px;
+                height: 30px;
+            }
+
+            @media screen and (min-width: 769px) {
+                svg {
+                    width: 38;
+                    height: 38;
+                }
+
+                margin-left: 40px;
+                padding: 5px 5px 5px 10px;
+                border-radius: 6px;
+                height: 50px;
+            }
         }
     }
 
-    ul {
+    .todo__filter {
+        position: relative;
+        z-index: 1;
+
+        @media screen and (min-width: 769px) {
+            .stage {
+                font-size: 20px;
+            }
+        }
+
+        .dropdown-menu {
+            @media screen and (min-width: 769px) {
+                font-size: 20px;
+
+                .dropbtn {
+                    font-size: 20px;
+                }
+            }
+
+            .list-unstyled {
+
+                @media screen and (min-width: 769px) {
+                    font-size: 20px;
+                    height: 115px;
+                }
+
+                a {
+                    display: block;
+                }
+
+                display: none;
+                height: 100px;
+                overflow-x: hidden;
+                overflow-y: auto;
+
+            }
+
+            .show {
+                z-index: 1;
+                display: block;
+            }
+        }
+
+    }
+
+    .down {
+        @media screen and (min-width: 769px) {
+            margin-top: -115px;
+        }
+
+        margin-top: -100px;
+    }
+
+    .todolist {
         list-style: none;
+
+        @media screen and (min-width: 769px) {
+            font-size: 20px;
+        }
 
         li {
             position: relative;
@@ -47,36 +146,36 @@
                 color: gray;
             }
 
-            .time {
+            .todo__time {
                 white-space: nowrap;
                 margin-left: 15px;
 
-                .important {
+                .todo__important {
                     color: red;
                     margin-bottom: 2px;
                 }
 
-                .non-urgent {
+                .todo__non-urgent {
                     color: #0d6efd;
                     margin-bottom: 2px;
                 }
 
             }
 
-            .category {
+            .todo__category {
                 margin-left: 15px;
                 padding: 2px 4px;
                 border-radius: 4px;
             }
 
-            .edit {
+            .todo__edit {
 
                 margin-top: -30px;
                 margin-right: 5px;
 
             }
 
-            .delete {
+            .todo__delete {
                 margin-top: -30px;
                 margin-right: -40px;
 
