@@ -42,6 +42,11 @@
             position: relative;
             padding-right: 55px;
 
+            a {
+                text-decoration: none;
+                color: gray;
+            }
+
             .time {
                 white-space: nowrap;
                 margin-left: 15px;
