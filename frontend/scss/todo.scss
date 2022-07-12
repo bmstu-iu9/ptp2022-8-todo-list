@@ -7,6 +7,8 @@
         width: 80%;
     }
 
+    position: relative;
+
     margin: calc(30px + 5% + max(30px, min(50px, 5vw))) auto;
 
     .todo_input {
@@ -184,4 +186,33 @@
         }
 
     }
+
+    .list-unstyled1-contener {
+        position: absolute;
+        width: calc(100% - 32px);
+
+        .list-unstyled1 {
+            list-style: none;
+            background-color: rgb(255, 255, 255);
+            border: 0.5px solid rgb(190, 190, 190);
+            border-top: none;
+            border-radius: 5px;
+
+            a {
+                display: block;
+            }
+
+            display: none;
+            max-height: 100px;
+            overflow-x: hidden;
+            overflow-y: auto;
+
+        }
+
+        .show1 {
+            z-index: 1;
+            display: block;
+        }
+    }
+
 }

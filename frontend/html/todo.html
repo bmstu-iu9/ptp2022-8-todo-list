@@ -12,6 +12,8 @@
   <link href="../scss/todo.scss" rel="stylesheet" />
   <link href="../scss/menu.scss" rel="stylesheet" />
   <script defer src="../js/todolist.js"></script>
+  <script defer src="../js/bootstrap.modal.js"></script>
+
 
 </head>
 
@@ -59,8 +61,10 @@
 
       <li class="nav-item">
         <a class="nav-link" href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
-            <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-seam"
+            viewBox="0 0 16 16">
+            <path
+              d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z" />
           </svg>
           <p>Инвентарь</p>
         </a>
@@ -86,24 +90,51 @@
   <div class="body">
     <div class="todo">
 
+
       <div class="todo_input">
         <input class="todo_text d-inline" type="text">
         <a class="add bg-primary text-white active d-inline-block" href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus"
-            viewBox="0 0 16 16">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
             <path
               d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
           </svg>
         </a>
-        <a class="expansion bg-primary text-white active d-inline-block" href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-three-dots"
-            viewBox="0 0 16 16">
+        <a class="expansion bg-primary text-white active d-inline-block" id="btn" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
             <path
               d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
           </svg>
         </a>
       </div>
 
+      <script>
+        function myFunction() {
+          document.getElementById("myDropdown").classList.toggle("show");
+          document.getElementById("todolist").classList.toggle("down");
+        }
+
+        window.onclick = function (event) {
+          if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("list-unstyled");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+              var openDropdown = dropdowns[i];
+              if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+              }
+            }
+            var dropdowns = document.getElementsByClassName("todolist");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+              var openDropdown = dropdowns[i];
+              if (openDropdown.classList.contains('down')) {
+                openDropdown.classList.remove('down');
+              }
+            }
+
+          }
+        }
+      </script>
 
       <div class="d-flex todo__filter">
 
@@ -136,13 +167,13 @@
                   <label class="todo__category" for="category2">работа</label>
                 </a></li>
 
-                <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
+              <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
                   <span style="background-color: rgba(101, 1, 168, 0.5);"
                     class="d-inline-block rounded-circle p-1"></span>
                   <label class="todo__category" for="category2">кот</label>
                 </a></li>
 
-                <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
+              <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
                   <span style="background-color: rgba(168, 54, 1, 0.5);"
                     class="d-inline-block rounded-circle p-1"></span>
                   <label class="todo__category" for="category2">позвонить гоше</label>
@@ -151,38 +182,9 @@
           </div>
         </div>
 
-        <script>
-          function myFunction() {
-            document.getElementById("myDropdown").classList.toggle("show");
-            document.getElementById("todolist").classList.toggle("down");
-          }
-
-          window.onclick = function (event) {
-            if (!event.target.matches('.dropbtn')) {
-              var dropdowns = document.getElementsByClassName("list-unstyled");
-              var i;
-              for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                  openDropdown.classList.remove('show');
-                }
-              }
-              var dropdowns = document.getElementsByClassName("todolist");
-              var i;
-              for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('down')) {
-                  openDropdown.classList.remove('down');
-                }
-              }
-              
-            }
-          }
-        </script>
-
 
       </div>
-      
+
       <ul class="todolist list-group d-flex flex-column" id="todolist">
 
         <li class="list-group-item" data-todo-state="completed">
@@ -302,7 +304,132 @@
         </li>
 
       </ul>
+
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+
+        const btn = document.querySelector('#btn');
+
+        const modal = new bootstrap.Modal(document.querySelector('#modal'));
+
+        btn.addEventListener('click', function () {
+
+          modal.show();
+
+        });
+
+      });
+    </script>
+
+
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Создание задачи</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+            <form>
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control rounded-3" id="name" placeholder="Название">
+                <label for="name">Название</label>
+              </div>
+
+              <div class="form-group mb-3">
+                <input type="date" class="form-control rounded-3" id="date" placeholder="Дата">
+              </div>
+
+              <div class="form-group mb-3">
+                <textarea name="comment" class="form-control" placeholder="Сообщение"></textarea>
+              </div>
+
+              <!-- <div class="form-group has-success">
+                <label class="control-label" for="succ">Оформление success</label>
+                <input type="text" class="form-control">
+             </div> -->
+
+
+
+
+              <script>
+                function myFunction1() {
+                  document.getElementById("myDropdown1").classList.toggle("show1");
+                }
+
+                window.onclick = function (event) {
+                  if (!event.target.matches('.dropbtn1')) {
+                    var dropdowns = document.getElementsByClassName("list-unstyled1");
+                    var i;
+                    for (i = 0; i < dropdowns.length; i++) {
+                      var openDropdown = dropdowns[i];
+                      if (openDropdown.classList.contains('show1')) {
+                        openDropdown.classList.remove('show1');
+                      }
+                    }
+                  }
+                }
+              </script>
+
+              <div class="m-2 d-inline p-0 h-38px">
+                <div class="dropdown-menu1 d-block position-static m-0 p-0 rounded-3">
+                  <form class="bg-light p-0 m-0">
+                    <input onclick="myFunction1()" type="search" class="dropbtn1 form-control" autocomplete="false"
+                      placeholder="Категория">
+                  </form>
+                <div class="list-unstyled1-contener">
+                  <ul id="myDropdown1" class="list-unstyled1 mb-0 p-0">
+                    <!-- <input class="form-control" id="myInput" type="text" placeholder="Поиск"> -->
+                    <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
+                        <span style="background-color: rgba(0, 116, 15, 0.5);"
+                          class="d-inline-block rounded-circle p-1"></span>
+                        <label class="todo__category" for="category1">семья</label>
+                      </a></li>
+
+                    <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
+                        <span style="background-color: rgba(0, 73, 209, 0.5);"
+                          class="d-inline-block rounded-circle p-1"></span>
+                        <label class="todo__category" for="category2">работа</label>
+                      </a></li>
+
+                    <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
+                        <span style="background-color: rgba(101, 1, 168, 0.5);"
+                          class="d-inline-block rounded-circle p-1"></span>
+                        <label class="todo__category" for="category2">кот</label>
+                      </a></li>
+
+                    <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
+                        <span style="background-color: rgba(168, 54, 1, 0.5);"
+                          class="d-inline-block rounded-circle p-1"></span>
+                        <label class="todo__category" for="category2">позвонить гоше</label>
+                      </a></li>
+                  </ul>
+                </div>
+              </div>
+
+              </div>
+
+
+
+            </form>
+
+
+          </div>
+          <div class="modal-footer">
+            <div class="container py-3 text-center">
+              <button type="button" class="btn btn-primary">Создать</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+
+
+
 
   </div>
 
