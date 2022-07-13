@@ -1,4 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=BIZ+UDGothic&family=Kosugi+Maru&family=Montserrat&display=swap');
+
 .todo {
+
+    .todo__title {
+        padding-bottom: calc(2vw + 10px);
+
+        h1 {
+            font-weight: lighter;
+            color: #0d6efd;
+            font-family: Luminari, fantasy;
+
+            @media screen and (min-width: 769px) {
+                font-size: 55px;
+                text-shadow: 1px 0 1px #094baf,
+                    0 1px 1px #094baf,
+                    -1px 0 1px #094baf,
+                    0 -1px 1px #094baf;
+            }
+        }
+    }
+
+
     @media screen and (max-width: 768px) {
         width: 90%;
     }
@@ -9,21 +31,27 @@
 
     position: relative;
 
-    margin: calc(30px + 5% + max(30px, min(50px, 5vw))) auto;
+    margin: calc(4vw + 5px) auto;
 
     .todo_input {
         position: relative;
 
         .todo_text {
+            border: 1px solid gray;
+
             @media screen and (max-width: 768px) {
                 height: 30px;
                 width: calc(100% - 55px);
+                border-bottom-left-radius: 4px;
+                border-top-left-radius: 4px;
             }
 
             @media screen and (min-width: 769px) {
                 height: 50px;
                 width: calc(100% - 95px);
                 font-size: 20px;
+                border-bottom-left-radius: 6px;
+                border-top-left-radius: 6px;
             }
         }
 
@@ -86,10 +114,13 @@
         @media screen and (min-width: 769px) {
             .stage {
                 font-size: 20px;
+
             }
         }
 
         .dropdown-menu {
+            border-width: 0;
+
             @media screen and (min-width: 769px) {
                 font-size: 20px;
 
@@ -117,7 +148,11 @@
             }
 
             .show {
-                z-index: 1;
+                padding: 3px 0;
+                border: 1px solid rgb(206, 212, 218);
+                border-bottom-left-radius: 6px;
+                border-bottom-right-radius: 6px;
+                z-index: 2;
                 display: block;
             }
         }
@@ -188,9 +223,10 @@
     }
 
     .window__form {
-        .title{
+        .form__title {
             
         }
+
         .chosen__categories {
             max-width: calc(100% - 32px);
 
