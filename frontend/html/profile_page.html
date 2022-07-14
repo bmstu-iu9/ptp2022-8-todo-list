@@ -55,7 +55,8 @@
     </ul>
   </div>
   <div class="body">
-    <section style="background-color: #fff;">
+    <div class="wrapper">
+      <section style="background-color: #fff;">
         <div class="container py-3">      
           <div class="row">
             <div class="col-lg-4">
@@ -63,10 +64,10 @@
                 <div class="card-body text-center">
                   <img src="https://i.pinimg.com/736x/cc/ad/60/ccad60cdf28bbe750cad42039de1e67d--art-pages-pixel-art.jpg" alt="avatar"
                     class="img-fluid" style="width: 150px;">
-                  <h5 class="my-3">@Al_Pajino</h5>
+                  <h5 class="my-3" id="usernameField">@Al_Pajino</h5>
                   <p class="text-muted mb-1">Level 1</p>
                   <div class="d-flex justify-content-center mb-2">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeDataModal">Изменить данные</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeDataModal" id="changeDataBtn">Изменить данные</button>
                     <button type="button" class="btn btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Изменить пароль</button>
                   </div>
 
@@ -76,7 +77,6 @@
                       <div class="modal-content">
                         <div class="modal-header">
                           <h5 class="modal-title">Изменение пароля</h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                         </div>
                         <div class="modal-body">
                           <form >
@@ -106,7 +106,6 @@
                       <div class="modal-content">
                         <div class="modal-header">
                           <h5 class="modal-title">Изменение данных</h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                           <form id="changeDataForm">
@@ -132,13 +131,13 @@
                               <div class="input-group-prepend">
                                 <span class="input-group-text">О себе</span>
                               </div>
-                              <textarea class="form-control" aria-label="With textarea"></textarea>
+                              <textarea class="form-control" aria-label="With textarea" id="aboutInfoInput"></textarea>
                             </div>
                           </form>
                         </div>
                         <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                          <button type="button" class="btn btn-primary">Сохранить изменения</button>
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeDataChangeModalBtn">Закрыть</button>
+                          <button type="button" class="btn btn-primary" id="changeDataSubmitBtn">Сохранить изменения</button>
                         </div>
                       </div>
                     </div>
@@ -184,7 +183,7 @@
                       <p class="mb-0">Имя</p>
                     </div>
                     <div class="col-sm-9">
-                      <p class="text-muted mb-0">Иван</p>
+                      <p class="text-muted mb-0" id="nameField">Иван</p>
                     </div>
                   </div>
                   <hr>
@@ -193,7 +192,7 @@
                       <p class="mb-0">Фамилия</p>
                     </div>
                     <div class="col-sm-9">
-                      <p class="text-muted mb-0">Иванов</p>
+                      <p class="text-muted mb-0" id="surnameField">Иванов</p>
                     </div>
                   </div>
                   <hr>
@@ -202,7 +201,7 @@
                       <p class="mb-0">Email</p>
                     </div>
                     <div class="col-sm-9">
-                      <p class="text-muted mb-0">example@example.ru</p>
+                      <p class="text-muted mb-0" id="emailField">example@example.ru</p>
                     </div>
                   </div>
                   <hr>
@@ -211,7 +210,7 @@
                       <p class="mb-0">О себе</p>
                     </div>
                     <div class="col-sm-9">
-                      <p class="text-muted mb-0">Я играю в доту по этим причинам: бучка, бачер, рудге, пэйджер джадж, hooker, пиджак, паджеро, Аль Паджино, чин чопа хук жопа, рыдж, пудге, пудочка, блевулька радж , добряк дуф , обычный пудж (нейтральный), модный или даже сексуальный c момом и башером pudGE</p>
+                      <p class="text-muted mb-0" id="aboutInfoField">Я играю в доту по этим причинам: бучка, бачер, рудге, пэйджер джадж, hooker, пиджак, паджеро, Аль Паджино, чин чопа хук жопа, рыдж, пудге, пудочка, блевулька радж , добряк дуф , обычный пудж (нейтральный), модный или даже сексуальный c момом и башером pudGE</p>
                     </div>
                   </div>
                 </div>
@@ -244,6 +243,7 @@
           </div>
         </div>
       </section>
+    </div>
   </div>
   <script src="../js/profile.ts"></script> 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"crossorigin="anonymous"></script>
