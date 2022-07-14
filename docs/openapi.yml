@@ -1,0 +1,23 @@
+openapi: 3.0.1
+
+info:
+  title: Славатидика API
+  description: Gamified TODO-list API.
+  version: 0.1.0
+  contact:
+    name: Starovoytov Alexandr
+    url: https://t.me/stewkk
+  license:
+    name: MIT
+
+servers:
+  - url: https://ptp.starovoytovai.ru/api/v1
+
+paths:
+  /ping:
+    get:
+      operationId: ping
+      summary: Ping API server
+      responses:
+        '418':
+          description: Success
