@@ -1,111 +1,125 @@
 body {
   font: max(13px, min(26px, 6vw)) Tahoma, sans-serif;
-  background-color: #f8f8f8;
   margin: 0;
   background-size: cover;
   width: 100%;
   background-image: url(../images/index-bg.jpg);
-}
 
-header {
-  padding: 20px 0 20px;
-}
 
-.menu {
-  margin-bottom: 5vw;
-  @media screen and (max-width: 768px) {
-    .signin{
-      margin-top: 15px;
+
+  .menu {
+
+    margin-bottom: 5vw;
+
+    header {
+
+      padding: 20px 0 20px;
+
+      @media screen and (max-width: 768px) {
+        .signin {
+          margin-top: 15px;
+        }
+      }
+
+      @media screen and (min-width: 768px) {
+        .signin {
+          margin-right: 5vw;
+        }
+      }
+
+      .sun-moon {
+        color: rgba(255, 255, 255, .5);
+        margin-left: 1rem;
+      }
+
+      .nav-masthead .nav-link {
+        color: rgba(255, 255, 255, .5);
+        border-bottom: .25rem solid transparent;
+      }
+
+      .nav-masthead .nav-link:hover,
+      .nav-masthead .nav-link:focus {
+        border-bottom-color: rgba(255, 255, 255, .25);
+      }
+
+      .nav-masthead .nav-link+.nav-link {
+        margin-left: 1rem;
+      }
+
+      .nav-masthead .active {
+        color: #fff;
+        border-bottom-color: #fff;
+      }
+
+      .nav-masthead .nav-linkw {
+        color: rgba(0, 0, 0, .5);
+        border-bottom: .25rem solid transparent;
+      }
+
+      .nav-masthead .nav-linkw:hover,
+      .nav-masthead .nav-linkw:focus {
+        border-bottom-color: rgba(0, 0, 0, .25);
+      }
+
+      .nav-masthead .nav-linkw+.nav-linkw {
+        margin-left: 1rem;
+      }
+
+      .nav-masthead .activew {
+        color: rgba(0, 0, 0);
+        border-bottom-color: rgba(0, 0, 0);
+      }
+
+      .logo {
+        font-size: max(14px, min(30px, 6vw));
+        margin: -0.3vw 3vw 0 0;
+      }
+
+    }
+
+  }
+
+  .main {
+    max-width: 800px;
+    padding: 50px;
+    margin: -4.5vw auto calc(3vw + 50px);
+
+    img {
+      margin: 0 0 30px //calc(3vw + 30px);
+    }
+
+    h1 {
+      font-size: max(40px, min(70px, 12vw));
     }
   }
-  @media screen and (min-width: 768px){
-    .signin{
-      margin-right: 5vw;
+
+  .images {
+    .img {
+      margin: 10px 20px;
+      padding: 10px 10px;
+    }
+
+    h1 {
+      margin-top: 10vw;
+      font-size: max(30px, min(60px, 10vw))
+    }
+
+    p,
+    h2 {
+      margin: calc(1vw + 5px);
     }
   }
-  
-}
 
-.btn-secondary,
-.btn-secondary:hover,
-.btn-secondary:focus {
-  color: #333;
-  text-shadow: none;
-}
-
-.cover-container {
-  max-width: 42em;
-}
-
-.nav-masthead .nav-link {
-  color: rgba(255, 255, 255, .5);
-  border-bottom: .25rem solid transparent;
-}
-
-.nav-masthead .nav-link:hover,
-.nav-masthead .nav-link:focus {
-  border-bottom-color: rgba(255, 255, 255, .25);
-}
-
-.nav-masthead .nav-link+.nav-link {
-  margin-left: 1rem;
-}
-
-.nav-masthead .active {
-  color: #fff;
-  border-bottom-color: #fff;
-}
-
-.logo {
-  font-size: max(14px, min(30px, 6vw));
-  margin: -0.3vw 3vw 0 0;
-}
-
-.card-cover {
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-
-}
-
-.main {
-  max-width: 800px;
-  padding: 50px;
-  margin: -4.5vw auto calc(3vw + 50px);
-
-  img {
-    margin: 0 0 30px //calc(3vw + 30px);
+  p {
+    font-size: max(10px, min(20px, 4vw));
   }
 
-  h1 {
-    font-size: max(40px, min(70px, 12vw));
-  }
-}
-
-.images {
-  .img{
-    margin: 10px 20px;
-    padding: 10px 10px;
-  }
-  h1 {
-    margin-top: 10vw;
-    font-size: max(30px, min(60px, 10vw))
+  .us {
+    color: rgb(108, 117, 125)
   }
 
-  p,
-  h2 {
-    margin: calc(1vw + 5px);
-  }
-}
-
-p {
-  font-size: max(10px, min(20px, 4vw));
-}
-
-.us{
-  color:rgb(108, 117, 125)
-}
-
-.us:hover{
+  .us:hover {
     color: rgb(73, 188, 186);
+  }
+
 }
