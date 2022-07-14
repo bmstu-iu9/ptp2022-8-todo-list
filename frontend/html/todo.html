@@ -91,10 +91,6 @@
   <div class="body">
     <div class="todo">
 
-      <div class="todo__title text-center">
-        <h1>Список дел</h1>
-      </div>
-
       <div class="todo_input">
         <input class="todo_text d-inline" type="text">
         <a class="add bg-primary text-white active d-inline-block" title="Добавить задачу" href="#">
@@ -115,7 +111,6 @@
       <script>
         function myFunction() {
           document.getElementById("myDropdown").classList.toggle("show");
-          document.getElementById("todolist").classList.toggle("down");
         }
 
         window.onclick = function (event) {
@@ -128,23 +123,15 @@
                 openDropdown.classList.remove('show');
               }
             }
-            var dropdowns = document.getElementsByClassName("todolist");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-              var openDropdown = dropdowns[i];
-              if (openDropdown.classList.contains('down')) {
-                openDropdown.classList.remove('down');
-              }
-            }
 
           }
         }
       </script>
 
-      <div class="d-flex todo__filter">
+      <div class="my-2 row todo__filter">
 
 
-        <div class="ms-0 m-2 w-auto d-inline">
+        <div class="col todo__stage">
           <select class="stage form-control">
             <option value="active">активные</option>
             <option value="completed">завершённые</option>
@@ -152,9 +139,9 @@
           </select>
         </div>
 
-        <div class="m-2 w-50 d-inline p-0 h-38px">
-          <div class="dropdown-menu d-block position-static m-0 p-0">
-            <form class="todo__categories__form bg-light p-0 m-0">
+        <div class="col h-38px">
+          <div class="dropdown-menu d-block pt-0">
+            <form class="todo__categories__form p-0 m-0">
               <input onclick="myFunction()" type="search" class="dropbtn form-control" autocomplete="false"
                 placeholder="Категория">
             </form>
@@ -489,16 +476,17 @@
                     </div>
 
                   </div>
+                </div>
 
 
-                  <div class="form-group mb-3">
-                    <textarea name="comment" class="form-control" title="Введите комментарий"
-                      placeholder="Комментарий"></textarea>
-                  </div>
+                <div class="form-group mb-3">
+                  <textarea name="comment" class="form-control" title="Введите комментарий"
+                    placeholder="Комментарий"></textarea>
+                </div>
 
-                  <div class="form-group mb-3">
-                    <input class="form-control" type="file" name="file" id="input__file" multiple>
-                  </div>
+                <div class="form-group mb-3">
+                  <input class="form-control" type="file" name="file" id="input__file" multiple>
+                </div>
 
 
 
