@@ -1,4 +1,5 @@
 let glob_id = 0
+declare var bootstrap: any
 
 type Color = {
     red: number
