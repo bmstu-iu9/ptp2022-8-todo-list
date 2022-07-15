@@ -51,21 +51,21 @@ body {
         border-bottom-color: #fff;
       }
 
-      .nav-masthead .nav-linkw {
+      .nav-masthead .nav-link__light {
         color: rgba(0, 0, 0, .5);
         border-bottom: .25rem solid transparent;
       }
 
-      .nav-masthead .nav-linkw:hover,
-      .nav-masthead .nav-linkw:focus {
+      .nav-masthead .nav-link__light:hover,
+      .nav-masthead .nav-link__light:focus {
         border-bottom-color: rgba(0, 0, 0, .25);
       }
 
-      .nav-masthead .nav-linkw+.nav-linkw {
+      .nav-masthead .nav-link__light+.nav-link__light {
         margin-left: 1rem;
       }
 
-      .nav-masthead .activew {
+      .nav-masthead .activelight {
         color: rgba(0, 0, 0);
         border-bottom-color: rgba(0, 0, 0);
       }
@@ -91,6 +91,10 @@ body {
     h1 {
       font-size: max(40px, min(70px, 12vw));
     }
+  }
+
+  .text-block{
+    border-radius: 6px;
   }
 
   .images {
