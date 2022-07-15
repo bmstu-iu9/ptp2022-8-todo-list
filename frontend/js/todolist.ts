@@ -140,6 +140,7 @@ class Task {
                         </svg>
                     </a>
 
+                    ${this.dueDate ? `
                     <div class="todo__time d-inline">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="${
                             this.dueDate && this.dueDate.getTime() >= new Date().getTime()
@@ -149,8 +150,9 @@ class Task {
                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"></path>
                         </svg>
                         <span>${formatDate(this.dueDate)}</span>
-                    </div>
-
+                    </div>`
+                    : ''
+                    }
                     ${labelStr}
 
                     <div class="d-flex flex-row justify-content-end">
@@ -292,7 +294,7 @@ document.addEventListener('click', (e) => {
         let lbl = labels[parseInt(link.id.substring(4)) - 1]
         console.log(lbl)
         let container = document.getElementsByClassName('chosen__categories')[0]
-        container.innerHTML = container.innerHTML + `<div class="category col-md-auto" 
+        container.innerHTML = container.innerHTML + `<div class="category col-auto" 
                         style="background-color: rgba(${lbl.color.red + ', ' + lbl.color.green + ', ' + lbl.color.blue}, 0.5);" id="lbl-${lbl.id}">
                         <label>${lbl.text}</label>
                         <button type="button" class="btn-close"></button>
@@ -394,3 +396,4 @@ function getFromStorage() {
         }
     }
 }
+
