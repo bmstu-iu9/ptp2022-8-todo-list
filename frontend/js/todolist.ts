@@ -285,7 +285,7 @@ document.addEventListener('click', (e) => {
         tasks[id].setStatus('deleted')
         tasks[id].clearHTML()
     } else 
-    if (target.classList.contains('btn-close')) { // Удаление лейбла в модалке
+    if (target.classList.contains('btn-close-lbl')) { // Удаление лейбла в модалке
         target.parentElement!.outerHTML = ''
     } else 
     if (hasParentClass(target, 'dropdown-item') && hasParentClass(target, 'list-category')) { // добавление лейбла в контейнер
@@ -297,7 +297,7 @@ document.addEventListener('click', (e) => {
         container.innerHTML = container.innerHTML + `<div class="category col-auto" 
                         style="background-color: rgba(${lbl.color.red + ', ' + lbl.color.green + ', ' + lbl.color.blue}, 0.5);" id="lbl-${lbl.id}">
                         <label>${lbl.text}</label>
-                        <button type="button" class="btn-close"></button>
+                        <button type="button" class="btn-close btn-close-lbl"></button>
                         </div>`
          LabelToHtml(lbl)
     } else 
