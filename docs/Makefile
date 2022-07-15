@@ -3,4 +3,4 @@ all: validate
 
 .PHONY: validate
 validate:
-	@docker run --volume "$(PWD)":/data jamescooke/openapi-validator openapi.yml
+	@docker run --rm -t -v "$(PWD)":/tmp stoplight/spectral lint -vr "/tmp/.spectral.yml" "/tmp/openapi.yaml"
