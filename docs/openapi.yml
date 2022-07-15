@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Славатидика API
   description: Gamified TODO-list API.
-  version: 0.2.0
+  version: 0.3.0
   contact:
     name: Starovoytov Alexandr
     url: https://t.me/stewkk
@@ -14,8 +14,9 @@ servers:
   - url: https://ptp.starovoytovai.ru/api/v1
 
 tags:
-  - name: User
+  - name: Users
   - name: Auth
+  - name: Tasks
 
 paths:
   /ping:
@@ -35,7 +36,7 @@ paths:
             schema:
               $ref: '#/components/schemas/NewUser'
       tags:
-        - User
+        - Users
       responses:
         '201':
           description: New user created
@@ -55,7 +56,7 @@ paths:
         required: true
     get:
       tags:
-        - User
+        - Users
       summary: View user
       responses:
         '200':
@@ -66,7 +67,7 @@ paths:
                 $ref: '#/components/schemas/User'
     put:
       tags:
-        - User
+        - Users
       summary: Modify user
       requestBody:
         content:
@@ -82,14 +83,14 @@ paths:
                 $ref: '#/components/schemas/User'
     delete:
       tags:
-        - User
+        - Users
       summary: Delete user
       responses:
         '204':
           description: No content
     patch:
       tags:
-        - User
+        - Users
       summary: Patch user
       requestBody:
         content:
@@ -135,7 +136,86 @@ paths:
                 type: string
                 format: url
       security: []
-
+  /users/{id}/tasks:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    get:
+      summary: List user tasks
+      tags:
+        - Tasks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tasks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Task'
+  /users/{user_id}/tasks/{task_id}:
+    parameters:
+      - schema:
+          type: integer
+        name: user_id
+        in: path
+        required: true
+      - schema:
+          type: integer
+        name: task_id
+        in: path
+        required: true
+    get:
+      summary: View task
+      tags:
+        - Tasks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+    put:
+      summary: Create or modify task
+      tags:
+        - Tasks
+      responses:
+        '201':
+          description: Created
+        '204':
+          description: Modified
+    patch:
+      summary: Patch task
+      tags:
+        - Tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/Task/properties/name'
+                - $ref: '#/components/schemas/Task/properties/description'
+                - $ref: '#/components/schemas/Task/properties/dueDate'
+                - $ref: '#/components/schemas/Task/properties/shtirlitchHumoresque'
+                - $ref: '#/components/schemas/Task/properties/labels'
+                - $ref: '#/components/schemas/Task/properties/status'
+      responses:
+        '204':
+          description: Modified
+    delete:
+      summary: Delete task
+      tags:
+        - Tasks
+      responses:
+        '204':
+          description: Deleted
 components:
   schemas:
     Token:
@@ -177,6 +257,29 @@ components:
           $ref: '#/components/schemas/Email'
         nickname:
           $ref: '#/components/schemas/Nickname'
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        created_on:
+          type: string
+          format: date-time
+        dueDate:
+          type: string
+          format: date-time
+        shtirlitchHumoresque:
+          type: string
+        labels:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
   securitySchemes:
     UserToken:
       type: apiKey
