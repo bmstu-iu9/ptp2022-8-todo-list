@@ -14,13 +14,12 @@ servers:
   - url: https://ptp.starovoytovai.ru/api/v1
 
 tags:
-  - name: Users
+  - name: User
   - name: Auth
 
 paths:
   /ping:
     get:
-      operationId: ping
       summary: Ping API server
       responses:
         '418':
@@ -28,7 +27,6 @@ paths:
       security: []
   /users:
     post:
-      operationId: createUser
       summary: Create new user
       requestBody:
         required: true
@@ -37,10 +35,10 @@ paths:
             schema:
               $ref: '#/components/schemas/NewUser'
       tags:
-        - Users
+        - User
       responses:
         '201':
-          description: Successfully created new user
+          description: New user created
           headers:
             Location:
               description: New user URI
@@ -48,9 +46,68 @@ paths:
                 type: string
                 format: url
       security: []
+  /users/{id}:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    get:
+      tags:
+        - User
+      summary: View user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      tags:
+        - User
+      summary: Modify user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      tags:
+        - User
+      summary: Delete user
+      responses:
+        '204':
+          description: No content
+    patch:
+      tags:
+        - User
+      summary: Patch user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/Email'
+                - $ref: '#/components/schemas/Nickname'
+                - $ref: '#/components/schemas/Password'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
   /tokens:
     post:
-      operationId: createToken
       summary: Create auth token
       requestBody:
         required: true
@@ -71,6 +128,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Token'
+          headers:
+            Location:
+              description: User URI
+              schema:
+                type: string
+                format: url
       security: []
 
 components:
@@ -110,15 +173,10 @@ components:
       properties:
         id:
           type: integer
-          example: 4
         email:
-          type: string
-          example:
-            slavadtika@example.com
+          $ref: '#/components/schemas/Email'
         nickname:
-          type: string
-          example:
-            stewkk
+          $ref: '#/components/schemas/Nickname'
   securitySchemes:
     UserToken:
       type: apiKey
