@@ -17,6 +17,8 @@ tags:
   - name: Users
   - name: Auth
   - name: Tasks
+  - name: Character
+  - name: Items
 
 paths:
   /ping:
@@ -216,6 +218,122 @@ paths:
       responses:
         '204':
           description: Deleted
+  /users/{id}/character:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    get:
+      summary: View user's character
+      tags:
+        - Character
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+    put:
+      summary: Modify user's character
+      tags:
+        - Character
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Character'
+      responses:
+        '204':
+          description: OK
+    patch:
+      summary: Patch user's character
+      tags:
+        - Character
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Character'
+      responses:
+        '204':
+          description: OK
+  /users/{id}/items:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    get:
+      summary: List all items in game
+      tags:
+        - Items
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Item'
+  /users/{userId}/items/{itemId}:
+    parameters:
+      - schema:
+          type: integer
+        name: userId
+        in: path
+        required: true
+      - schema:
+          type: integer
+        name: itemId
+        in: path
+        required: true
+    get:
+      summary: View item
+      tags:
+        - Items
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    put:
+      summary: Modify item
+      tags:
+        - Items
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    patch:
+      summary: Patch item
+      tags:
+        - Items
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Item'
+
 components:
   schemas:
     Token:
@@ -280,6 +398,12 @@ components:
             type: string
         status:
           type: string
+    Character:
+      type: object
+      description: TODO
+    Item:
+      type: object
+      description: TODO
   securitySchemes:
     UserToken:
       type: apiKey
