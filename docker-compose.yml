@@ -21,3 +21,15 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+  docs:
+    image: python:slim
+    container_name: docs
+    volumes:
+      - ./docs/index.html:/index.html
+      - ./docs/openapi.yml:/openapi.yml
+    ports:
+      - 5332:8080
+    command: python -m http.server 8080
+    deploy:
+      restart_policy:
+        condition: on-failure
