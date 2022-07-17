@@ -10,6 +10,7 @@ const emailField: HTMLElement = document.getElementById("emailField") as HTMLEle
 const aboutInfoField: HTMLElement = document.getElementById("aboutInfoField") as HTMLElement;
 const changeDataBtn: HTMLElement = document.getElementById("changeDataBtn") as HTMLElement;
 const changePasswordModal: HTMLElement = document.getElementById("changePasswordModal") as HTMLElement;
+const changeDataModal: HTMLElement = document.getElementById("changeDataModal") as HTMLElement;
 const changeUsernameForm: HTMLFormElement = document.getElementById("usernameInput") as HTMLFormElement;
 const changeNameForm: HTMLFormElement = document.getElementById("nameInput") as HTMLFormElement;
 const changeSurnameForm: HTMLFormElement = document.getElementById("surnameInput") as HTMLFormElement;
@@ -18,11 +19,25 @@ const closeDataChangeModalBtn: HTMLElement = document.getElementById("closeDataC
 const changeDataSubmitBtn: HTMLElement = document.getElementById("changeDataSubmitBtn") as HTMLElement;
 
 
+
+
+
 function clearChangePswrdForm(): void {
     changePasswordForm.value = "";
     passwordRepeatForm.value = "";
     validationResSpan.innerHTML = "";
 }
+
+
+window.addEventListener("load", () => {
+    if (localStorage.getItem("userInfo") != null) {
+        let userInfo: Object = JSON.parse(localStorage.getItem("userInfo") || "");
+        nameField.innerHTML = userInfo.name;
+        surnameField.innerHTML = userInfo.surname;
+        usernameField.innerHTML = "@" + userInfo.username;
+        aboutInfoField.innerHTML = userInfo.aboutInfo;
+    }
+})
 
 changeDataBtn.addEventListener("click", () => {
     changeUsernameForm.value = usernameField.innerHTML.slice(1);
@@ -31,7 +46,7 @@ changeDataBtn.addEventListener("click", () => {
     changeAboutInfoForm.value = aboutInfoField.innerHTML;
 });
 
-passwordRepeatForm.addEventListener("input", (evt) => {
+passwordRepeatForm.addEventListener("input", () => {
     if (passwordRepeatForm.value == changePasswordForm.value) {
         validationResSpan.innerHTML = "&#10003 Пароли совпадают";
         validationResSpan.style.color = "green";
@@ -49,3 +64,19 @@ changePasswordModal.addEventListener("click", (evt) => {
 });
 
 
+changeDataSubmitBtn.addEventListener("click", () => {
+    usernameField.innerHTML = "@" + changeUsernameForm.value;
+    nameField.innerHTML = changeNameForm.value;
+    surnameField.innerHTML = changeSurnameForm.value;
+    aboutInfoField.innerHTML = changeAboutInfoForm.value;
+    localStorage.setItem("userInfo", JSON.stringify({
+        username: changeUsernameForm.value,
+        name: changeNameForm.value,
+        surname: changeSurnameForm.value,
+        aboutInfo: changeAboutInfoForm.value,
+
+    }));
+    /*
+        Тут наверное должен отправлятья запрос на сервер
+    */
+})
