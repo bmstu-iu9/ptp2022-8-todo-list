@@ -1,0 +1,420 @@
+openapi: 3.0.1
+
+info:
+  title: Славатидика API
+  description: Gamified TODO-list API.
+  version: 0.3.0
+  contact:
+    name: Starovoytov Alexandr
+    url: https://t.me/stewkk
+  license:
+    name: MIT
+
+servers:
+  - url: https://ptp.starovoytovai.ru/api/v1
+
+tags:
+  - name: Users
+  - name: Auth
+  - name: Tasks
+  - name: Character
+  - name: Items
+
+paths:
+  /ping:
+    get:
+      summary: Ping API server
+      responses:
+        '418':
+          description: I'm a teapot.
+      security: []
+  /users:
+    post:
+      summary: Create new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      tags:
+        - Users
+      responses:
+        '201':
+          description: New user created
+          headers:
+            Location:
+              description: New user URI
+              schema:
+                type: string
+                format: url
+      security: []
+  /users/{id}:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    get:
+      tags:
+        - Users
+      summary: View user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      tags:
+        - Users
+      summary: Modify user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      tags:
+        - Users
+      summary: Delete user
+      responses:
+        '204':
+          description: No content
+    patch:
+      tags:
+        - Users
+      summary: Patch user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/Email'
+                - $ref: '#/components/schemas/Nickname'
+                - $ref: '#/components/schemas/Password'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /tokens:
+    post:
+      summary: Create auth token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - oneOf:
+                  - $ref: '#/components/schemas/Email'
+                  - $ref: '#/components/schemas/Nickname'
+                - $ref: '#/components/schemas/Password'
+      tags:
+        - Auth
+      responses:
+        '201':
+          description: New token created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+          headers:
+            Location:
+              description: User URI
+              schema:
+                type: string
+                format: url
+      security: []
+  /users/{id}/tasks:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    get:
+      summary: List user tasks
+      tags:
+        - Tasks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tasks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Task'
+  /users/{user_id}/tasks/{task_id}:
+    parameters:
+      - schema:
+          type: integer
+        name: user_id
+        in: path
+        required: true
+      - schema:
+          type: integer
+        name: task_id
+        in: path
+        required: true
+    get:
+      summary: View task
+      tags:
+        - Tasks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+    put:
+      summary: Create or modify task
+      tags:
+        - Tasks
+      responses:
+        '201':
+          description: Created
+        '204':
+          description: Modified
+    patch:
+      summary: Patch task
+      tags:
+        - Tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/Task/properties/name'
+                - $ref: '#/components/schemas/Task/properties/description'
+                - $ref: '#/components/schemas/Task/properties/dueDate'
+                - $ref: '#/components/schemas/Task/properties/shtirlitchHumoresque'
+                - $ref: '#/components/schemas/Task/properties/labels'
+                - $ref: '#/components/schemas/Task/properties/status'
+      responses:
+        '204':
+          description: Modified
+    delete:
+      summary: Delete task
+      tags:
+        - Tasks
+      responses:
+        '204':
+          description: Deleted
+  /users/{id}/character:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    get:
+      summary: View user's character
+      tags:
+        - Character
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+    put:
+      summary: Modify user's character
+      tags:
+        - Character
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Character'
+      responses:
+        '204':
+          description: OK
+    patch:
+      summary: Patch user's character
+      tags:
+        - Character
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Character'
+      responses:
+        '204':
+          description: OK
+  /users/{id}/items:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    get:
+      summary: List all items in game
+      tags:
+        - Items
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Item'
+  /users/{userId}/items/{itemId}:
+    parameters:
+      - schema:
+          type: integer
+        name: userId
+        in: path
+        required: true
+      - schema:
+          type: integer
+        name: itemId
+        in: path
+        required: true
+    get:
+      summary: View item
+      tags:
+        - Items
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    put:
+      summary: Modify item
+      tags:
+        - Items
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    patch:
+      summary: Patch item
+      tags:
+        - Items
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Item'
+
+components:
+  schemas:
+    Token:
+      type: string
+    Email:
+      type: string
+      format: email
+      pattern: '^[^\s@]+@[^\s@]+\.[^\s@]+$'
+    Nickname:
+      type: string
+      minLength: 4
+      maxLength: 20
+      pattern: '^([a-z\d]+-)*[a-z\d]+$'
+    Password:
+      type: string
+      format: password
+      minLength: 8
+      maxLength: 100
+      pattern: '^[A-Za-z0-9]\w{8,}$'
+    NewUser:
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+        nickname:
+          $ref: '#/components/schemas/Nickname'
+        password:
+          $ref: '#/components/schemas/Password'
+      required:
+        - email
+        - nickname
+        - password
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          $ref: '#/components/schemas/Email'
+        nickname:
+          $ref: '#/components/schemas/Nickname'
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        createdOn:
+          type: string
+          format: date-time
+        dueDate:
+          type: string
+          format: date-time
+        shtirlitchHumoresque:
+          type: string
+        labels:
+          type: array
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+              color:
+                type: string
+                format: Hex string
+        status:
+          type: string
+    Character:
+      type: object
+      description: TODO
+    Item:
+      type: object
+      description: TODO
+  securitySchemes:
+    UserToken:
+      type: apiKey
+      in: header
+      name: Authorization
+
+security:
+  - UserToken: []
