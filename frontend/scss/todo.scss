@@ -161,9 +161,14 @@
             position: relative;
             padding-right: 55px;
 
-            a {
+            a:not(.name__openModal) {
                 text-decoration: none;
                 color: gray;
+            }
+
+            .name__openModal{
+                text-decoration: none;
+                color: black;
             }
 
             .todo__time {
@@ -205,8 +210,10 @@
 
     }
 
-    .window__form {
-        .form__title {}
+    //.window__form {
+        .form__title {
+            color: #0d6efd;
+        }
 
         .chosen__categories {
             max-width: calc(100% - 32px);
@@ -226,6 +233,10 @@
                     top: calc(50% - 6px);
                     right: 8px;
                 }
+            }
+
+            .category__edit{
+                padding-right: 6px;
             }
         }
 
@@ -314,7 +325,7 @@
             display: block;
         }
 
-    }
+    //}
 
 
 }

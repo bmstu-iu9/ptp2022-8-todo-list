@@ -198,17 +198,10 @@
                 <div class="form-group mb-3">
                   <input type="text" class="form-control rounded-3" id="name" placeholder="Название" required
                     title="Введите название задачи">
-                    <div class="invalid-feedback">
-                      Пожалуйста, введите название задачи
-                    </div>
+                  <div class="invalid-feedback">
+                    Пожалуйста, введите название задачи
+                  </div>
                 </div>
-
-                <!-- <div class="form-floating mb-3">
-                  <input type="text" class="form-control rounded-3" id="name" placeholder="Название" title="Введите название задачи">
-                  <label for="name">Название</label>
-                </div> -->
-
-
 
                 <div class="form-group mb-3">
                   <input type="date" class="form-control rounded-3" id="date" name="date" placeholder="Дата">
@@ -217,20 +210,6 @@
                 <div class="form-group mb-3">
                   <input class="form-control rounded-3" type="time" id="time" placeholder="Время">
                 </div>
-
-                <!-- <div class="form-group mb-3">
-                    <input class="form-control rounded-3" type="datetime-local" value="2022-09-19T13:45:00">
-                </div> -->
-
-                <!-- <div class="form-group mb-3">
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox"> Важно
-                    </label>
-                  </div>
-                </div> -->
-
-
 
                 <div class="container p-0" title="Выбранные категории">
                   <div class="chosen__categories row mb-3 m-0">
@@ -244,7 +223,6 @@
                   </form>
                   <div id="form__category" class="list-category-contener">
                     <ul class="list-category mb-0 px-0">
-                      <!-- <input class="form-control" id="myInput" type="text" placeholder="Поиск"> -->
                     </ul>
 
 
@@ -275,8 +253,8 @@
 
 
                 <div class="form-group mb-3">
-                  <textarea name="comment" class="form-control" title="Введите комментарий"
-                    placeholder="Комментарий" id="comment"></textarea>
+                  <textarea name="comment" class="form-control" title="Введите комментарий" placeholder="Комментарий"
+                    id="comment"></textarea>
                 </div>
 
                 <div class="form-group mb-3">
@@ -297,7 +275,78 @@
           </div>
         </div>
       </div>
+
+
+
+      <div class="window__form modal fade" id="modal__editor" tabindex="-1" aria-labelledby="exampleModalLabel" opened-task-id="">
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title form__title" id = "modal-title-info">Информация</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+              <form>
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control rounded-3" id="nameE" placeholder="Название"
+                    title="Введите название задачи">
+                  <label for="nameE">Название</label>
+                  <div class="invalid-feedback">
+                    Пожалуйста, введите название задачи
+                  </div>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <input type="date" class="form-control rounded-3" id="dateE" name="date" placeholder="Дата">
+                  <label for="dateE">Дата</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <input class="form-control rounded-3" type="time" id="timeE" placeholder="Время">
+                  <label for="timeE">Время</label>
+                </div>
+
+                <div class="container p-0" title="Выбранные категории">
+                  <div class="chosen__categories row mb-3 m-0">
+                    
+                  </div>
+                </div>
+
+                <div id = "form__edit__categories" class="d-block position-static mb-3 rounded-3">
+                  
+                </div>
+
+
+                <div class="form-floating mb-3">
+                  <textarea name="comment" class="form-control" title="Введите комментарий" placeholder="Комментарий"
+                    id="commentE"></textarea>
+                  <label for="commentE">Комментарий</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <input class="form-control" type="file" name="file" id="input__fileE" multiple>
+                </div>
+
+
+
+              </form>
+
+
+            </div>
+            <div class="modal-footer">
+              <div class="container py-3 text-center">
+                <button type="button" class="btn btn-primary btn-edit">Редактировать</button>
+                <button type="button" class="btn btn-primary btn-edit-save">Сохранить изменения</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+
 
 
 
