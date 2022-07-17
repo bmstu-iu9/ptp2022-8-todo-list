@@ -26,7 +26,7 @@ paths:
       summary: Ping API server
       responses:
         '418':
-          description: Success
+          description: I'm a teapot.
       security: []
   /users:
     post:
@@ -384,7 +384,7 @@ components:
           type: string
         description:
           type: string
-        created_on:
+        createdOn:
           type: string
           format: date-time
         dueDate:
@@ -395,7 +395,13 @@ components:
         labels:
           type: array
           items:
-            type: string
+            type: object
+            properties:
+              text:
+                type: string
+              color:
+                type: string
+                format: Hex string
         status:
           type: string
     Character:
