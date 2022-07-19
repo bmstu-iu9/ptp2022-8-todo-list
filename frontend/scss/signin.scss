@@ -1,6 +1,6 @@
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
-html{
+html {
 	height: 100%;
 }
 
@@ -10,7 +10,7 @@ body {
 	align-items: center;
 	background-color: #f5f5f5;
 
-	img{
+	img {
 
 		@media screen and (max-height: 735px) {
 			width: 150;
@@ -21,7 +21,7 @@ body {
 			width: 200;
 			height: 200;
 		}
-	
+
 		@media screen and (min-height: 871px) {
 			width: 300px;
 			height: 300px;
@@ -42,7 +42,7 @@ body {
 
 			.password-control {
 				position: absolute;
-				top: 20px;
+				top: 18px;
 				right: 10px;
 
 				svg {
@@ -107,12 +107,13 @@ body {
 		width: 50%;
 	}
 
-	.password-check {
+	.password-check,
+	.login-check {
 		color: $red-500;
 		visibility: hidden;
 	}
 
-	footer{
+	footer {
 		margin-top: 1rem;
 	}
 }
