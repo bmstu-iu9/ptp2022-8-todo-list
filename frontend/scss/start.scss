@@ -32,7 +32,12 @@ body {
 
       @media screen and (min-width: 768px) {
         .signin {
-          margin-right: 5vw;
+          margin-right: 4vw;
+        }
+
+        .logo{
+          margin-left: 2vw;
+          margin-right: 1.5rem;
         }
 
         .sun-moon {
@@ -85,7 +90,7 @@ body {
 
       .logo {
         font-size: max(14px, min(30px, 6vw));
-        margin: -0.3vw 3vw 0 0;
+        margin-top: -0.3vw;
       }
 
     }
