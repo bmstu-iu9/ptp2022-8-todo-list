@@ -22,7 +22,16 @@ body {
 
         .sun-moon {
           height: 30px;
-          width: 30px;
+
+          :not(.moon) {
+            height: 30px;
+            width: 30px;
+          }
+
+          .moon {
+            height: 27px;
+            width: 27px;
+          }
         }
 
         .signin {
@@ -35,14 +44,21 @@ body {
           margin-right: 4vw;
         }
 
-        .logo{
+        .logo {
           margin-left: 2vw;
           margin-right: 1.5rem;
         }
 
         .sun-moon {
-          height: 40px;
-          width: 40px;
+          :not(.moon) {
+            height: 40px;
+            width: 40px;
+          }
+
+          .moon {
+            height: 35px;
+            width: 35px;
+          }
         }
       }
 
