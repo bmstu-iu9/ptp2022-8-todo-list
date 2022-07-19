@@ -9,12 +9,14 @@ window.onload = function () {
     const eye = <HTMLElement>document.getElementsByClassName('password-control')[0]
     const register = document.getElementById('register')
     let footer = <HTMLElement>document.querySelector('footer')
+    let check = <HTMLElement>document.getElementsByClassName('password-check')[0]
 
     rgBtn.addEventListener('click', () => {
         rgForm.classList.add('hidden')
         lgForm.classList.remove('hidden')
         document.title = "Sign in"
         footer.style.margin = '1rem 0 0 0'
+        check.style.visibility = 'hidden'
     })
     lgBtn.addEventListener('click', () => {
         lgForm.classList.add('hidden')
@@ -28,7 +30,6 @@ window.onload = function () {
         let input2 = (<HTMLInputElement>document.getElementById('confirmPassword')).value;
         let email = (<HTMLInputElement>document.getElementById('email_rg')).value;
         let nickname = (<HTMLInputElement>document.getElementById('nickname')).value;
-        let check = <HTMLElement>document.getElementsByClassName('password-check')[0]
         const re = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
         if (nickname.length==0 || email.length==0 || input1.length==0 || input2.length==0){
             check.innerHTML = 'Заполнены не все поля'
