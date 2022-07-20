@@ -1,0 +1,320 @@
+@import url('https://fonts.googleapis.com/css2?family=BIZ+UDGothic&family=Kosugi+Maru&family=Montserrat&display=swap');
+
+.todo {
+
+    @media screen and (max-width: 768px) {
+        width: 90%;
+    }
+
+    @media screen and (min-width: 769px) {
+        width: 80%;
+    }
+
+    position: relative;
+
+    margin: calc(8vw - 10px) auto;
+
+    .todo_input {
+        position: relative;
+
+        .todo_text {
+            border: 1px solid gray;
+
+            @media screen and (max-width: 768px) {
+                height: 30px;
+                width: calc(100% - 55px);
+                border-bottom-left-radius: 4px;
+                border-top-left-radius: 4px;
+            }
+
+            @media screen and (min-width: 769px) {
+                height: 50px;
+                width: calc(100% - 95px);
+                font-size: 20px;
+                border-bottom-left-radius: 6px;
+                border-top-left-radius: 6px;
+            }
+        }
+
+        .add {
+            z-index: 1;
+            position: absolute;
+            padding: 0px;
+            margin-left: -4px;
+            border: 1px solid gray;
+
+            @media screen and (max-width: 768px) {
+                svg {
+                    width: 28;
+                    height: 28;
+                }
+            }
+
+            @media screen and (min-width: 769px) {
+                svg {
+                    width: 48;
+                    height: 48;
+                }
+            }
+        }
+
+        .expansion {
+            position: absolute;
+            border: 1px solid gray;
+
+            @media screen and (max-width: 768px) {
+                svg {
+                    width: 20;
+                    height: 20;
+                }
+
+                margin-left: 20px;
+                padding: 0 4px 8px 9px;
+                border-radius: 4px;
+                height: 30px;
+            }
+
+            @media screen and (min-width: 769px) {
+                svg {
+                    width: 38;
+                    height: 38;
+                }
+
+                margin-left: 40px;
+                padding: 5px 5px 5px 10px;
+                border-radius: 6px;
+                height: 50px;
+            }
+        }
+    }
+
+    .todo__filter {
+        position: relative;
+        z-index: 1;
+
+        .todo__stage {
+            .stage {
+                @media screen and (min-width: 769px) {
+                    font-size: 20px;
+
+                }
+            }
+        }
+
+
+        .dropdown-menu {
+            width: calc(50% - 24px);
+            border-width: 0;
+
+            @media screen and (min-width: 769px) {
+                font-size: 20px;
+
+                .dropbtn {
+                    font-size: 20px;
+                }
+            }
+
+            .dropbtn {
+                @media screen and (max-width: 380px) {
+                    width: calc(41.5vw);
+                }
+            }
+
+            .list-unstyled {
+
+                @media screen and (min-width: 769px) {
+                    font-size: 20px;
+                    max-height: 115px;
+                }
+
+                a {
+                    display: block;
+                }
+
+                display: none;
+                max-height: 100px;
+                overflow-x: hidden;
+                overflow-y: auto;
+
+            }
+
+            .show {
+                padding: 3px 0;
+                border: 1px solid rgb(206, 212, 218);
+                border-bottom-left-radius: 6px;
+                border-bottom-right-radius: 6px;
+                z-index: 2;
+                display: block;
+            }
+        }
+
+    }
+
+    .todolist {
+        list-style: none;
+
+        @media screen and (min-width: 769px) {
+            font-size: 20px;
+        }
+
+        li {
+            position: relative;
+            padding-right: 55px;
+
+            a {
+                text-decoration: none;
+                color: gray;
+            }
+
+            .todo__time {
+                white-space: nowrap;
+                margin-left: 15px;
+
+                .todo__important {
+                    color: red;
+                    margin-bottom: 2px;
+                }
+
+                .todo__non-urgent {
+                    color: #0d6efd;
+                    margin-bottom: 2px;
+                }
+
+            }
+
+            .todo__category {
+                margin-left: 15px;
+                padding: 2px 4px;
+                border-radius: 4px;
+            }
+
+            .todo__edit {
+
+                margin-top: -30px;
+                margin-right: 5px;
+
+            }
+
+            .todo__delete {
+                margin-top: -30px;
+                margin-right: -40px;
+
+            }
+
+        }
+
+    }
+
+    .window__form {
+        .form__title {}
+
+        .chosen__categories {
+            
+            .category {
+                position: relative;
+                padding: 6px;
+                padding-right: 26px;
+                margin-right: 10px;
+                margin-top: 10px;
+                border-radius: 4px;
+
+                button {
+                    height: 6px;
+                    width: 6px;
+                    position: absolute;
+                    top: calc(50% - 6px);
+                    right: 8px;
+                }
+            }
+        }
+
+        .list-category-contener {
+            position: absolute;
+            display: none;
+            width: calc(100% - 32px);
+
+            .list-category {
+                list-style: none;
+                display: block;
+                background-color: rgb(255, 255, 255);
+                border: 0.5px solid rgb(190, 190, 190);
+                border-top: none;
+                border-bottom: none;
+
+                a {
+                    display: block;
+                }
+
+                max-height: 100px;
+                overflow-x: hidden;
+                overflow-y: auto;
+
+            }
+
+
+            .add__category {
+                display: block;
+                background-color: rgb(255, 255, 255);
+                border: 0.5px solid rgb(190, 190, 190);
+                border-top: none;
+                border-bottom-left-radius: 6px;
+                border-bottom-right-radius: 6px;
+                margin-top: 0px;
+                padding: 8px 1em 4px;
+                height: auto;
+
+                .name__category {
+                    width: calc(100% - 80px);
+
+                    input {
+                        border-top-right-radius: 0;
+                        border-bottom-right-radius: 0;
+                    }
+                }
+
+                .color__category {
+                    width: 38px;
+                    padding: 0;
+
+                    input {
+                        border: 0.5px solid rgb(206, 212, 218);
+                        border-radius: 0;
+                        border-right: none;
+                    }
+                }
+
+                .add {
+                    width: 38px;
+
+                    a {
+                        border-left: none;
+                        border: 0.5px solid rgb(206, 212, 218);
+                        border-top-right-radius: 6px;
+                        border-bottom-right-radius: 6px;
+
+                    }
+
+                }
+            }
+
+            .add__category__botton {
+                height: 22px;
+                background-color: rgb(255, 255, 255);
+                border: 0.5px solid rgb(206, 212, 218);
+                border-top: none;
+                border-radius: 6px;
+                margin-top: -7px;
+            }
+
+
+        }
+
+        .show1 {
+            z-index: 1;
+            display: block;
+        }
+
+    }
+
+
+}

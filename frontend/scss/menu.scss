@@ -5,8 +5,8 @@ body {
     position: relative;
     $width_menu: 115px;
     .menu {
-        z-index: 1;
-        .open{
+        z-index: 11;
+        .menu__open{
             background-color: #0d6efd;
             a{
                 color: #ECEFF1;
@@ -55,7 +55,7 @@ body {
                 height: 26px;
 
                 cursor: pointer;
-                z-index: 1;
+                z-index: 13;
             }
 
             .menu__btn>span,
@@ -93,18 +93,22 @@ body {
         }
 
         .menu__box {
-            @media screen and (min-width: 768px) {
+            z-index: 12;
+            @media screen and (min-width: 769px) {
                 // padding: 20px 0;
                 left: 0;
                 width: $width_menu;
 
-                .nav-item-end{
+                .menu__exit{
                     position: absolute;
                     bottom: 0;
                     width: $width_menu;
-                    a{
-                        color: $danger;
-                    }
+                }
+            }
+
+            .menu__exit{
+                a{
+                    color: $danger;
                 }
             }
 
@@ -157,7 +161,7 @@ body {
 
         }
 
-        .nav-item:not(.open):hover {
+        .nav-item:not(.menu__open):hover {
             background-color: #CFD8DC;
         }
     }
@@ -165,7 +169,7 @@ body {
     .body {
         @media screen and (min-width: 769px) {
             left: $width_menu;
-            max-width: calc(100% - $width_menu);
+            width: calc(100% - $width_menu);
             padding: 0;
             position: absolute;
         }

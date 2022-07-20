@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta name="theme-color" content="#712cf9" />
+
+    <title>Document</title>
+    <link href="../scss/todo.scss" rel="stylesheet" />
+    <link href="../scss/menu.scss" rel="stylesheet" />
+</head>
+
+<body>
+<div class="w-100 h-100">
+    <div class="menu">
+
+        <input id="menu__toggle" class="d-none" type="checkbox" />
+        <label class="menu__btn" for="menu__toggle">
+            <span></span>
+        </label>
+        <ul class="menu__box nav flex-column">
+
+            <li class="nav-item">
+                <a class="nav-link active" href="#">
+<!--                    добавить ссылку на профиль после принятия пул реквеста и слияния проекта-->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                    </svg><p>Профиль</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link active" href="todo.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list-check" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3.854 2.146a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 3.293l1.146-1.147a.5.5 0 0 1 .708 0zm0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 7.293l1.146-1.147a.5.5 0 0 1 .708 0zm0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
+                    </svg> <p>Список дел</p>
+                </a>
+            </li>
+            <li class="nav-item open">
+                <a class="nav-link active" href="shop.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-shop" viewBox="0 0 16 16">
+                        <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zM4 15h3v-5H4v5zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3zm3 0h-2v3h2v-3z"/>
+                    </svg> <p>Магазин</p>
+                </a>
+            </li>
+            <li class="nav-item exit">
+                <a class="nav-link active" href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
+                        <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+                    </svg> <p>Выход</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="body">
+        <nav class=" sticky-top navbar navbar-expand-lg bg-light">
+            <div class="container-fluid" id="top">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Меню</a>
+                </div>
+                <div class="navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="#clothes">Одежда</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#Accessories">Аксессуары</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#pet">Питомцы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#other">Другое</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+        <!--    Типы карточек:
+            Обычная:     #C8C8C8 ($gray-200)
+            Редкая:      #FFB74D ($orange-300)
+            Эпическая:   #F06292 ($pink-300)
+            Легендарная: #26A69A ($teal-400)
+            Мифическая:  linear-gradient(#40E0D0, #FF8C00, #FF0080)
+        -->
+
+        <div class="padding-right px-3 padding-left px-3">
+            <h3 class="display-4 text-center" id="clothes">
+                <a href="#top" style = "text-decoration: none">Одежда</a></h3>
+            <br>
+
+            <div class="row row-cols-lg-6 row-cols-md-4 row-cols-sm-3 row-cols-2 g-4">
+                <div class="col">
+                    <div class="card h-100">
+                       <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #C8C8C8">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #FFB74D">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a short card.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #26A69A">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #F06292">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #C8C8C8">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style = "background: linear-gradient(#40E0D0, #FF8C00, #FF0080)">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary btn-size-xs" >Buy</a>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+            <h3 class="display-4 text-center" id="Accessories">
+                <a href="#top" style="text-decoration: none">Аксессуары</a></h3>
+            <br>
+
+            <div class="row row-cols-lg-6 row-cols-md-4 row-cols-sm-3 row-cols-2 g-4">
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #C8C8C8">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #FFB74D">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a short card.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #26A69A">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #F06292">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #C8C8C8">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style = "background: linear-gradient(#40E0D0, #FF8C00, #FF0080)">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary btn-size-xs" >Buy</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <br>
+            <h3 class="display-4 text-center" id="pet">
+                <a href="#top" style = "text-decoration: none">Питомцы</a></h3>
+            <br>
+
+            <div class="row row-cols-lg-6 row-cols-md-4 row-cols-sm-3 row-cols-2 g-4">
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #C8C8C8">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #FFB74D">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a short card.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #26A69A">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #F06292">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #C8C8C8">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style = "background: linear-gradient(#40E0D0, #FF8C00, #FF0080)">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary btn-size-xs" >Buy</a>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+            <h3 class="display-4 text-center" id="other">
+                <a href="#top" style = "text-decoration: none">Другое</a></h3>
+            <br>
+
+            <div class="row row-cols-lg-6 row-cols-md-4 row-cols-sm-3 row-cols-2 g-4">
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #C8C8C8">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #FFB74D">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a short card.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #26A69A">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #F06292">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: #C8C8C8">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Buy</a>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="../images/armorHelmet.webp" class="card-img-top" alt="...">
+                        <div class="card-body" style = "background: linear-gradient(#40E0D0, #FF8C00, #FF0080)">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary btn-size-xs" >Buy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
