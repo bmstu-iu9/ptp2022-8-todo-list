@@ -32,6 +32,11 @@ func NewRepository(db *sql.DB, logger *log.Logger) repository {
 }
 
 func (repo *repository) Create(user *entity.User) error {
+	_, err := repo.db.Exec(fmt.Sprintf("INSERT INTO users(id, email, nickname, password)"+
+		"VALUES (%d,'%s','%s','%s'", user.Id, user.Email, user.Nickname, user.Password))
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
