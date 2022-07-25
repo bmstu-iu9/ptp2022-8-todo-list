@@ -59,5 +59,10 @@ func (repo *repository) Delete(id int) error {
 }
 
 func (repo *repository) Update(user *entity.User) error {
+	_, err := repo.db.Exec(fmt.Sprintf("UPDATE users SET email = '%s', nickname = '%s',"+
+		"password = '%s' WHERE id = %d", user.Email, user.Nickname, user.Password, user.Id))
+	if err != nil {
+		return err
+	}
 	return nil
 }
