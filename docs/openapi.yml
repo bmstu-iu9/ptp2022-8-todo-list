@@ -121,13 +121,9 @@ paths:
           application/json:
             schema:
               allOf:
-                - oneOf:
-                  - properties:
-                      email:
-                        $ref: '#/components/schemas/Email'
-                  - properties:
-                      nickname:
-                        $ref: '#/components/schemas/Nickname'
+                - properties:
+                    email:
+                      $ref: '#/components/schemas/Email'
                 - properties:
                     password:
                       $ref: '#/components/schemas/Password'
