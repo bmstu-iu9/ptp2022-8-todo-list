@@ -25,20 +25,15 @@ window.onload = function () {
         lgForm.classList.add('hidden')
         rgForm.classList.remove('hidden')
         document.title = "Sign up"
-        footer.style.margin = '10rem 0 0 0'
+        footer.style.margin = '7rem 0 0 0'
         check1.style.visibility = 'hidden'
     })
 
     login!.addEventListener('click', () => {
         let email = (<HTMLInputElement>document.getElementById('email_lg')).value
         let password = (<HTMLInputElement>document.getElementById('rgPassword')).value;
-        if(re.test(email.toLowerCase())){
-            //введена почта
-        }else{
-            //введен никнейм
-        }
-
-        if(password.length < 8){
+        
+        if(password.length < 8 || !(re.test(email.toLowerCase()))){
             check1.style.visibility = 'visible'
         }
     })

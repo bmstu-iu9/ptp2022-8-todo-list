@@ -12,26 +12,29 @@ body {
 
 	img {
 
-		@media screen and (max-height: 735px) {
-			width: 150;
-			height: 150;
+		@media screen and (max-height: 743px) {
+			width: 140;
+			height: 140;
+			margin-bottom: .5rem;
 		}
 
-		@media screen and (min-height: 736px) {
+		@media screen and (min-height: 744px) {
 			width: 200;
 			height: 200;
+			margin-bottom: 1.5rem;
 		}
 
 		@media screen and (min-height: 871px) {
 			width: 300px;
 			height: 300px;
+			margin-bottom: 1.5rem;
 		}
 	}
 
 	.form-signin {
 		max-width: 330px;
+		padding: 0 15px;
 		margin: 0 auto;
-		padding: 15px;
 		position: relative;
 
 		.login .form-control {
@@ -84,7 +87,7 @@ body {
 
 	.register {
 		max-width: 300px;
-		top: 15px;
+		top: 0px;
 		left: 15px;
 		position: absolute;
 
