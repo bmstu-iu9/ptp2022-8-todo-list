@@ -51,6 +51,10 @@ func (repo *repository) Get(id int) (entity.User, error) {
 }
 
 func (repo *repository) Delete(id int) error {
+	_, err := repo.db.Exec(fmt.Sprintf("DELETE FROM users WHERE id = %d", id))
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
