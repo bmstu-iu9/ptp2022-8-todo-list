@@ -11,7 +11,7 @@ FROM base AS build
 RUN --mount=target=. \
     --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
-    go build -o /out/data-provider .
+    go build -o /out/slavatidika cmd/slavatidika/slavatidika.go
 
 FROM base AS unit-test
 RUN --mount=target=. \
@@ -33,5 +33,5 @@ FROM scratch AS unit-test-coverage
 COPY --from=unit-test /out/cover.out /cover.out
 
 FROM golang:1.18-alpine
-COPY --from=build /out/data-provider /
-ENTRYPOINT "/data-provider"
+COPY --from=build /out/slavatidika /
+ENTRYPOINT "/slavatidika"
