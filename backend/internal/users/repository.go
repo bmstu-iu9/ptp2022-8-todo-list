@@ -2,6 +2,7 @@ package users
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "github.com/lib/pq"
@@ -22,7 +23,7 @@ type Repository interface {
 }
 
 type repository struct {
-	db *sql.DB
+	db     *sql.DB
 	logger *log.Logger
 }
 
@@ -35,7 +36,18 @@ func (repo *repository) Create(user *entity.User) error {
 }
 
 func (repo *repository) Get(id int) (entity.User, error) {
-	return entity.User{}, nil
+	row, err := repo.db.Query(fmt.Sprintf("SELECT * FROM users WHERE id = %d", id))
+	if err != nil {
+		return entity.User{}, err
+	}
+	defer row.Close()
+	user := entity.User{}
+	err = row.Scan(&user.Id, &user.Email, &user.Nickname, user.Password)
+	if err != nil {
+		return entity.User{}, err
+	} else {
+		return user, nil
+	}
 }
 
 func (repo *repository) Delete(id int) error {
