@@ -26,14 +26,7 @@ class Task {
                 labels: this.labels,
                 status: this.status
             } 
-            sendRequest('POST', `http://grechkogv.ru/tasks`, JSON.stringify(tsk))
-        }
-    }
-
-    public setStatus(s: Status, edited: boolean = true) {
-        this.status = s
-        if (edited) {
-            this.updateHTML()
+            sendRequest('POST', server + '/tasks', JSON.stringify(tsk))
         }
     }
 
@@ -157,5 +150,13 @@ class Task {
 
     public getStatus(): Status {
         return this.status
+    }
+
+    public setStatus(s: Status, edited: boolean = true) {
+        this.status = s
+        if (edited) {
+            this.updateHTML()
+            sendRequest('PATCH', server + `/tasks/${this.id}`, JSON.stringify({status:this.status}))
+        }
     }
 }

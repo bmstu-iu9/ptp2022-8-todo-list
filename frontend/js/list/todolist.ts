@@ -12,14 +12,14 @@ const modal = new bootstrap.Modal(<HTMLFormElement>document.getElementById('moda
 const modalEditor = new bootstrap.Modal(<HTMLFormElement>document.getElementById('modal__editor'))
 
 // Получение лейблов с сервера
-sendRequest('GET', 'http://grechkogv.ru/labels').then((data) => {
+sendRequest('GET', server + '/labels').then((data) => {
     for (let i = 0; i < data.length; i++) {
         labels.set(lbl_id++, data[i])
     }
 })
 
 // Получение задач с сервера
-sendRequest('GET', 'http://grechkogv.ru/tasks').then((data) => {
+sendRequest('GET', server + '/tasks').then((data) => {
     for (let i = 0; i < data.length; i++) {
         let buf = data[i]
         let newTask = new Task(buf.id, buf.name, buf.description, buf.dueDate, buf.labels, false)
@@ -96,7 +96,7 @@ document.addEventListener('click', (e) => {
         let id = parseInt(strId!.substring(3))
         tasks.get(id)!.setStatus('archived')
         tasks.get(id)!.clearHTML()
-        sendRequest('DELETE', `http://grechkogv.ru/tasks/${id}`)
+        sendRequest('DELETE', server + `/tasks/${id}`)
         tasks.delete(id)
     } else if (hasParentClass(target, 'name__openModal')) {
         // Просмотр информации о задаче
@@ -213,7 +213,6 @@ document.addEventListener('click', (e) => {
         let regexp = /id=lbl-\d+/
         let link = <HTMLElement>target.closest('.dropdown-item')
         let lbl = labels.get(parseInt(link.id.substring(4)) - 1)
-        console.log(lbl)
         let container = document.getElementsByClassName('chosen__categories')[0]
         container.innerHTML =
             container.innerHTML +
@@ -270,7 +269,6 @@ document.addEventListener('change', (e) => {
         // код фильтра
         let flt = <HTMLSelectElement>target
         let status = flt.selectedOptions[0].value
-        console.log(status)
         let ul = <HTMLUListElement>document.getElementById('todolist')
         ul.innerHTML = ''
         tasks.forEach((task) => {
