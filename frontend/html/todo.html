@@ -11,7 +11,10 @@
   <title>Document</title>
   <link href="../scss/todo.scss" rel="stylesheet" />
   <link href="../scss/menu.scss" rel="stylesheet" />
-  <script defer src="../js/todolist.ts"></script>
+  <script src="../js/request.ts"></script>
+  <script defer src="../js/list/utility.ts"></script>
+  <script defer src="../js/list/task.ts"></script>
+  <script defer src="../js/list/todolist.ts"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     crossorigin="anonymous"></script>
 
@@ -135,7 +138,7 @@
           <select class="stage form-control">
             <option value="active">активные</option>
             <option value="completed">завершённые</option>
-            <option value="deleted">удалённые</option>
+            <option value="archived">архивированные</option>
           </select>
         </div>
 
