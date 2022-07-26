@@ -213,7 +213,6 @@ document.addEventListener('click', (e) => {
         let regexp = /id=lbl-\d+/
         let link = <HTMLElement>target.closest('.dropdown-item')
         let lbl = labels.get(parseInt(link.id.substring(4)) - 1)
-        console.log(lbl)
         let container = document.getElementsByClassName('chosen__categories')[0]
         container.innerHTML =
             container.innerHTML +
@@ -270,7 +269,6 @@ document.addEventListener('change', (e) => {
         // код фильтра
         let flt = <HTMLSelectElement>target
         let status = flt.selectedOptions[0].value
-        console.log(status)
         let ul = <HTMLUListElement>document.getElementById('todolist')
         ul.innerHTML = ''
         tasks.forEach((task) => {
