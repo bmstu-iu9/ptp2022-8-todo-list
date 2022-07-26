@@ -30,13 +30,6 @@ class Task {
         }
     }
 
-    public setStatus(s: Status, edited: boolean = true) {
-        this.status = s
-        if (edited) {
-            this.updateHTML()
-        }
-    }
-
     private createHTMLBlock() {
         let labelStr = ''
         if (this.labels.length > 0) {
@@ -157,5 +150,13 @@ class Task {
 
     public getStatus(): Status {
         return this.status
+    }
+
+    public setStatus(s: Status, edited: boolean = true) {
+        this.status = s
+        if (edited) {
+            this.updateHTML()
+            sendRequest('PATCH', server + `/tasks/${this.id}`, JSON.stringify({status:this.status}))
+        }
     }
 }
