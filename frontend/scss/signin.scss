@@ -1,7 +1,9 @@
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
 html {
+	margin: 0;
 	height: 100%;
+	width: 100%;
 }
 
 body {
@@ -11,8 +13,13 @@ body {
 	background-color: #f5f5f5;
 
 	img {
+		@media screen and (max-height: 650px) {
+			width: 0;
+			height: 0;
+			margin-bottom: .5rem;
+		}
 
-		@media screen and (max-height: 743px) {
+		@media screen and (min-height: 651px) {
 			width: 140;
 			height: 140;
 			margin-bottom: .5rem;
@@ -86,6 +93,7 @@ body {
 	}
 
 	.register {
+		width: calc(100% - 30px);
 		max-width: 300px;
 		top: 0px;
 		left: 15px;

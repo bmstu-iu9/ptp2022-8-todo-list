@@ -25,7 +25,7 @@ window.onload = function () {
         lgForm.classList.add('hidden')
         rgForm.classList.remove('hidden')
         document.title = "Sign up"
-        footer.style.margin = '7rem 0 0 0'
+        footer.style.margin = '110px 0 0 0'
         check1.style.visibility = 'hidden'
     })
 
