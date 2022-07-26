@@ -26,7 +26,7 @@ class Task {
                 labels: this.labels,
                 status: this.status
             } 
-            sendRequest('POST', `http://grechkogv.ru/tasks`, JSON.stringify(tsk))
+            sendRequest('POST', server + '/tasks', JSON.stringify(tsk))
         }
     }
 
