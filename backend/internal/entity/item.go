@@ -1,7 +1,7 @@
 package entity
 
-
 //Struct Item describing one item
 type Item struct {
-	itemId int `json:"itemId"`
+	ItemId   int    `json:"ItemId"`
+	ItemName string `json:"ItemName"`
 }
