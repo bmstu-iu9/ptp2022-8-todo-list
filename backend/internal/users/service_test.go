@@ -197,7 +197,7 @@ func (s *UsersTestSuite) TestUpdateError(c *C) {
 
 type mockRepository struct {
 	items []entity.User
-	id    int
+	id    int64
 }
 
 func NewMockRerository() *mockRepository {
@@ -227,7 +227,7 @@ func (repo *mockRepository) Create(user *entity.User) error {
 	return nil
 }
 
-func (repo *mockRepository) Get(id int) (entity.User, error) {
+func (repo *mockRepository) Get(id int64) (entity.User, error) {
 	for _, item := range repo.items {
 		if item.Id == id {
 			return item, nil
@@ -236,7 +236,7 @@ func (repo *mockRepository) Get(id int) (entity.User, error) {
 	return entity.User{}, errors.New("repo: can't find User with given id")
 }
 
-func (repo *mockRepository) Delete(id int) error {
+func (repo *mockRepository) Delete(id int64) error {
 	for i, item := range repo.items {
 		if item.Id == id {
 			repo.items[i] = repo.items[len(repo.items)-1]

@@ -111,6 +111,7 @@ func (res *resource) handleDelete(w http.ResponseWriter, r *http.Request, p http
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func getId(p httprouter.Params) (int, error) {
-	return strconv.Atoi(p.ByName("id"))
+func getId(p httprouter.Params) (int64, error) {
+	id, err := strconv.Atoi(p.ByName("id"))
+	return int64(id), err
 }
