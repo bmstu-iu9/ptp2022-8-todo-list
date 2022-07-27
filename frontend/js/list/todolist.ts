@@ -119,18 +119,28 @@ document.addEventListener('click', (e) => {
         let dateBoxInfo = <HTMLInputElement>document.getElementById('dateE')
         let timeBoxInfo = <HTMLInputElement>document.getElementById('timeE')
         let commentTextInfo = <HTMLTextAreaElement>document.getElementById('commentE')
-        let fileEdit = <HTMLTextAreaElement>document.getElementById('input__fileE')
+        let fileInfo = <HTMLTextAreaElement>document.getElementById('input__fileE')
         inptBoxInfo.setAttribute('readonly', '') //делаем поля недоступными
         dateBoxInfo.setAttribute('readonly', '')
         timeBoxInfo.setAttribute('readonly', '')
         commentTextInfo.setAttribute('readonly', '')
-        fileEdit.setAttribute('readonly', '')
+        fileInfo.setAttribute('readonly', '')
         inptBoxInfo.value = buf?.getName()!
-        dateBoxInfo.value = ''
-        commentTextInfo.value = ''
+        if (buf?.getDueDate()!) {
+            let month = buf?.getDueDate()!.getMonth()!
+            let day = buf?.getDueDate()!.getDate()!
+            dateBoxInfo.value = `${buf?.getDueDate()!.getFullYear()}-${month > 9 ? month : `0${month}`}-${day > 9 ? day : `0${day}`}`
+            timeBoxInfo.value = `${buf?.getDueDate().getHours()}:${buf?.getDueDate().getMinutes()}`
+        }
+        else {
+            dateBoxInfo.value = ''
+            timeBoxInfo.value = ''
+        }
+        commentTextInfo.value = `${buf?.getDesc()}`
+        fileInfo.value = ''
         let taskLabels = <Array<Label>>buf?.getLabels()
         let container = document.getElementsByClassName('chosen__categories')[1]
-        container.innerHTML = ''
+        taskLabels.length === 0 ? container.innerHTML = 'Категории отсутствуют' : container.innerHTML = ''
         for (let i = 0; i < taskLabels.length; i++) {
             let lbl = taskLabels[i]
             container.innerHTML =
@@ -145,7 +155,7 @@ document.addEventListener('click', (e) => {
         // редактирование задачи
         let modal = document.getElementById('modal__editor')
         let id = modal?.getAttribute('opened-task-id')
-        let buf = JSON.parse(localStorage[parseInt(id!)])
+        let buf = tasks.get(parseInt(id))
         let titleModal = <HTMLInputElement>document.getElementById('modal-title-info') //меняем заголовок
         titleModal.innerHTML = 'Редактирование задачи'
         let btnEditSave = <HTMLInputElement>document.getElementsByClassName('btn-edit-save')[0] //меняем кнопку внизу
@@ -167,7 +177,7 @@ document.addEventListener('click', (e) => {
         let taskLabels = container.children
         let btnCloseLbl = document.getElementsByClassName('btn-close-lbl-edit')
         for (let i = 0; i < btnCloseLbl.length; i++) {
-            ;(<HTMLElement>btnCloseLbl[i]).style.display = 'block'
+            (<HTMLElement>btnCloseLbl[i]).style.display = 'block'
         }
         for (let i = 0; i < taskLabels.length; i++) {
             let lbl = taskLabels[i]
@@ -178,8 +188,8 @@ document.addEventListener('click', (e) => {
                     <input type="search" class="dropbtn2 form-control" autocomplete="false"
                       placeholder="Выбрать категорию">
                   </form>
-                  <div id="form__category" class="list-category-contener">
-                    <ul class="list-category mb-0 px-0">
+                  <div id="form-edit__category" class="list-category-contener">
+                    <ul class="edit__list-category list-category mb-0 px-0">
                       <!-- <input class="form-control" id="myInput" type="text" placeholder="Поиск"> -->
                     </ul>
 
@@ -208,8 +218,22 @@ document.addEventListener('click', (e) => {
     } else if (target.classList.contains('btn-close-lbl')) {
         // Удаление лейбла в модалке
         target.parentElement!.outerHTML = ''
+    } else if (hasParentClass(target, 'dropdown-item') && hasParentClass(target, 'edit__list-category')) {
+        // добавление лейбла в контейнер при редактировании
+        let regexp = /id=lbl-\d+/
+        let link = <HTMLElement>target.closest('.dropdown-item')
+        let lbl = labels.get(parseInt(link.id.substring(4)) - 1)
+        let container = document.getElementsByClassName('chosen__categories')[1]
+        container.innerHTML =
+            container.innerHTML +
+            `<div class="category col-auto" 
+                        style="background-color: ${lbl?.color};" id="lbl-${lbl?.id}">
+                        <label>${lbl?.text}</label>
+                        <button type="button" class="btn-close btn-close-lbl"></button>
+                        </div>`
+        LabelToHtml(<Label>lbl)
     } else if (hasParentClass(target, 'dropdown-item') && hasParentClass(target, 'list-category')) {
-        // добавление лейбла в контейнер
+        // добавление лейбла в контейнер при создании задачи
         let regexp = /id=lbl-\d+/
         let link = <HTMLElement>target.closest('.dropdown-item')
         let lbl = labels.get(parseInt(link.id.substring(4)) - 1)
@@ -239,8 +263,43 @@ document.addEventListener('click', (e) => {
                         <label class="todo__category">${lbl.text}</label>
                     </a></li>`
         ul.innerHTML = ul.innerHTML.concat(lbl_text)
-    } else if (target.classList.contains('dropbtn2')) {
-        // отрисовка выбранных лейблов в списке
+    } else if (target.classList.contains('dropbtn')) {
+        //выпадающий список лейблов в сортировке
+        let ul = <HTMLUListElement>document.getElementsByClassName('sort__list-category')[0]
+        if (ul.classList.contains('show')) {
+            ul.classList.remove('show')
+            ul.innerHTML = ''
+        } else {
+            labels.forEach((lbl) => {
+                let lbl_text = `<li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#" id="lbl-${lbl.id}">
+                                <span style="background-color: ${lbl.color};"
+                                class="d-inline-block rounded-circle p-1"></span>
+                                <label class="todo__category">${lbl.text}</label>
+                            </a></li>`
+                ul.innerHTML = ul.innerHTML.concat(lbl_text)
+            })
+            ul.classList.toggle('show')
+        }
+    } else if (!(target.matches('.dropbtn') || document.getElementsByClassName('sort__list-category')[0].contains(target)) && document.getElementsByClassName('sort__list-category')[0].classList.contains('show')) {
+        //сворачивание списка лейблов в сортировке задач по лейблам
+        let ul = <HTMLUListElement>document.getElementsByClassName('sort__list-category')[0]
+        ul.classList.remove('show')
+        ul.innerHTML = ''
+    } else if (hasParentClass(target, 'dropdown-item') && hasParentClass(target, 'sort__list-category')) {
+        //сортировка отображаемых задач по выбранному лейблу !добавить категорию все
+        let link = <HTMLElement>target.closest('.dropdown-item')
+        let lbl = labels.get(parseInt(link.id.substring(4)) - 1)!
+        let ul = <HTMLUListElement>document.getElementById('todolist')
+        ul.innerHTML = ''
+        tasks.forEach((task) => {
+            task.getLabels().forEach(function (taskLbl) {
+                if (taskLbl.id === lbl.id) {
+                    task.toHTMLBlock()
+                }
+            });
+        })
+    } else if (target.classList.contains('dropbtn1')) {
+        // отрисовка выбранных лейблов в списке (выпадающий список лейблов в создании задачи)
         let elem = <HTMLDivElement>document.getElementById('form__category')
         if (elem.classList.contains('show1')) {
             elem.classList.remove('show1')
@@ -258,6 +317,40 @@ document.addEventListener('click', (e) => {
             })
             elem.classList.toggle('show1')
         }
+    } else if (!(target.matches('.dropbtn1') || document.getElementsByClassName('list-category')[0].contains(target)) && (<HTMLDivElement>document.getElementById('form__category')).classList.contains('show1')) {
+        // сворачивание списка лейблов в создании задачи
+        console.log('сворачивание списка лейблов в создании задачи')
+        let elem = <HTMLDivElement>document.getElementById('form__category')
+        elem.classList.remove('show1')
+        let ul = <HTMLUListElement>document.getElementsByClassName('list-category')[0]
+        ul.innerHTML = ''
+    }
+    else if (target.classList.contains('dropbtn2')) {
+        // выпадающий список лейблов в редактировании задачи
+        console.log('выпадающий список лейблов в редактировании задачи')
+        let elem = <HTMLDivElement>document.getElementById('form-edit__category')
+        if (elem.classList.contains('show1')) {
+            elem.classList.remove('show1')
+            let ul = <HTMLUListElement>document.getElementsByClassName('edit__list-category')[0]
+            ul.innerHTML = ''
+        } else {
+            let ul = <HTMLUListElement>document.getElementsByClassName('edit__list-category')[0]
+            labels.forEach((lbl) => {
+                let lbl_text = `<li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#" id="lbl-${lbl.id}">
+                                <span style="background-color: ${lbl.color};"
+                                class="d-inline-block rounded-circle p-1"></span>
+                                <label class="todo__category">${lbl.text}</label>
+                            </a></li>`
+                ul.innerHTML = ul.innerHTML.concat(lbl_text)
+            })
+            elem.classList.toggle('show1')
+        }
+    } else if (!target.matches('.dropbtn2') && !document.getElementsByClassName('edit__list-category')[0].contains(target) && (<HTMLDivElement>document.getElementById('form-edit__category')).classList.contains('show1')) {
+        // сворачивание списка лейблов в редактировании задачи
+        let elem = <HTMLDivElement>document.getElementById('form-edit__category')
+        elem.classList.remove('show1')
+        let ul = <HTMLUListElement>document.getElementsByClassName('edit__list-category')[0]
+        ul.innerHTML = ''
     }
 })
 

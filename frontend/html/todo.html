@@ -111,26 +111,6 @@
         </a>
       </div>
 
-      <script>
-        function myFunction() {
-          document.getElementById("myDropdown").classList.toggle("show");
-        }
-
-        window.onclick = function (event) {
-          if (!event.target.matches('.dropbtn') && !document.getElementsByClassName('list-unstyled')[0].contains(event.target)) {
-            var dropdowns = document.getElementsByClassName("list-unstyled");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-              var openDropdown = dropdowns[i];
-              if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-              }
-            }
-
-          }
-        }
-      </script>
-
       <div class="my-2 row todo__filter">
 
 
@@ -145,34 +125,11 @@
         <div class="col h-38px">
           <div class="dropdown-menu d-block pt-0">
             <form class="todo__categories__form p-0 m-0">
-              <input onclick="myFunction()" type="search" class="dropbtn form-control" autocomplete="false"
+              <input type="search" class="dropbtn form-control" autocomplete="false"
                 placeholder="Категория">
             </form>
-            <ul id="myDropdown" class="list-unstyled mb-0">
-              <!-- <input class="form-control" id="myInput" type="text" placeholder="Поиск"> -->
-              <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
-                  <span style="background-color: rgba(0, 116, 15, 0.5);"
-                    class="d-inline-block rounded-circle p-1"></span>
-                  <label class="todo__category" for="category1">семья</label>
-                </a></li>
-
-              <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
-                  <span style="background-color: rgba(0, 73, 209, 0.5);"
-                    class="d-inline-block rounded-circle p-1"></span>
-                  <label class="todo__category" for="category2">работа</label>
-                </a></li>
-
-              <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
-                  <span style="background-color: rgba(101, 1, 168, 0.5);"
-                    class="d-inline-block rounded-circle p-1"></span>
-                  <label class="todo__category" for="category2">кот</label>
-                </a></li>
-
-              <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
-                  <span style="background-color: rgba(168, 54, 1, 0.5);"
-                    class="d-inline-block rounded-circle p-1"></span>
-                  <label class="todo__category" for="category2">позвонить гоше</label>
-                </a></li>
+            <ul class="sort__list-category mb-0">
+              
             </ul>
           </div>
         </div>
@@ -184,8 +141,6 @@
 
 
       </ul>
-
-
 
       <div class="window__form modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -221,7 +176,7 @@
 
                 <div class="d-block position-static mb-3 rounded-3">
                   <form class="bg-light p-0 m-0">
-                    <input type="search" class="dropbtn2 form-control" autocomplete="false"
+                    <input type="search" class="dropbtn1 form-control" autocomplete="false"
                       placeholder="Выбрать категорию">
                   </form>
                   <div id="form__category" class="list-category-contener">
@@ -281,12 +236,12 @@
 
 
 
-      <div class="window__form modal fade" id="modal__editor" tabindex="-1" aria-labelledby="exampleModalLabel" opened-task-id="">
-        aria-hidden="true">
+      <div class="window__form modal fade" id="modal__editor" tabindex="-1" aria-labelledby="exampleModalLabel"
+        opened-task-id="" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title form__title" id = "modal-title-info">Информация</h5>
+              <h5 class="modal-title form__title" id="modal-title-info">Информация</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -313,12 +268,12 @@
 
                 <div class="container p-0" title="Выбранные категории">
                   <div class="chosen__categories row mb-3 m-0">
-                    
+
                   </div>
                 </div>
 
-                <div id = "form__edit__categories" class="d-block position-static mb-3 rounded-3">
-                  
+                <div id="form__edit__categories" class="d-block position-static mb-3 rounded-3">
+
                 </div>
 
 
@@ -328,7 +283,7 @@
                   <label for="commentE">Комментарий</label>
                 </div>
 
-                <div class="form-floating mb-3">
+                <div class="form-group mb-3">
                   <input class="form-control" type="file" name="file" id="input__fileE" multiple>
                 </div>
 
@@ -340,19 +295,14 @@
             </div>
             <div class="modal-footer">
               <div class="container py-3 text-center">
-                <button type="button" class="btn btn-primary btn-edit">Редактировать</button>
-                <button type="button" class="btn btn-primary btn-edit-save">Сохранить изменения</button>
-              </div>
+                <button type="button" class="btn btn-primary btn-edit mx-auto">Редактировать</button>
+                <button type="button" class="btn btn-primary btn-edit-save mx-auto" data-bs-dismiss="modal">Сохранить изменения</button>
+              </div>              
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
-
-
-
 
 
   </div>

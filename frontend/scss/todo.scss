@@ -116,11 +116,11 @@
 
             .dropbtn {
                 @media screen and (max-width: 380px) {
-                    width: calc(41.5vw);
+                    width: 41.5vw;
                 }
             }
 
-            .list-unstyled {
+            .sort__list-category {
 
                 @media screen and (min-width: 769px) {
                     font-size: 20px;
@@ -222,7 +222,6 @@
                 padding: 6px;
                 padding-right: 26px;
                 margin-right: 10px;
-                margin-top: 10px;
                 border-radius: 4px;
 
                 button {
@@ -240,6 +239,7 @@
         }
 
         .list-category-contener {
+            width: calc(100% - 2rem);
             position: absolute;
             display: none;
 
