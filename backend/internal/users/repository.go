@@ -28,13 +28,13 @@ type repository struct {
 }
 
 // NewRepository creates a new users repository.
-func NewRepository(db *sql.DB, logger *log.Logger) repository {
+func NewRepository(db *sql.DB, logger *log.Logger) Repository {
 	return repository{db, logger}
 }
 
 // Create saves a new user in repository and sets an id field of user argument
 // to the id of saved user.
-func (repo *repository) Create(user *entity.User) error {
+func (repo repository) Create(user *entity.User) error {
 	err := repo.db.QueryRow("INSERT INTO users(email, nickname, password)"+
 		"VALUES ($1, $2, $3) RETURNING id", user.Email, user.Nickname, user.Password).
 		Scan(&user.Id)
@@ -45,7 +45,7 @@ func (repo *repository) Create(user *entity.User) error {
 }
 
 // Get reads the user with specified id from database.
-func (repo *repository) Get(id int64) (entity.User, error) {
+func (repo repository) Get(id int64) (entity.User, error) {
 	row, err := repo.db.Query("SELECT * FROM users WHERE id = $1", id)
 	if err != nil {
 		return entity.User{}, err
@@ -62,7 +62,7 @@ func (repo *repository) Get(id int64) (entity.User, error) {
 }
 
 // Delete removes a user with specified id from database.
-func (repo *repository) Delete(id int64) error {
+func (repo repository) Delete(id int64) error {
 	_, err := repo.db.Exec("DELETE FROM users WHERE id = $1", id)
 	if err != nil {
 		return err
@@ -71,7 +71,7 @@ func (repo *repository) Delete(id int64) error {
 }
 
 // Update saves changes to a user from database.
-func (repo *repository) Update(user *entity.User) error {
+func (repo repository) Update(user *entity.User) error {
 	_, err := repo.db.Exec("UPDATE users SET email = $1, nickname = $2,"+
 		"password = $3 WHERE id = $4", user.Email, user.Nickname, user.Password, user.Id)
 	if err != nil {

@@ -11,6 +11,8 @@ services:
       restart_policy:
         condition: on-failure
     network_mode: host
+    depends_on:
+      - db
   frontend:
     build:
       context: .

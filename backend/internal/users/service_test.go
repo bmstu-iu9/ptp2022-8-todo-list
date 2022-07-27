@@ -227,7 +227,7 @@ func (repo *mockRepository) Create(user *entity.User) error {
 	return nil
 }
 
-func (repo *mockRepository) Get(id int64) (entity.User, error) {
+func (repo mockRepository) Get(id int64) (entity.User, error) {
 	for _, item := range repo.items {
 		if item.Id == id {
 			return item, nil
@@ -246,7 +246,7 @@ func (repo *mockRepository) Delete(id int64) error {
 	}
 	return nil
 }
-func (repo *mockRepository) Update(user *entity.User) error {
+func (repo mockRepository) Update(user *entity.User) error {
 	for i, item := range repo.items {
 		if item.Id == user.Id {
 			repo.items[i] = *user

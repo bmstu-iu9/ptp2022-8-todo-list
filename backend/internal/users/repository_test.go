@@ -1,16 +1,14 @@
 package users
 
 import (
-	"database/sql"
-	"log"
-	"os"
-
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/db"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/logger"
 	. "gopkg.in/check.v1"
 )
 
 type RepoTestSuite struct {
-	repo repository
+	repo Repository
 }
 
 func init() {
@@ -18,33 +16,15 @@ func init() {
 }
 
 func (s *RepoTestSuite) SetUpSuite(c *C) {
-	db, err := sql.Open("postgres", "host=localhost port=5432 user=postgres dbname=slavatidika password=example sslmode=disable")
+	db, err := db.New()
 	if err != nil {
 		panic(err)
 	}
 
-	_, err = db.Exec(`
-DROP TABLE IF EXISTS users;
-CREATE TABLE users (
-       id serial PRIMARY KEY,
-       email varchar(255) UNIQUE NOT NULL,
-       nickname varchar(20) NOT NULL,
-       password varchar(100) NOT NULL
-);
-INSERT INTO users(email, nickname, password)
-VALUES('test@example.com', 'test', 'Test123Test');
-`)
-	if err != nil {
-		panic(err)
-	}
-
-	s.repo = NewRepository(db, log.New(os.Stdout, "", log.Ldate|log.Ltime|log.Lshortfile))
+	s.repo = NewRepository(db, logger.New())
 }
 
 func (s *RepoTestSuite) TestRepo(c *C) {
-	tmp := s.repo.db.Ping()
-	c.Check(tmp, IsNil)
-
 	testUser, err := s.repo.Get(1)
 	c.Check(err, IsNil)
 	c.Check(testUser, DeepEquals, entity.User{
