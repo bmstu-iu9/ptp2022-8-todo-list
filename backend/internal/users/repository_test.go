@@ -3,7 +3,7 @@ package users
 import (
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/db"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/logger"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	. "gopkg.in/check.v1"
 )
 
@@ -21,7 +21,7 @@ func (s *RepoTestSuite) SetUpSuite(c *C) {
 		panic(err)
 	}
 
-	s.repo = NewRepository(db, logger.New())
+	s.repo = NewRepository(db, log.New())
 }
 
 func (s *RepoTestSuite) TestRepo(c *C) {

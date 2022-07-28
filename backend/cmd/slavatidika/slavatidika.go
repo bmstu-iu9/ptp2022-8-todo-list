@@ -2,23 +2,24 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
+	"os"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/config"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/db"
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/logger"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/ping"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/users"
 	"github.com/julienschmidt/httprouter"
 )
 
 func main() {
+	logger := log.New()
 	db, err := db.New()
 	if err != nil {
-		log.Fatal(err)
+		logger.Info(err)
+		os.Exit(1)
 	}
-	logger := logger.New()
 	mux := httprouter.New()
 
 	ping.RegisterHandlers(mux)
@@ -33,5 +34,6 @@ func main() {
 		Handler: mux,
 	}
 
-	log.Fatal(server.ListenAndServe())
+	logger.Info(server.ListenAndServe())
+	os.Exit(1)
 }

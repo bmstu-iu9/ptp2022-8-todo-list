@@ -2,11 +2,11 @@ package users
 
 import (
 	"database/sql"
-	"log"
 
 	_ "github.com/lib/pq"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 )
 
 // Repository encapsulates the logic to access users from the data source.
@@ -24,11 +24,11 @@ type Repository interface {
 // repository persists users in database.
 type repository struct {
 	db     *sql.DB
-	logger *log.Logger
+	logger log.Logger
 }
 
 // NewRepository creates a new users repository.
-func NewRepository(db *sql.DB, logger *log.Logger) Repository {
+func NewRepository(db *sql.DB, logger log.Logger) Repository {
 	return repository{db, logger}
 }
 
