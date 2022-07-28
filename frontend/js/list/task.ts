@@ -157,12 +157,22 @@ class Task {
         }
     }
 
-    public editTask(n: string, date: string, l: Label[], d: string){
+    public editTask(n: string, date: string | undefined, l: Label[], d: string){
         this.name = n
         if (date) this.dueDate = new Date(date)
+        else delete this.dueDate
         this.labels = l
-        this.desc = d
+        this.desc = d  
         this.updateHTML()
-        sendRequest('PATCH', server + `/tasks/${this.id}`, JSON.stringify(this))
+        const tsk = {
+            name: this.name,
+            id: this.id,
+            description: this.desc,
+            createdOn: this.createdOn,
+            dueDate: this.dueDate,
+            labels: this.labels,
+            status: this.status
+        }
+        sendRequest('PUT', server + `/tasks/${this.id}`, JSON.stringify(tsk))
     }
 }

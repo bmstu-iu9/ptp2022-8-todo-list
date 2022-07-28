@@ -94,8 +94,8 @@
   <div class="body">
     <div class="todo">
 
-      <div class="todo_input">
-        <input class="todo_text d-inline" type="text">
+      <div class="todo__input">
+        <input class="todo__text d-inline" type="text">
         <a class="add bg-primary text-white active d-inline-block" title="Добавить задачу">
           <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="add-btn bi bi-plus" viewBox="0 0 16 16">
             <path
@@ -124,13 +124,16 @@
 
         <div class="col h-38px">
           <div class="dropdown-menu d-block pt-0">
-            <form class="todo__categories__form p-0 m-0">
-              <input type="search" class="dropbtn form-control" autocomplete="false"
-                placeholder="Категория">
+            <form class="todo__categories__form p-0 m-0 w-100">
+              <input type="search" class="dropbtn form-control" autocomplete="false" placeholder="Категория">
             </form>
-            <ul class="sort__list-category mb-0">
-              
-            </ul>
+            <div id="sort__form__category" class="sort__list-category-contener">
+              <ul class="sort__list-category mb-0">
+                
+              </ul>
+
+              <button type="button" class="sort__btn btn btn-primary w-100">Сбросить</button>
+            </div>
           </div>
         </div>
 
@@ -268,7 +271,7 @@
 
                 <div class="container p-0" title="Выбранные категории">
                   <div class="chosen__categories row mb-3 m-0">
-                    
+
                   </div>
                 </div>
 
@@ -296,8 +299,9 @@
             <div class="modal-footer">
               <div class="container py-3 text-center">
                 <button type="button" class="btn btn-primary btn-edit mx-auto">Редактировать</button>
-                <button type="button" class="btn btn-primary btn-edit-save mx-auto" data-bs-dismiss="modal">Сохранить изменения</button>
-              </div>              
+                <button type="button" class="btn btn-primary btn-edit-save mx-auto" data-bs-dismiss="modal">Сохранить
+                  изменения</button>
+              </div>
             </div>
           </div>
         </div>
