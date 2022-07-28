@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "parcel ./frontend/index.html -p 8000",
     "start": "parcel build --public-url ./ ./frontend/index.html ",
-    "lint": "npx eslint ./frontend/js/*.js && npx tsc --noEmit frontend/js/*.ts"
+    "lint": "npx eslint ./frontend/js/*.js && npx tsc -t es6 --noEmit frontend/js/*.ts"
   },
   "repository": {
     "type": "git",

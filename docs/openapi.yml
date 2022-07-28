@@ -36,7 +36,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewUser'
+              allOf:
+                - properties:
+                    email:
+                      $ref: '#/components/schemas/User/properties/email'
+                - properties:
+                    nickname:
+                      $ref: '#/components/schemas/User/properties/nickname'
+                - properties:
+                    password:
+                      $ref: '#/components/schemas/Password'
       tags:
         - Users
       responses:
@@ -67,22 +76,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-    put:
-      tags:
-        - Users
-      summary: Modify user
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/NewUser'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
     delete:
       tags:
         - Users
@@ -93,15 +86,25 @@ paths:
     patch:
       tags:
         - Users
-      summary: Patch user
+      summary: Modify user
       requestBody:
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/Email'
-                - $ref: '#/components/schemas/Nickname'
-                - $ref: '#/components/schemas/Password'
+              type: object
+              properties:
+                currentPassword:
+                  $ref: '#/components/schemas/Password'
+              anyOf:
+                - properties:
+                    email:
+                      $ref: '#/components/schemas/Email'
+                - properties:
+                    nickname:
+                      $ref: '#/components/schemas/Nickname'
+                - properties:
+                    newPassword:
+                      $ref: '#/components/schemas/Password'
       responses:
         '200':
           description: OK
@@ -118,10 +121,12 @@ paths:
           application/json:
             schema:
               allOf:
-                - oneOf:
-                  - $ref: '#/components/schemas/Email'
-                  - $ref: '#/components/schemas/Nickname'
-                - $ref: '#/components/schemas/Password'
+                - properties:
+                    email:
+                      $ref: '#/components/schemas/Email'
+                - properties:
+                    password:
+                      $ref: '#/components/schemas/Password'
       tags:
         - Auth
       responses:
@@ -202,12 +207,24 @@ paths:
           application/json:
             schema:
               anyOf:
-                - $ref: '#/components/schemas/Task/properties/name'
-                - $ref: '#/components/schemas/Task/properties/description'
-                - $ref: '#/components/schemas/Task/properties/dueDate'
-                - $ref: '#/components/schemas/Task/properties/shtirlitchHumoresque'
-                - $ref: '#/components/schemas/Task/properties/labels'
-                - $ref: '#/components/schemas/Task/properties/status'
+                - properties:
+                    name:
+                      $ref: '#/components/schemas/Task/properties/name'
+                - properties:
+                    description:
+                      $ref: '#/components/schemas/Task/properties/description'
+                - properties:
+                    dueDate:
+                      $ref: '#/components/schemas/Task/properties/dueDate'
+                - properties:
+                    shtirlitchHumoresque:
+                      $ref: '#/components/schemas/Task/properties/shtirlitchHumoresque'
+                - properties:
+                    labels:
+                      $ref: '#/components/schemas/Task/properties/labels'
+                - properties:
+                    status:
+                      $ref: '#/components/schemas/Task/properties/status'
       responses:
         '204':
           description: Modified
@@ -353,19 +370,6 @@ components:
       minLength: 8
       maxLength: 100
       pattern: '^[A-Za-z0-9]\w{8,}$'
-    NewUser:
-      type: object
-      properties:
-        email:
-          $ref: '#/components/schemas/Email'
-        nickname:
-          $ref: '#/components/schemas/Nickname'
-        password:
-          $ref: '#/components/schemas/Password'
-      required:
-        - email
-        - nickname
-        - password
     User:
       type: object
       properties:
