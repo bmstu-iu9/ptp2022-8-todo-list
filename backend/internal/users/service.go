@@ -9,15 +9,15 @@ import (
 
 // Service encapsulates usecase logic for users.
 type Service interface {
-	Get(id int) (User, error)
-	Delete(id int) (User, error)
+	Get(id int64) (User, error)
+	Delete(id int64) (User, error)
 	Create(input *CreateUserRequest) (User, error)
-	Update(id int, input *UpdateUserRequest) (User, error)
+	Update(id int64, input *UpdateUserRequest) (User, error)
 }
 
 // User represents the data about an API user.
 type User struct {
-	Id       int    `json:"id"`
+	Id       int64    `json:"id"`
 	Email    string `json:"email"`
 	Nickname string `json:"nickname"`
 }
@@ -95,7 +95,7 @@ func NewService(repo Repository) Service {
 }
 
 // Get returns User with specified id.
-func (s service) Get(id int) (User, error) {
+func (s service) Get(id int64) (User, error) {
 	user, err := s.repo.Get(id)
 	if err != nil {
 		return User{}, err
@@ -104,7 +104,7 @@ func (s service) Get(id int) (User, error) {
 }
 
 // Delete removes User with specified id.
-func (s service) Delete(id int) (User, error) {
+func (s service) Delete(id int64) (User, error) {
 	user, err := s.repo.Get(id)
 	if err != nil {
 		return User{}, err
@@ -136,7 +136,7 @@ func (s service) Create(input *CreateUserRequest) (User, error) {
 }
 
 // Update modifies User with given id.
-func (s service) Update(id int, input *UpdateUserRequest) (User, error) {
+func (s service) Update(id int64, input *UpdateUserRequest) (User, error) {
 	err := input.Validate()
 	if err != nil {
 		return User{}, err

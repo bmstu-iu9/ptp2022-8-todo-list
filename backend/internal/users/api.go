@@ -63,7 +63,7 @@ func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httpro
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	w.Header().Set("Location", fmt.Sprintf("%v/users/%v", config.Server, strconv.FormatInt(int64(user.Id), 10)))
+	w.Header().Set("Location", fmt.Sprintf("%v/users/%v", config.Get("API_SERVER"), strconv.FormatInt(int64(user.Id), 10)))
 	w.WriteHeader(http.StatusNoContent)
 }
 
@@ -111,6 +111,7 @@ func (res *resource) handleDelete(w http.ResponseWriter, r *http.Request, p http
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func getId(p httprouter.Params) (int, error) {
-	return strconv.Atoi(p.ByName("id"))
+func getId(p httprouter.Params) (int64, error) {
+	id, err := strconv.Atoi(p.ByName("id"))
+	return int64(id), err
 }
