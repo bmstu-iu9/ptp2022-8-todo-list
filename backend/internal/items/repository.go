@@ -2,7 +2,6 @@ package items
 
 import (
 	"database/sql"
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"log"
 )
 
@@ -12,8 +11,8 @@ type Repository interface {
 	GetAll() ([]Item, error)
 	// GetOne returns user's item with specified id.
 	GetOne(userId, itemId int) (Item, error)
-	// Modify modifies the users`s item with specified id.
-	Modify(user *entity.User, item *entity.Item) error
+	// Update modifies the users`s item with specified id.
+	Update(item Item) error
 }
 
 type repository struct {
@@ -29,6 +28,6 @@ func (repo *repository) GetOne(userId, itemId int) (Item, error) {
 	return Item{}, nil
 }
 
-func (repo *repository) Modify(user *entity.User, item *entity.Item) error {
+func (repo *repository) Update(item Item) error {
 	return nil
 }

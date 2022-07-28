@@ -9,7 +9,7 @@ type Item struct {
 type Service interface {
 	GetAll() ([]Item, error)
 	GetOne(userId, itemId int) (Item, error)
-	Modify(input *UpdateItemRequest) (Item, error)
+	Modify(userId, itemId int, input *UpdateItemRequest) (Item, error)
 }
 
 type UpdateItemRequest struct {
@@ -37,9 +37,20 @@ func (s service) GetOne(userId, itemId int) (Item, error) {
 	if err != nil {
 		return Item{}, err
 	}
-	return Item(item), nil
+	return item, nil
 }
 
-func (s service) Modify(input *UpdateItemRequest) (Item, error) {
-	return Item{}, nil
+func (s service) Modify(userId, itemId int, input *UpdateItemRequest) (Item, error) {
+	entityItem, err := s.repo.GetOne(userId, itemId)
+	if err != nil {
+		return Item{}, err
+	}
+	if input.ItemName != "" {
+		entityItem.ItemName = input.ItemName
+	}
+	err = s.repo.Update(entityItem)
+	if err != nil {
+		return Item{}, err
+	}
+	return entityItem, nil
 }
