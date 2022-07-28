@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Славатидика API
   description: Gamified TODO-list API.
-  version: 0.3.0
+  version: 0.3.3
   contact:
     name: Starovoytov Alexandr
     url: https://t.me/stewkk
@@ -345,7 +345,7 @@ components:
     Nickname:
       type: string
       minLength: 4
-      maxLength: 20
+      maxLength: 40
       pattern: '^([a-z\d]+-)*[a-z\d]+$'
     Password:
       type: string
