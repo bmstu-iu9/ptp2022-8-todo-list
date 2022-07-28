@@ -25,19 +25,11 @@ func NewService(repo Repository) Service {
 }
 
 func (s service) GetAll() ([]Item, error) {
-	allItems, err := s.repo.GetAll()
-	if err != nil {
-		return nil, err
-	}
-	return allItems, nil
+	return s.repo.GetAll()
 }
 
 func (s service) GetOne(userId, itemId int) (Item, error) {
-	item, err := s.repo.GetOne(userId, itemId)
-	if err != nil {
-		return Item{}, err
-	}
-	return item, nil
+	return s.repo.GetOne(userId, itemId)
 }
 
 func (s service) Modify(userId, itemId int, input *UpdateItemRequest) (Item, error) {
@@ -49,8 +41,5 @@ func (s service) Modify(userId, itemId int, input *UpdateItemRequest) (Item, err
 		entityItem.ItemName = input.ItemName
 	}
 	err = s.repo.Update(entityItem)
-	if err != nil {
-		return Item{}, err
-	}
-	return entityItem, nil
+	return entityItem, err
 }
