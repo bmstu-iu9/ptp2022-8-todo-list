@@ -28,7 +28,8 @@ func main() {
 		logger)
 
 	server := http.Server{
-		Addr:    fmt.Sprintf("%v:%v", config.Host, config.Port),
+		Addr:    fmt.Sprintf("%v:%v",
+			config.Get("HTTP_HOST"), config.Get("HTTP_PORT")),
 		Handler: mux,
 	}
 

@@ -2,18 +2,26 @@ package config
 
 import "os"
 
-// Port on which api server will run.
-var Port = "8080"
-// Network address on whitch api server will run.
-var Host = "0.0.0.0"
-
-var Server = "https://ptp.starovoytovai.ru/api/v1"
+var config = map[string]string{
+	"HTTP_PORT":   "8080",
+	"HTTP_HOST":   "0.0.0.0",
+	"API_SERVER":  "https://ptp.starovoytovai.ru/api/v1",
+	"DB_PORT":     "5432",
+	"DB_HOST":     "localhost",
+	"DB_USER":     "postgres",
+	"DB_NAME":     "slavatidika",
+	"DB_PASSWORD": "example",
+	"DB_SSL_MODE": "disable",
+}
 
 func init() {
-	if port := os.Getenv("HTTP_PORT"); port != "" {
-		Port = port
+	for variable := range config {
+		if envValue := os.Getenv(variable); envValue != "" {
+			config[variable] = envValue
+		}
 	}
-	if host := os.Getenv("HTTP_HOST"); host != "" {
-		Host = host
-	}
+}
+
+func Get(variable string) string {
+	return config[variable]
 }

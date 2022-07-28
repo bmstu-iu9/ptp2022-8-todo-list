@@ -2,16 +2,28 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/config"
 	_ "github.com/lib/pq"
 )
 
-var db *sql.DB
-var err error
+var (
+	db *sql.DB
+	err error
+
+	host = config.Get("DB_HOST")
+	port = config.Get("DB_PORT")
+	user = config.Get("DB_USER")
+	dbName = config.Get("DB_NAME")
+	password = config.Get("DB_PASSWORD")
+	sslMode = config.Get("DB_SSL_MODE")
+)
 
 func init() {
-	db, err = sql.Open("postgres", "host=localhost port=5432 user=postgres"+
-		" dbname=slavatidika password=example sslmode=disable")
+	db, err = sql.Open("postgres",
+		fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
+			host, port, user, dbName, password, sslMode))
 	if err != nil {
 		return
 	}
