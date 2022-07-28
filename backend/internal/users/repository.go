@@ -38,10 +38,7 @@ func (repo repository) Create(user *entity.User) error {
 	err := repo.db.QueryRow("INSERT INTO users(email, nickname, password)"+
 		"VALUES ($1, $2, $3) RETURNING id", user.Email, user.Nickname, user.Password).
 		Scan(&user.Id)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 // Get reads the user with specified id from database.
@@ -54,11 +51,7 @@ func (repo repository) Get(id int64) (entity.User, error) {
 	user := entity.User{}
 	row.Next()
 	err = row.Scan(&user.Id, &user.Email, &user.Nickname, &user.Password)
-	if err != nil {
-		return entity.User{}, err
-	} else {
-		return user, nil
-	}
+	return user, err
 }
 
 // Delete removes a user with specified id from database.
@@ -74,8 +67,5 @@ func (repo repository) Delete(id int64) error {
 func (repo repository) Update(user *entity.User) error {
 	_, err := repo.db.Exec("UPDATE users SET email = $1, nickname = $2,"+
 		"password = $3 WHERE id = $4", user.Email, user.Nickname, user.Password, user.Id)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }

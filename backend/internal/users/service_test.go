@@ -72,7 +72,7 @@ func (s *ValidateTestSuite) TestCreateUserRequest_Validate(c *C) {
 }
 
 func (s *ValidateTestSuite) TestUpdateUserRequest_Validate(c *C) {
-
+	// TODO Написать тест
 }
 
 func (s *UsersTestSuite) SetUpTest(c *C) {

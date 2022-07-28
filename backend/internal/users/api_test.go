@@ -108,6 +108,7 @@ func (s *ApiTestSuite) TestDelete(c *C) {
 
 	makeRequest("5")
 	c.Check(s.writer.Code, Equals, http.StatusNoContent)
+	// TODO Проверка наличия удаленного пользователя
 
 	makeRequest("6")
 	c.Check(s.writer.Code, Equals, http.StatusNotFound)
