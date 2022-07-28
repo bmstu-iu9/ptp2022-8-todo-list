@@ -34,7 +34,7 @@ func (s *ApiTestSuite) TestPost(c *C) {
 	}
 
 	makeRequest(`{"email": "slava@example.com", "nickname": "slavarusvarrior", "password": "sDFHgjssndbfns123"}`)
-	c.Check(s.writer.Code, Equals, http.StatusNoContent)
+	c.Check(s.writer.Code, Equals, http.StatusCreated)
 	c.Check(s.writer.Header().Get("Location"), Equals, "https://ptp.starovoytovai.ru/api/v1/users/6")
 	c.Check(s.writer.Body.Len(), Equals, 0)
 

@@ -64,7 +64,7 @@ func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httpro
 		return
 	}
 	w.Header().Set("Location", fmt.Sprintf("%v/users/%v", config.Get("API_SERVER"), strconv.FormatInt(int64(user.Id), 10)))
-	w.WriteHeader(http.StatusNoContent)
+	w.WriteHeader(http.StatusCreated)
 }
 
 func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
