@@ -30,7 +30,6 @@ func (res *resource) handleGetAll(w http.ResponseWriter, r *http.Request, p http
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(items)
 	if err != nil {
 		res.logger.Println(err)
@@ -41,7 +40,31 @@ func (res *resource) handleGetAll(w http.ResponseWriter, r *http.Request, p http
 }
 
 func (res *resource) handleGetOne(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-
+	userId, err := getUserId(p)
+	if err != nil {
+		res.logger.Println(err)
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	itemId, err := getItemId(p)
+	if err != nil {
+		res.logger.Println(err)
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	item, err := res.service.GetOne(userId, itemId)
+	if err != nil {
+		res.logger.Println(err)
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	err = json.NewEncoder(w).Encode(item)
+	if err != nil {
+		res.logger.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
 }
 
 func (res *resource) handlePut(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
@@ -57,5 +80,5 @@ func getUserId(p httprouter.Params) (int, error) {
 }
 
 func getItemId(p httprouter.Params) (int, error) {
-	return strconv.Atoi(p.ByName("userId"))
+	return strconv.Atoi(p.ByName("itemId"))
 }

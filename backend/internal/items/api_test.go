@@ -2,7 +2,7 @@ package items
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"log"
 	"net/http"
@@ -33,15 +33,13 @@ func Test(t *testing.T) { TestingT(t) }
 func (s *ApiTestSuite) TestGetAll(c *C) {
 	makeRequest := func(userId string) {
 		s.writer = httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/users/:"+userId+"/items", nil)
+		req, _ := http.NewRequest("GET", "/users/"+userId+"/items", nil)
 		s.mux.ServeHTTP(s.writer, req)
 	}
 	makeRequest("1") //any userId
 	c.Check(s.writer.Code, Equals, http.StatusOK)
 	got := []Item{}
-	fmt.Println(s.writer.Body)
 	err := json.NewDecoder(s.writer.Body).Decode(&got)
-	fmt.Println(got)
 	c.Check(err, Equals, nil)
 	c.Check(got, DeepEquals, []Item{
 		{
@@ -56,18 +54,41 @@ func (s *ApiTestSuite) TestGetAll(c *C) {
 
 }
 
+func (s *ApiTestSuite) TestGetOne(c *C) {
+	makeRequest := func(userId, itemId string) {
+		s.writer = httptest.NewRecorder()
+		req, _ := http.NewRequest("GET", "/users/"+userId+"/items/"+itemId, nil)
+		s.mux.ServeHTTP(s.writer, req)
+	}
+	makeRequest("1", "10")
+	c.Check(s.writer.Code, Equals, http.StatusOK)
+	got := Item{}
+	err := json.NewDecoder(s.writer.Body).Decode(&got)
+	c.Check(err, Equals, nil)
+	c.Check(got, DeepEquals, Item{
+		ItemId:   10,
+		ItemName: "sword",
+	})
+	makeRequest("1", "5")
+	c.Check(s.writer.Code, Equals, http.StatusNotFound)
+}
+
 type mockRepository struct {
-	items  []Item
+	data   []Item
 	userId int
 }
 
 func (m mockRepository) GetAll() ([]Item, error) {
-	return m.items, nil
+	return m.data, nil
 }
 
-func (m mockRepository) GetOne(user *entity.User, item *entity.Item) (entity.Item, error) {
-	//TODO implement me
-	panic("implement me")
+func (m mockRepository) GetOne(userId, itemId int) (Item, error) {
+	for _, item := range m.data {
+		if item.ItemId == itemId {
+			return item, nil
+		}
+	}
+	return Item{}, errors.New("No data")
 }
 
 func (m mockRepository) Modify(user *entity.User, item *entity.Item) error {
@@ -77,7 +98,7 @@ func (m mockRepository) Modify(user *entity.User, item *entity.Item) error {
 
 func NewMockRerository() *mockRepository {
 	return &mockRepository{
-		items: []Item{
+		data: []Item{
 			{
 				ItemId:   10,
 				ItemName: "sword",

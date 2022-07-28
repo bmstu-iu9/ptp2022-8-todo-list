@@ -8,7 +8,7 @@ type Item struct {
 // Service encapsulates usecase logic for users.
 type Service interface {
 	GetAll() ([]Item, error)
-	GetOne(id int) (Item, error)
+	GetOne(userId, itemId int) (Item, error)
 	Modify(input *UpdateItemRequest) (Item, error)
 }
 
@@ -32,8 +32,12 @@ func (s service) GetAll() ([]Item, error) {
 	return allItems, nil
 }
 
-func (s service) GetOne(id int) (Item, error) {
-	return Item{}, nil
+func (s service) GetOne(userId, itemId int) (Item, error) {
+	item, err := s.repo.GetOne(userId, itemId)
+	if err != nil {
+		return Item{}, err
+	}
+	return Item(item), nil
 }
 
 func (s service) Modify(input *UpdateItemRequest) (Item, error) {
