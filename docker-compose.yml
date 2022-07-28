@@ -10,6 +10,9 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+    network_mode: host
+    depends_on:
+      - db
   frontend:
     build:
       context: .
@@ -33,3 +36,15 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+  db:
+    image: postgres
+    container_name: db
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: slavatidika
+      POSTGRES_PASSWORD: example
+    volumes:
+      - ./postgres:/var/lib/postgresql/data/
+    network_mode: host
