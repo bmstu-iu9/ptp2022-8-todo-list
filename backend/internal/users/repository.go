@@ -57,10 +57,7 @@ func (repo repository) Get(id int64) (entity.User, error) {
 // Delete removes a user with specified id from database.
 func (repo repository) Delete(id int64) error {
 	_, err := repo.db.Exec("DELETE FROM users WHERE id = $1", id)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 // Update saves changes to a user from database.
