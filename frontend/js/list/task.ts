@@ -25,7 +25,7 @@ class Task {
                 dueDate: this.dueDate,
                 labels: this.labels,
                 status: this.status
-            } 
+            }
             sendRequest('POST', server + '/tasks', JSON.stringify(tsk))
         }
     }
@@ -40,13 +40,11 @@ class Task {
         let str: string
         str = `<li class="list-group-item id=${this.id}">
                     <div>
-                    <input class="form-check-input me-2" type="checkbox" value="1" ${
-                        this.status === 'completed' ? 'checked' : ''
-                    } id="${this.id}">
+                    <input class="form-check-input me-2" type="checkbox" value="1" ${this.status === 'completed' ? 'checked' : ''
+            } id="${this.id}">
                     <a class = "name__openModal">
-                    <strong ${this.status === 'completed' ? 'style="text-decoration: line-through"' : ''}>${
-            this.name
-        }</strong></a>
+                    <strong ${this.status === 'completed' ? 'style="text-decoration: line-through"' : ''}>${this.name
+            }</strong></a>
 
                     <a href="#" title="">
                         <svg xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 24 24" class="bi bi-paperclip">
@@ -65,23 +63,22 @@ class Task {
 
                     ${this.dueDate ? `
                     <div class="todo__time d-inline">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="${
-                            this.dueDate && this.dueDate.getTime() >= new Date().getTime()
-                                ? 'todo__non-urgent'
-                                : 'todo__important'
-                        } bi bi-clock-fill" viewBox="0 0 16 16">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="${this.dueDate && this.dueDate.getTime() >= new Date().getTime()
+                    ? 'todo__non-urgent'
+                    : 'todo__important'
+                } bi bi-clock-fill" viewBox="0 0 16 16">
                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"></path>
                         </svg>
                         <span>${formatDate(this.dueDate)}</span>
                     </div>`
-                    : ''
-                    }
+                : ''
+            }
                     ${labelStr}
 
                     <div class="d-flex flex-row justify-content-end">
-                        <a href="#!" class="todo__edit text-info" title="Редактировать">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-                            <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"></path>
+                        <a href="#!" class="todo__archive text-info" title="Архивировать">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive-fill" viewBox="0 0 16 16">
+                        <path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1zM.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8H.8z"/>
                         </svg>
                         </a>
                         <a href="#" class="todo__delete text-danger" title="Удалить">
@@ -131,7 +128,7 @@ class Task {
     public getId(): number {
         return this.id
     }
-    
+
     public getName(): string {
         return this.name
     }
@@ -145,7 +142,7 @@ class Task {
     }
 
     public getDesc(): string {
-        return this.desc    
+        return this.desc
     }
 
     public getStatus(): Status {
@@ -156,7 +153,16 @@ class Task {
         this.status = s
         if (edited) {
             this.updateHTML()
-            sendRequest('PATCH', server + `/tasks/${this.id}`, JSON.stringify({status:this.status}))
+            sendRequest('PATCH', server + `/tasks/${this.id}`, JSON.stringify({ status: this.status }))
         }
+    }
+
+    public editTask(n: string, date: string, l: Label[], d: string){
+        this.name = n
+        if (date) this.dueDate = new Date(date)
+        this.labels = l
+        this.desc = d
+        this.updateHTML()
+        sendRequest('PATCH', server + `/tasks/${this.id}`, JSON.stringify(this))
     }
 }

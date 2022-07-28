@@ -130,7 +130,11 @@ document.addEventListener('click', (e) => {
             let month = buf?.getDueDate()!.getMonth()!
             let day = buf?.getDueDate()!.getDate()!
             dateBoxInfo.value = `${buf?.getDueDate()!.getFullYear()}-${month > 9 ? month : `0${month}`}-${day > 9 ? day : `0${day}`}`
-            timeBoxInfo.value = `${buf?.getDueDate().getHours()}:${buf?.getDueDate().getMinutes()}`
+            let hours = buf?.getDueDate().getHours()
+            let minutes = buf?.getDueDate().getMinutes()
+            if (hours || minutes) {
+                timeBoxInfo.value = `${hours! > 9 ? hours : `0${hours}`}:${minutes! > 9 ? minutes : `0${minutes}`}`
+            }
         }
         else {
             dateBoxInfo.value = ''
@@ -154,7 +158,7 @@ document.addEventListener('click', (e) => {
     } else if (target.classList.contains('btn-edit')) {
         // редактирование задачи
         let modal = document.getElementById('modal__editor')
-        let id = modal?.getAttribute('opened-task-id')
+        let id = modal?.getAttribute('opened-task-id')!
         let buf = tasks.get(parseInt(id))
         let titleModal = <HTMLInputElement>document.getElementById('modal-title-info') //меняем заголовок
         titleModal.innerHTML = 'Редактирование задачи'
@@ -174,6 +178,7 @@ document.addEventListener('click', (e) => {
         commentTextEdit.removeAttribute('readonly')
         fileEdit.removeAttribute('readonly')
         let container = document.getElementsByClassName('chosen__categories')[1]
+        if (container.innerHTML === 'Категории отсутствуют') container.innerHTML = ''
         let taskLabels = container.children
         let btnCloseLbl = document.getElementsByClassName('btn-close-lbl-edit')
         for (let i = 0; i < btnCloseLbl.length; i++) {
@@ -214,7 +219,27 @@ document.addEventListener('click', (e) => {
                       </div>
                     </div>
                   </div>`
-        //нужно сделать сохранение введеных данных по клику на кнопку класса btn-edit-save
+    } else if (target.classList.contains('btn-edit-save')) {
+        // сохранение изменений при редактировании
+        let modal = document.getElementById('modal__editor')
+        let id = modal?.getAttribute('opened-task-id')!
+        let nameEdit = (<HTMLInputElement>document.getElementById('nameE')).value
+        let dateEdit = (<HTMLInputElement>document.getElementById('dateE')).value
+        let timeEdit = (<HTMLInputElement>document.getElementById('timeE')).value
+        let date = dateEdit + ' ' + timeEdit
+        let descEdit = (<HTMLTextAreaElement>document.getElementById('commentE')).value
+        let fileEdit = (<HTMLTextAreaElement>document.getElementById('input__fileE')).value
+        let lbls = document.getElementsByClassName('chosen__categories')[1].children
+        let taskLabels: Label[] = []
+        for (let i = 0; i < lbls.length; i++) {
+            taskLabels.push(labels.get(parseInt(lbls[i].id.substring(4)) - 1)!)
+        }
+
+        if (date !== ' ') {
+            tasks.get(parseInt(id))!.editTask(nameEdit, date, taskLabels, descEdit)
+        } else {
+            tasks.get(parseInt(id))!.editTask(nameEdit, date, taskLabels, descEdit)
+        }
     } else if (target.classList.contains('btn-close-lbl')) {
         // Удаление лейбла в модалке
         target.parentElement!.outerHTML = ''
@@ -319,7 +344,6 @@ document.addEventListener('click', (e) => {
         }
     } else if (!(target.matches('.dropbtn1') || document.getElementsByClassName('list-category')[0].contains(target)) && (<HTMLDivElement>document.getElementById('form__category')).classList.contains('show1')) {
         // сворачивание списка лейблов в создании задачи
-        console.log('сворачивание списка лейблов в создании задачи')
         let elem = <HTMLDivElement>document.getElementById('form__category')
         elem.classList.remove('show1')
         let ul = <HTMLUListElement>document.getElementsByClassName('list-category')[0]
@@ -327,7 +351,6 @@ document.addEventListener('click', (e) => {
     }
     else if (target.classList.contains('dropbtn2')) {
         // выпадающий список лейблов в редактировании задачи
-        console.log('выпадающий список лейблов в редактировании задачи')
         let elem = <HTMLDivElement>document.getElementById('form-edit__category')
         if (elem.classList.contains('show1')) {
             elem.classList.remove('show1')
@@ -345,7 +368,7 @@ document.addEventListener('click', (e) => {
             })
             elem.classList.toggle('show1')
         }
-    } else if (!target.matches('.dropbtn2') && !document.getElementsByClassName('edit__list-category')[0].contains(target) && (<HTMLDivElement>document.getElementById('form-edit__category')).classList.contains('show1')) {
+    } else if (!target.matches('.dropbtn2') && document.getElementsByClassName('edit__list-category').length != 0 && !document.getElementsByClassName('edit__list-category')[0].contains(target) && (<HTMLDivElement>document.getElementById('form-edit__category')).classList.contains('show1')) {
         // сворачивание списка лейблов в редактировании задачи
         let elem = <HTMLDivElement>document.getElementById('form-edit__category')
         elem.classList.remove('show1')
