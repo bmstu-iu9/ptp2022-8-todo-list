@@ -21,7 +21,7 @@ type Label = {
 
 function LabelToHtml(lbl: Label): string {
     return `<label class="todo__category"
-            style="background-color: #${lbl.color}80">
+            style="background-color: #${lbl.color}99">
             ${lbl.text}</label>`
 }
 

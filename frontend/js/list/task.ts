@@ -38,15 +38,15 @@ class Task {
             })
         }
         let str: string
-        str = `<li class="list-group-item id=${this.id}">
+        str = `<li class="list-group-item id=${this.id}" ${this.status === 'archived' ? 'style="background-color: #e9ecef"' : ''}> 
                     <div>
                     <input class="form-check-input me-2" type="checkbox" value="1" ${this.status === 'completed' ? 'checked' : ''
-            } id="${this.id}">
+                } ${this.status === 'archived' ? 'disabled' : ''} id="${this.id}">
                     <a class = "name__openModal">
                     <strong ${this.status === 'completed' ? 'style="text-decoration: line-through"' : ''}>${this.name
             }</strong></a>
 
-                    <a href="#" title="">
+                    <a title="У задачи есть прикрепленный файл">
                         <svg xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 24 24" class="bi bi-paperclip">
                         <g xmlns="http://www.w3.org/2000/svg" fill="none" fill-rule="evenodd">
                             <path d="m0 0h24v24h-24z"></path>
@@ -54,12 +54,15 @@ class Task {
                         </g>
                         </svg>
                     </a>
-
-                    <a href="#" title="">
+                    ${this.desc !== '' ? `
+                    <a title="У задачи есть описание">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-chat" viewBox="0 0 16 16">
                         <path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"></path>
                         </svg>
                     </a>
+                    `
+                : ''}
+                    
 
                     ${this.dueDate ? `
                     <div class="todo__time d-inline">
@@ -76,7 +79,7 @@ class Task {
                     ${labelStr}
 
                     <div class="d-flex flex-row justify-content-end">
-                        <a href="#!" class="todo__archive text-info" title="Архивировать">
+                        <a href="#!" class="todo__archive" title="Архивировать">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive-fill" viewBox="0 0 16 16">
                         <path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1zM.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8H.8z"/>
                         </svg>
@@ -157,12 +160,12 @@ class Task {
         }
     }
 
-    public editTask(n: string, date: string | undefined, l: Label[], d: string){
+    public editTask(n: string, date: string | undefined, l: Label[], d: string) {
         this.name = n
         if (date) this.dueDate = new Date(date)
         else delete this.dueDate
         this.labels = l
-        this.desc = d  
+        this.desc = d
         this.updateHTML()
         const tsk = {
             name: this.name,

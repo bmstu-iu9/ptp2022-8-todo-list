@@ -119,20 +119,21 @@
             <option value="active">активные</option>
             <option value="completed">завершённые</option>
             <option value="archived">архивированные</option>
+            <option value="all">все</option>
           </select>
         </div>
 
         <div class="col h-38px">
           <div class="dropdown-menu d-block pt-0">
             <form class="todo__categories__form p-0 m-0 w-100">
-              <input type="search" class="dropbtn form-control" autocomplete="false" placeholder="Категория">
+              <input type="search" class="dropbtn form-control" autocomplete="false" placeholder="Категории">
             </form>
             <div id="sort__form__category" class="sort__list-category-contener">
               <ul class="sort__list-category mb-0">
                 
               </ul>
 
-              <button type="button" class="sort__btn btn btn-primary w-100">Сбросить</button>
+              <button type="button" class="sort__btn-all btn btn-primary w-100">Сбросить</button>
             </div>
           </div>
         </div>
@@ -193,7 +194,7 @@
                           <input type="text" class="form-control" id="name__category" placeholder="Новая категория">
                         </div>
                         <div class="m-0 color__category">
-                          <input class="h-100 color__category" type="color" value="#563d7c" title="Задать цвет"
+                          <input class="h-100 color__category" type="color" title="Задать цвет"
                             id="color__category">
                         </div>
                         <div class="add p-0">
@@ -214,11 +215,11 @@
 
 
                 <div class="form-group mb-3">
-                  <textarea name="comment" class="form-control" title="Введите комментарий" placeholder="Комментарий"
+                  <textarea name="comment" class="form-control" title="Введите описание" placeholder="Описание"
                     id="comment"></textarea>
                 </div>
 
-                <div class="form-group mb-3">
+                <div class="form-group">
                   <input class="form-control" type="file" name="file" id="input__file" multiple>
                 </div>
 
@@ -281,12 +282,12 @@
 
 
                 <div class="form-floating mb-3">
-                  <textarea name="comment" class="form-control" title="Введите комментарий" placeholder="Комментарий"
+                  <textarea name="comment" class="form-control" title="Введите описание" placeholder="Описание"
                     id="commentE"></textarea>
-                  <label for="commentE">Комментарий</label>
+                  <label for="commentE">Описание</label>
                 </div>
 
-                <div class="form-group mb-3">
+                <div class="form-group">
                   <input class="form-control" type="file" name="file" id="input__fileE" multiple>
                 </div>
 
