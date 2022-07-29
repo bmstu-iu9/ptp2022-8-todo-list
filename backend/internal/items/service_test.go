@@ -67,6 +67,6 @@ func (s *ServiceTestSuite) TestModify(c *C) {
 	c.Check(err, IsNil)
 	c.Check(item, Equals, Item{
 		ItemId:   10,
-		ItemName: "sword",
+		ItemName: "Sasha",
 	})
 }

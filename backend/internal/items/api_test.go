@@ -119,9 +119,9 @@ func (m mockRepository) GetOne(userId, itemId int) (Item, error) {
 }
 
 func (m mockRepository) Update(item Item) error {
-	for _, curItem := range m.data {
+	for i, curItem := range m.data {
 		if curItem.ItemId == item.ItemId {
-			curItem.ItemName = item.ItemName
+			m.data[i] = item
 			return nil
 		}
 	}
