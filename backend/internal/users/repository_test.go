@@ -16,12 +16,13 @@ func init() {
 }
 
 func (s *RepoTestSuite) SetUpSuite(c *C) {
-	db, err := db.New()
+	logger := log.NewForTest()
+	db, err := db.New(logger)
 	if err != nil {
 		panic(err)
 	}
 
-	s.repo = NewRepository(db, log.NewForTest())
+	s.repo = NewRepository(db, logger)
 }
 
 func (s *RepoTestSuite) TestRepo(c *C) {

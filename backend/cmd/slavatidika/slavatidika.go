@@ -15,11 +15,12 @@ import (
 
 func main() {
 	logger := log.New()
-	db, err := db.New()
+	db, err := db.New(logger)
 	if err != nil {
 		logger.Info(err)
 		os.Exit(1)
 	}
+	logger.Debug("DB connection established")
 	mux := httprouter.New()
 
 	ping.RegisterHandlers(mux, logger)
