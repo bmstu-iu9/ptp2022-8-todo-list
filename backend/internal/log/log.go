@@ -31,7 +31,6 @@ type logger struct {
 
 func (logger logger) Debug(v ...interface{}) {
 	if isDebug {
-		logger.log.Print("[DEBUG] ")
 		logger.log.Println(v...)
 	}
 }

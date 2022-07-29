@@ -22,18 +22,20 @@ func main() {
 	}
 	mux := httprouter.New()
 
-	ping.RegisterHandlers(mux)
+	ping.RegisterHandlers(mux, logger)
 	users.RegisterHandlers(
 		mux,
 		users.NewService(users.NewRepository(db, logger)),
 		logger)
 
+	address := fmt.Sprintf("%v:%v",
+			config.Get("HTTP_HOST"), config.Get("HTTP_PORT"))
 	server := http.Server{
-		Addr:    fmt.Sprintf("%v:%v",
-			config.Get("HTTP_HOST"), config.Get("HTTP_PORT")),
+		Addr:    address,
 		Handler: mux,
 	}
 
+	logger.Info("Slavatidika launched on", address)
 	logger.Info(server.ListenAndServe())
 	os.Exit(1)
 }
