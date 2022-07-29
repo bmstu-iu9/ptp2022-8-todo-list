@@ -16,7 +16,7 @@ func init() {
 }
 
 func (s *RepoTestSuite) SetUpSuite(c *C) {
-	logger := log.NewForTest()
+	logger := log.New()
 	db, err := db.New(logger)
 	if err != nil {
 		panic(err)

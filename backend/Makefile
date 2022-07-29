@@ -19,7 +19,7 @@ unit-test-run:
 
 .PHONY: unit-test
 unit-test: unit-test-run
-	@docker build . --target unit-test-coverage-and-logs \
+	@docker build . --target unit-test-coverage \
 	--output ./ \
 	--network host
 

@@ -29,9 +29,8 @@ RUN --mount=target=. \
     --mount=type=cache,target=/root/.cache/golangci-lint \
     golangci-lint run --timeout 10m0s ./...
 
-FROM scratch AS unit-test-coverage-and-logs
+FROM scratch AS unit-test-coverage
 COPY --from=unit-test /out/cover.out /cover.out
-COPY --from=unit-test /out/tests.log /tests.log
 
 FROM golang:1.18-alpine
 COPY --from=build /out/slavatidika /

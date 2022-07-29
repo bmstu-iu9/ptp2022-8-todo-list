@@ -24,7 +24,7 @@ func Test(t *testing.T) { TestingT(t) }
 
 func (s *PingTestSuite) SetUpSuite(c *C) {
 	s.mux = httprouter.New()
-	s.logger = log.NewForTest()
+	s.logger = log.New()
 	RegisterHandlers(s.mux, s.logger)
 	s.writer = httptest.NewRecorder()
 }
