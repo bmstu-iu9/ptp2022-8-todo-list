@@ -1,61 +1,130 @@
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
 html {
+	margin: 0;
 	height: 100%;
+	width: 100%;
 }
+
 body {
 	height: 100%;
 	display: flex;
 	align-items: center;
-	padding-top: 40px;
-	padding-bottom: 40px;
 	background-color: #f5f5f5;
-}
-.form-signin {
-	max-width: 330px;
-	margin: 0 auto;
-	padding: 15px;
-	position: relative;
-	.form-floating {
-		&:focus-within {
-			z-index: 2;
+
+	img {
+		@media screen and (max-height: 650px) {
+			width: 0;
+			height: 0;
+			margin-bottom: .5rem;
+		}
+
+		@media screen and (min-height: 651px) {
+			width: 140;
+			height: 140;
+			margin-bottom: .5rem;
+		}
+
+		@media screen and (min-height: 744px) {
+			width: 200;
+			height: 200;
+			margin-bottom: 1.5rem;
+		}
+
+		@media screen and (min-height: 871px) {
+			width: 300px;
+			height: 300px;
+			margin-bottom: 1.5rem;
 		}
 	}
-	input[type="email"] {
-		margin-bottom: -1px;
-		border-bottom-right-radius: 0;
-		border-bottom-left-radius: 0;
+
+	.form-signin {
+		max-width: 330px;
+		padding: 0 15px;
+		margin: 0 auto;
+		position: relative;
+
+		.login .form-control {
+			padding-right: 40px;
+		}
+
+		.form-floating {
+
+			.password-control {
+				position: absolute;
+				top: 18px;
+				right: 10px;
+
+				svg {
+					color: rgb(36, 36, 36);
+				}
+			}
+
+			&:focus-within {
+				z-index: 2;
+			}
+		}
+
+		input[type="email"] {
+			margin-bottom: -1px;
+			border-bottom-right-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+
+		input[type="password"]:not(.password-2) {
+			margin-bottom: -1px;
+			border-radius: 0;
+		}
+
+		.password-2 {
+			margin-bottom: 10px;
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+		}
 	}
-	.password-1 {
-		margin-bottom: -1px;
-		border-top-left-radius: 0;
-		border-top-right-radius: 0;
+
+	.hidden {
+		visibility: hidden;
 	}
-	input[type="password"]:not(.password-1) {
-		margin-bottom: 10px;
-		border-top-left-radius: 0;
-		border-top-right-radius: 0;
+
+	.login {
+		max-width: 300px;
+		margin-bottom: 0px;
 	}
-}
-.hidden {
-	visibility: hidden;
-}
-.login {
-	max-width: 300px;
-	margin-bottom: 0px;
-}
-.register {
-	max-width: 300px;
-	top: 15px;
-	left: 15px;
-	position: absolute;
-}
-.center {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	width: 50%;
-}
-.password-check {
-    color: $red-500;
+
+	.register {
+		width: calc(100% - 30px);
+		max-width: 300px;
+		top: 0px;
+		left: 15px;
+		position: absolute;
+
+		input[type="text"] {
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+
+		input[type="email"] {
+			margin-top: -1px;
+			border-radius: 0;
+		}
+
+	}
+
+	.center {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		width: 50%;
+	}
+
+	.password-check,
+	.login-check {
+		color: $red-500;
+		visibility: hidden;
+	}
+
+	footer {
+		margin-top: 1rem;
+	}
 }
