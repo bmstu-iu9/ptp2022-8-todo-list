@@ -49,7 +49,7 @@ func New() Logger {
 
 // NewForTest creates a new logger using configuration for unit-tests.
 func NewForTest() Logger {
-	file, err := os.OpenFile("tests.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	file, err := os.OpenFile("/out/tests.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
 		panic(err)
 	}

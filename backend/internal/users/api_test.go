@@ -22,7 +22,7 @@ func init() {
 
 func (s *ApiTestSuite) SetUpTest(c *C) {
 	s.mux = httprouter.New()
-	RegisterHandlers(s.mux, NewService(NewMockRerository()), log.New())
+	RegisterHandlers(s.mux, NewService(NewMockRerository()), log.NewForTest())
 }
 
 func (s *ApiTestSuite) TestPost(c *C) {

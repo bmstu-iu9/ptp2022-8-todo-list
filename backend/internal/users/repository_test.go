@@ -21,7 +21,7 @@ func (s *RepoTestSuite) SetUpSuite(c *C) {
 		panic(err)
 	}
 
-	s.repo = NewRepository(db, log.New())
+	s.repo = NewRepository(db, log.NewForTest())
 }
 
 func (s *RepoTestSuite) TestRepo(c *C) {
