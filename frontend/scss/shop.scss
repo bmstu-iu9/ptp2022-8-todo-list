@@ -1,0 +1,9 @@
+.body {
+    nav {
+        @media screen and (max-width: 768px) {
+                height: 64px;
+                padding-left: 27px;
+                padding-right: 3px;
+        }
+    }
+}

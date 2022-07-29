@@ -5,7 +5,7 @@ body {
     position: relative;
     $width_menu: 115px;
     .menu {
-        z-index: 11;
+        z-index: 1111;
         .menu__open{
             background-color: #0d6efd;
             a{
@@ -55,7 +55,7 @@ body {
                 height: 26px;
 
                 cursor: pointer;
-                z-index: 13;
+                z-index: 1113;
             }
 
             .menu__btn>span,
@@ -93,7 +93,7 @@ body {
         }
 
         .menu__box {
-            z-index: 12;
+            z-index: 1112;
             @media screen and (min-width: 769px) {
                 // padding: 20px 0;
                 left: 0;
@@ -174,7 +174,7 @@ body {
             position: absolute;
         }
         @media screen and (max-width: 768px) {
-            padding-top: 66px;
+            //padding-top: 66px;
         }
     }
 }
