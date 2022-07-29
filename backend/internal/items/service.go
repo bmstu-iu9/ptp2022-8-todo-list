@@ -5,7 +5,7 @@ type Item struct {
 	ItemName string `json:"ItemName"`
 }
 type UpdateItemRequest struct {
-	ItemName string `json:"ItemName"`
+	ItemName string `json:"itemName"`
 }
 
 // Service encapsulates usecase logic for users.

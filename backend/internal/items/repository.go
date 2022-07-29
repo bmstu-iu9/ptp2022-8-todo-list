@@ -53,7 +53,7 @@ func (repo repository) GetOne(userId, itemId int) (Item, error) {
 	var checker bool
 	row.Scan(&checker)
 	if checker == false {
-		return Item{}, errors.New("No data in table")
+		return Item{}, errors.New("can`t find data in table")
 	}
 
 	row, err = repo.db.Query("SELECT * FROM items WHERE item_id = $1", itemId)
