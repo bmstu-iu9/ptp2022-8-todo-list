@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"strings"
 
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/logger"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"github.com/julienschmidt/httprouter"
 	. "gopkg.in/check.v1"
 )
@@ -22,7 +22,7 @@ func init() {
 
 func (s *ApiTestSuite) SetUpTest(c *C) {
 	s.mux = httprouter.New()
-	RegisterHandlers(s.mux, NewService(NewMockRerository()), logger.New())
+	RegisterHandlers(s.mux, NewService(NewMockRerository()), log.New())
 }
 
 func (s *ApiTestSuite) TestPost(c *C) {
