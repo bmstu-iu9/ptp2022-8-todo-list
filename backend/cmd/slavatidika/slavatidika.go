@@ -2,36 +2,41 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
+	"os"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/config"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/db"
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/logger"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/ping"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/users"
 	"github.com/julienschmidt/httprouter"
 )
 
 func main() {
-	db, err := db.New()
+	logger := log.New()
+	db, err := db.New(logger)
 	if err != nil {
-		log.Fatal(err)
+		logger.Info(err)
+		os.Exit(1)
 	}
-	logger := logger.New()
+	logger.Debug("DB connection established")
 	mux := httprouter.New()
 
-	ping.RegisterHandlers(mux)
+	ping.RegisterHandlers(mux, logger)
 	users.RegisterHandlers(
 		mux,
 		users.NewService(users.NewRepository(db, logger)),
 		logger)
 
+	address := fmt.Sprintf("%v:%v",
+			config.Get("HTTP_HOST"), config.Get("HTTP_PORT"))
 	server := http.Server{
-		Addr:    fmt.Sprintf("%v:%v",
-			config.Get("HTTP_HOST"), config.Get("HTTP_PORT")),
+		Addr:    address,
 		Handler: mux,
 	}
 
-	log.Fatal(server.ListenAndServe())
+	logger.Info("Slavatidika launched on", address)
+	logger.Info(server.ListenAndServe())
+	os.Exit(1)
 }

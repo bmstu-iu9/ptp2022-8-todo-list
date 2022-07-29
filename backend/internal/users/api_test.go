@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"strings"
 
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/logger"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"github.com/julienschmidt/httprouter"
 	. "gopkg.in/check.v1"
 )
@@ -22,7 +22,7 @@ func init() {
 
 func (s *ApiTestSuite) SetUpTest(c *C) {
 	s.mux = httprouter.New()
-	RegisterHandlers(s.mux, NewService(NewMockRerository()), logger.New())
+	RegisterHandlers(s.mux, NewService(NewMockRerository()), log.New())
 }
 
 func (s *ApiTestSuite) TestPost(c *C) {
@@ -34,7 +34,7 @@ func (s *ApiTestSuite) TestPost(c *C) {
 	}
 
 	makeRequest(`{"email": "slava@example.com", "nickname": "slavarusvarrior", "password": "sDFHgjssndbfns123"}`)
-	c.Check(s.writer.Code, Equals, http.StatusNoContent)
+	c.Check(s.writer.Code, Equals, http.StatusCreated)
 	c.Check(s.writer.Header().Get("Location"), Equals, "https://ptp.starovoytovai.ru/api/v1/users/6")
 	c.Check(s.writer.Body.Len(), Equals, 0)
 
@@ -108,6 +108,7 @@ func (s *ApiTestSuite) TestDelete(c *C) {
 
 	makeRequest("5")
 	c.Check(s.writer.Code, Equals, http.StatusNoContent)
+	// TODO Проверка наличия удаленного пользователя
 
 	makeRequest("6")
 	c.Check(s.writer.Code, Equals, http.StatusNotFound)

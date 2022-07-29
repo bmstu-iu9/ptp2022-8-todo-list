@@ -145,3 +145,6 @@ out
 #parcel build files
 dist/**
 frontend/dist/**
+
+# Unit-test coverage
+**/cover.out

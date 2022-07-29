@@ -64,11 +64,11 @@ jobs:
             
             - name: Prettier Checking
               if: ${{ always() && (steps.changed-files-js.outputs.added_files || steps.changed-files-js.outputs.modified_files) }}
-              run: yarn prettier --config ./frontend/prettier.config.js --ignore-path ./frontend/.prettierignore  ${{ steps.changed-files-js.outputs.modified_files }} ${{ steps.changed-files-js.outputs.deleted_files }} --fix
+              run: yarn prettier --config ./frontend/prettier.config.js --ignore-path ./frontend/.prettierignore  ${{ steps.changed-files-js.outputs.modified_files }} ${{ steps.changed-files-js.outputs.added_files }} --fix
 
             - name: ESLint Checking
               if: ${{ always() && (steps.changed-files-js.outputs.added_files || steps.changed-files-js.outputs.modified_files) }}
-              run: yarn eslint --config ./frontend/.eslintrc.js --ignore-path ./frontend/.eslintignore ${{ steps.changed-files-js.outputs.modified_files }} ${{ steps.changed-files-js.outputs.deleted_files }} --fix
+              run: yarn eslint --config ./frontend/.eslintrc.js --ignore-path ./frontend/.eslintignore ${{ steps.changed-files-js.outputs.modified_files }} ${{ steps.changed-files-js.outputs.added_files }} --fix
 
             - name: Get specific changed files
               id: changed-files-ts
@@ -77,9 +77,16 @@ jobs:
                 files: |
                   **/*.ts
 
+            - name: Get specific changed files
+              id: files-ts
+              uses: Rishabh510/Path-lister-action@master
+              with:
+                path: "frontend/js/"
+                type: ".ts"
+
             - name: TsLint Checking
               if: ${{ always() && (steps.changed-files-ts.outputs.added_files || steps.changed-files-ts.outputs.modified_files) }} 
-              run: yarn tsc --noEmit ${{ steps.changed-files-ts.outputs.modified_files }} ${{ steps.changed-files-ts.outputs.deleted_files }}
+              run: yarn tsc -t es6 --noEmit ${{ steps.files-ts.outputs.paths }}
 
             - name: Commit changes
               if: always()
