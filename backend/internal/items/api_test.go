@@ -3,12 +3,12 @@ package items
 import (
 	"encoding/json"
 	"errors"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/logger"
 	"github.com/julienschmidt/httprouter"
 	. "gopkg.in/check.v1"
 )
@@ -24,7 +24,7 @@ func init() {
 
 func (s *ApiTestSuite) SetUpTest(c *C) {
 	s.mux = httprouter.New()
-	RegisterHandlers(s.mux, NewService(NewMockRerository()), logger.New())
+	RegisterHandlers(s.mux, NewService(NewMockRerository()), log.New())
 }
 
 func Test(t *testing.T) { TestingT(t) }

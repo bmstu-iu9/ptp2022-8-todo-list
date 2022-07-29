@@ -2,7 +2,7 @@ package items
 
 import (
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/db"
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/logger"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	. "gopkg.in/check.v1"
 )
 
@@ -15,11 +15,12 @@ func init() {
 }
 
 func (r *RepositoryTestSuite) SetUpTest(c *C) {
-	db, err := db.New()
+	logger := log.New()
+	db, err := db.New(logger)
 	if err != nil {
 		panic(err)
 	}
-	r.repo = NewRepository(db, logger.New())
+	r.repo = NewRepository(db, logger)
 }
 
 func (r *RepositoryTestSuite) TestGetAll(c *C) {

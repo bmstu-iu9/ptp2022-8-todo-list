@@ -3,7 +3,7 @@ package items
 import (
 	"database/sql"
 	"errors"
-	"log"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 )
 
 // Repository encapsulates the logic to access items from the data source.
@@ -18,10 +18,10 @@ type Repository interface {
 
 type repository struct {
 	db     *sql.DB
-	logger *log.Logger
+	logger log.Logger
 }
 
-func NewRepository(db *sql.DB, logger *log.Logger) Repository {
+func NewRepository(db *sql.DB, logger log.Logger) Repository {
 	return repository{db, logger}
 }
 
