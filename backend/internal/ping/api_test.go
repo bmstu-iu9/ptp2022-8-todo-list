@@ -3,36 +3,53 @@ package ping
 import (
 	"net/http"
 	"net/http/httptest"
+	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/router"
 	"github.com/julienschmidt/httprouter"
-	. "gopkg.in/check.v1"
 )
 
-type PingTestSuite struct{
-	mux *httprouter.Router
-	writer *httptest.ResponseRecorder
+var (
+	mux    *httprouter.Router
 	logger log.Logger
-}
+)
 
 func init() {
-	Suite(&PingTestSuite{})
+	mux = router.New()
+	logger = log.New()
+	RegisterHandlers(mux, logger)
 }
 
-func Test(t *testing.T) { TestingT(t) }
+func TestPing(t *testing.T) {
+	tests := map[string]struct {
+		method   string
+		body     string
+		wantCode int
+		wantBody string
+	}{
+		"OK":             {method: "GET", body: "", wantCode: http.StatusTeapot, wantBody: ""},
+		"Non-empty body": {method: "GET", body: "12345", wantCode: http.StatusTeapot, wantBody: ""},
+		"Wrong method":   {method: "POST", body: "{}", wantCode: http.StatusMethodNotAllowed, wantBody: "Method Not Allowed\n"},
+	}
 
-func (s *PingTestSuite) SetUpSuite(c *C) {
-	s.mux = httprouter.New()
-	s.logger = log.New()
-	RegisterHandlers(s.mux, s.logger)
-	s.writer = httptest.NewRecorder()
-}
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			request, _ := http.NewRequest(tc.method, "/ping", strings.NewReader(tc.body))
+			writer := httptest.NewRecorder()
+			mux.ServeHTTP(writer, request)
 
-func (s *PingTestSuite) TestPing(c *C) {
-	request, _ := http.NewRequest("GET", "/ping", nil)
-	s.mux.ServeHTTP(s.writer, request)
+			gotCode := writer.Code
+			gotBody := writer.Body.String()
 
-	c.Check(s.writer.Code, Equals, 418)
-	c.Check(s.writer.Body.Len(), Equals, 0)
+			if tc.wantCode != gotCode {
+				t.Fatalf("expected: %#v, got: %#v", tc.wantCode, gotCode)
+			}
+			if !reflect.DeepEqual(tc.wantBody, gotBody) {
+				t.Fatalf("expected: %#v, got: %#v", tc.wantBody, gotBody)
+			}
+		})
+	}
 }
