@@ -76,7 +76,23 @@ func (s *ValidateTestSuite) TestUpdateUserRequest_Validate(c *C) {
 }
 
 func (s *UsersTestSuite) SetUpTest(c *C) {
-	s.service = service{NewMockRerository()}
+	s.service = service{&mockRepository{
+		items: []entity.User{
+			{
+				Id:       0,
+				Email:    "slava@example.com",
+				Nickname: "slavaruswarrior",
+				Password: "wasdqwertytest",
+			},
+			{
+				Id: 5,
+				Email: "geogreck@example.com",
+				Nickname: "geogreck",
+				Password: "test123test",
+			},
+		},
+		id: 6,
+	}}
 }
 
 func (s *UsersTestSuite) TestGet(c *C) {
@@ -197,27 +213,7 @@ func (s *UsersTestSuite) TestUpdateError(c *C) {
 
 type mockRepository struct {
 	items []entity.User
-	id    int64
-}
-
-func NewMockRerository() *mockRepository {
-	return &mockRepository{
-		items: []entity.User{
-			{
-				Id:       0,
-				Email:    "slava@example.com",
-				Nickname: "slavaruswarrior",
-				Password: "wasdqwertytest",
-			},
-			{
-				Id: 5,
-				Email: "geogreck@example.com",
-				Nickname: "geogreck",
-				Password: "test123test",
-			},
-		},
-		id: 6,
-	}
+	id int64
 }
 
 func (repo *mockRepository) Create(user *entity.User) error {

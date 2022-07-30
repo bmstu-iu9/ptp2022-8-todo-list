@@ -1,116 +1,80 @@
 package users
 
 import (
-	"encoding/json"
 	"net/http"
-	"net/http/httptest"
-	"strings"
+	"testing"
 
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/router"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/test"
 	"github.com/julienschmidt/httprouter"
-	. "gopkg.in/check.v1"
 )
 
-type ApiTestSuite struct {
-	mux *httprouter.Router
-	writer *httptest.ResponseRecorder
-}
+var (
+	mux    *httprouter.Router
+	logger log.Logger
+)
 
 func init() {
-	Suite(&ApiTestSuite{})
-}
-
-func (s *ApiTestSuite) SetUpTest(c *C) {
-	s.mux = router.New()
-	RegisterHandlers(s.mux, NewService(NewMockRerository()), log.New())
-}
-
-func (s *ApiTestSuite) TestPost(c *C) {
-	makeRequest := func (body string) {
-		s.writer = httptest.NewRecorder()
-		bodyReader := strings.NewReader(body)
-		request, _ := http.NewRequest("POST", "/users", bodyReader)
-		s.mux.ServeHTTP(s.writer, request)
-	}
-
-	makeRequest(`{"email": "slava@example.com", "nickname": "slavarusvarrior", "password": "sDFHgjssndbfns123"}`)
-	c.Check(s.writer.Code, Equals, http.StatusCreated)
-	c.Check(s.writer.Header().Get("Location"), Equals, "https://ptp.starovoytovai.ru/api/v1/users/6")
-	c.Check(s.writer.Body.Len(), Equals, 0)
-
-	makeRequest(`"email": "slava@example.com", "nickname": "slavarusvarrior", "password": "sDFHgjssndbfns123"`)
-	c.Check(s.writer.Code, Equals, http.StatusBadRequest)
-
-	makeRequest(`{"email": "slava@example.com", "password": "sDFHgjssndbfns123"}`)
-	c.Check(s.writer.Code, Equals, http.StatusBadRequest)
-
-	makeRequest(`{"email": "slavaexample.com", "nickname": "slavarusvarrior", "password": "sDFHgjssndbfns123"}`)
-	c.Check(s.writer.Code, Equals, http.StatusBadRequest)
-}
-
-func (s *ApiTestSuite) TestGet(c *C) {
-	makeRequest := func (id string) {
-		s.writer = httptest.NewRecorder()
-		request, _ := http.NewRequest("GET", "/users/" + id, nil)
-		s.mux.ServeHTTP(s.writer, request)
-	}
-
-	makeRequest("5")
-	c.Check(s.writer.Code, Equals, http.StatusOK)
-	got := User{}
-	err := json.NewDecoder(s.writer.Body).Decode(&got)
-	c.Check(err, Equals, nil)
-	c.Check(got, DeepEquals, User {
-		Id: 5,
-		Email: "geogreck@example.com",
-		Nickname: "geogreck",
+	mux = router.New()
+	logger = log.New()
+	service := NewService(&mockRepository{
+		id: 2,
+		items: []entity.User{{
+			Id: 1,
+			Email: "geogreck@example.com",
+			Nickname: "geogreck",
+			Password: "Test123Test",
+		}},
 	})
-
-	makeRequest("6")
-	c.Check(s.writer.Code, Equals, http.StatusNotFound)
+	RegisterHandlers(mux, service, logger)
 }
 
-func (s *ApiTestSuite) TestPatch(c *C) {
-	makeRequest := func (id string, body string) {
-		s.writer = httptest.NewRecorder()
-		bodyReader := strings.NewReader(body)
-		request, _ := http.NewRequest("PATCH", "/users/"+ id, bodyReader)
-		s.mux.ServeHTTP(s.writer, request)
+func TestApi(t *testing.T) {
+	tests := []test.ApiTestCase{
+		{Name: "create OK", Method: "POST", Url: "/users",
+			Body: `{"email": "slava@example.com", "nickname": "slavarusvarrior", "password": "sDFHgjssndbfns123"}`,
+			WantCode: http.StatusCreated, WantHeader: http.Header{"Location": {"https://ptp.starovoytovai.ru/api/v1/users/2"}}},
+		{Name: "create verify", Method: "GET", Url: "/users/2",
+			WantBody:  `{"id":2,"email":"slava@example.com","nickname":"slavarusvarrior"}
+`,
+			WantCode: http.StatusOK},
+		{Name: "create input error", Method: "POST", Url: "/users", Body: `"email": "slava@example.com", "nickname": "slavarusvarrior", "password": "sDFHgjssndbfns123"`,
+			WantCode: http.StatusBadRequest},
+		{Name: "Create input error", Method: "POST", Url: "/users", Body: `{"email": "slava@example.com", "password": "sDFHgjssndbfns123"}`,
+			WantCode: http.StatusBadRequest},
+		{Name: "get OK", Method: "GET", Url: "/users/1",
+			WantCode: http.StatusOK, WantBody: `{"id":1,"email":"geogreck@example.com","nickname":"geogreck"}
+`},
+		{Name: "get id error", Method: "GET", Url: "/users/33",
+			WantCode: http.StatusNotFound},
+		{Name: "modify OK", Method: "PATCH", Url: "/users/1",
+			Body:  `{"email": "test@example.com", "currentPassword": "Test123Test"}`,
+			WantCode: http.StatusOK, WantBody: `{"id":1,"email":"test@example.com","nickname":"geogreck"}
+`},
+		{Name: "modify verify", Method: "GET", Url: "/users/1",
+			WantCode: http.StatusOK, WantBody: `{"id":1,"email":"test@example.com","nickname":"geogreck"}
+`},
+		{Name: "modify id error", Method: "PATCH", Url: "/users/33",
+			WantCode: http.StatusNotFound},
+		{Name: "modify current password error", Method: "PATCH", Url: "/users/1",
+			Body:  `{"email": "test@example.com", "currentPassword": "test12test"}`,
+		    WantCode: http.StatusForbidden},
+		{Name: "modify verify", Method: "GET", Url: "/users/1",
+			WantCode: http.StatusOK, WantBody: `{"id":1,"email":"test@example.com","nickname":"geogreck"}
+`},
+		{Name: "modify input error", Method: "PATCH", Url: "/users/1",
+			Body:  `{"email": "testexample.com", "currentPassword": "Test123Test"}`,
+		    WantCode: http.StatusBadRequest},
+		{Name: "delete OK", Method: "DELETE", Url: "/users/1",
+			WantCode: http.StatusNoContent},
+		{Name: "delete verify", Method: "DELETE", Url: "/users/1",
+			WantCode: http.StatusNotFound},
+		{Name: "delete id error", Method: "DELETE", Url: "/users/33",
+			WantCode: http.StatusNotFound},
 	}
 
-	makeRequest("5", `{"email": "test@example.com", "currentPassword": "test123test"}`)
-	c.Check(s.writer.Code, Equals, http.StatusOK)
-	got := User{}
-	err := json.NewDecoder(s.writer.Body).Decode(&got)
-	c.Check(err, Equals, nil)
-	c.Check(got, DeepEquals, User {
-		Id: 5,
-		Email: "test@example.com",
-		Nickname: "geogreck",
-	})
-
-	makeRequest("6", `{"email": "test@example.com", "currentPassword": "test123test"}`)
-	c.Check(s.writer.Code, Equals, http.StatusInternalServerError)
-
-	makeRequest("5", `{"email": "test@example.com", "currentPassword": "test12test"}`)
-	c.Check(s.writer.Code, Equals, http.StatusInternalServerError)
-
-	makeRequest("5", `{"email": "testexample.com", "currentPassword": "test123test"}`)
-	c.Check(s.writer.Code, Equals, http.StatusInternalServerError)
+	test.Endpoint(t, tests, mux)
 }
 
-func (s *ApiTestSuite) TestDelete(c *C) {
-	makeRequest := func (id string) {
-		s.writer = httptest.NewRecorder()
-		request, _ := http.NewRequest("DELETE", "/users/"+id, nil)
-		s.mux.ServeHTTP(s.writer, request)
-	}
-
-	makeRequest("5")
-	c.Check(s.writer.Code, Equals, http.StatusNoContent)
-	// TODO Проверка наличия удаленного пользователя
-
-	makeRequest("6")
-	c.Check(s.writer.Code, Equals, http.StatusNotFound)
-}

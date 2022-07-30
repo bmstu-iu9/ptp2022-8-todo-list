@@ -11,20 +11,21 @@ import (
 )
 
 // ApiTestCases represents the data needed to describe an API endpoint test cases
-type ApiTestCases map[string]struct {
+type ApiTestCase struct {
+	Name       string
 	Method     string
 	Url        string
 	Body       string
 	Header     http.Header
-	WantCode int
+	WantCode   int
 	WantBody   string
 	WantHeader http.Header
 }
 
 // Endpoint tests the API endpoint using given test cases.
-func Endpoint(t *testing.T, testCases ApiTestCases, mux *httprouter.Router) {
-	for name, tc := range testCases {
-		t.Run(name, func(t *testing.T) {
+func Endpoint(t *testing.T, testCases []ApiTestCase, mux *httprouter.Router) {
+	for _, tc := range testCases {
+		t.Run(tc.Name, func(t *testing.T) {
 			request, _ := http.NewRequest(tc.Method, tc.Url, strings.NewReader(tc.Body))
 			writer := httptest.NewRecorder()
 			mux.ServeHTTP(writer, request)

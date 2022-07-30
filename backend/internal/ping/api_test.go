@@ -21,13 +21,13 @@ func init() {
 	RegisterHandlers(mux, logger)
 }
 
-func TestPing(t *testing.T) {
-	tests := test.ApiTestCases{
-		"OK": {Method: "GET", Url: "/ping", Body: "",
+func TestApi(t *testing.T) {
+	tests := []test.ApiTestCase{
+		{Name: "Ping OK", Method: "GET", Url: "/ping", Body: "",
 			WantCode: http.StatusTeapot},
-		"Non-empty body": {Method: "GET", Url: "/ping", Body: "12345",
+		{Name: "Ping non-empty body", Method: "GET", Url: "/ping", Body: "12345",
 			WantCode: http.StatusTeapot},
-		"Wrong method": {Method: "POST", Url: "/ping", Body: "{}",
+		{Name: "Ping wrong method", Method: "POST", Url: "/ping", Body: "{}",
 			WantCode: http.StatusMethodNotAllowed, WantBody: "Method Not Allowed\n"},
 	}
 
