@@ -1,5 +1,8 @@
 body {
     .wrapper {
+        @media screen and (max-width: 768px) {
+            padding-top: 66px;
+        }
         width: 90%;
         margin: auto;
     }
