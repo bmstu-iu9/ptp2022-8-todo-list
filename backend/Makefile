@@ -13,16 +13,20 @@ run: build
 containers:
 	@docker build .
 
-.PHONY: unit-test
-unit-test:
-	@docker build . --target unit-test
+.PHONY: unit-test-run
+unit-test-run:
+	@docker build . --target unit-test --network host
 
-.PHONY: unit-test-coverage
-unit-test-coverage:
+.PHONY: unit-test
+unit-test: unit-test-run
 	@docker build . --target unit-test-coverage \
-	--output coverage/
-	cat coverage/cover.out
+	--output ./ \
+	--network host
 
 .PHONY: lint
 lint:
 	@docker build . --target lint
+
+.PHONY: db
+db:
+	@docker compose -f ../docker-compose.yml up -d db

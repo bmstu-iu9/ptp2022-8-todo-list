@@ -77,9 +77,16 @@ jobs:
                 files: |
                   **/*.ts
 
+            - name: Get specific changed files
+              id: files-ts
+              uses: Rishabh510/Path-lister-action@master
+              with:
+                path: "frontend/js/"
+                type: ".ts"
+
             - name: TsLint Checking
               if: ${{ always() && (steps.changed-files-ts.outputs.added_files || steps.changed-files-ts.outputs.modified_files) }} 
-              run: yarn tsc -t es6 --noEmit ${{ steps.changed-files-ts.outputs.modified_files }} ${{ steps.changed-files-ts.outputs.added_files }}
+              run: yarn tsc -t es6 --noEmit ${{ steps.files-ts.outputs.paths }}
 
             - name: Commit changes
               if: always()
