@@ -3,7 +3,6 @@ package test
 import (
 	"net/http"
 	"net/http/httptest"
-	"reflect"
 	"strings"
 	"testing"
 
@@ -37,14 +36,10 @@ func Endpoint(t *testing.T, testCases []ApiTestCase, mux *httprouter.Router) {
 			if tc.WantCode != gotCode {
 				t.Fatalf("expected: %#v, got: %#v", tc.WantCode, gotCode)
 			}
-			if !reflect.DeepEqual(tc.WantBody, gotBody) {
-				t.Fatalf("expected: %#v, got: %#v", tc.WantBody, gotBody)
-			}
+			DeepEqual(t, tc.WantBody, gotBody)
 			for name, wantValue := range tc.WantHeader {
 				gotValue := gotHeader.Values(name)
-				if !reflect.DeepEqual(wantValue, gotValue) {
-					t.Fatalf("expected header %s value: %#v, got: %#v", name, wantValue, gotValue)
-				}
+				DeepEqual(t, wantValue, gotValue)
 			}
 		})
 	}
