@@ -29,8 +29,8 @@ func (s *RepoTestSuite) TestRepo(c *C) {
 	testUser, err := s.repo.Get(1)
 	c.Check(err, IsNil)
 	c.Check(testUser, DeepEquals, entity.User{
-		Id: 1,
-		Email: "test@example.com",
+		Id:       1,
+		Email:    "test@example.com",
 		Nickname: "test",
 		Password: "Test123Test",
 	})
@@ -45,7 +45,7 @@ func (s *RepoTestSuite) TestRepo(c *C) {
 	got, err := s.repo.Get(user.Id)
 	c.Check(err, IsNil)
 	c.Check(*user, DeepEquals, got)
-	c.Check(user.Id, Equals, int64(2))
+	c.Check(user.Id, Equals, int64(3))
 
 	user.Email = "example@example.com"
 	err = s.repo.Update(user)
