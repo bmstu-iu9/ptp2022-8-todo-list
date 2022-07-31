@@ -1,6 +1,6 @@
 package entity
 
-//Struct Item describing one item
+// A Item represents single in-game item
 type Item struct {
 	ItemId      int    `json:"item_id"`
 	ItemName    string `json:"item_name"`

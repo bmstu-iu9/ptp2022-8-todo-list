@@ -65,8 +65,8 @@ func (repo repository) GetOne(userId, itemId int) (entity.Item, error) {
 		return entity.Item{}, errors.New("can`t find data in table")
 	}
 
-	row, err := repo.db.Query("SELECT items.id,item_name,image_src,"+
-		"description,price,category,rarity,users_items.is_equipped FROM items INNER JOIN users_items ON items.id = $1"+
+	row, err := repo.db.Query("SELECT items.id, item_name, image_src,"+
+		" description, price, category, rarity, users_items.is_equipped FROM items INNER JOIN users_items ON items.id = $1"+
 		"AND users_items.item_id = $2 AND users_items.user_id = $3", itemId, itemId, userId)
 	if err != nil {
 		return entity.Item{}, err
