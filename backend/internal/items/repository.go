@@ -82,6 +82,9 @@ func (repo repository) GetOne(userId, itemId int) (entity.Item, error) {
 func (repo repository) Update(userId int, item *entity.Item) error {
 	status, err := repo.checkUsersItem(userId, item.ItemId)
 	item.IsInInventory = status
+	if err != nil {
+		return err
+	}
 
 	_, err = repo.db.Exec("UPDATE users_items SET is_equipped = $1 WHERE item_id = $2 AND user_id =$3",
 		item.IsEquipped, item.ItemId, userId)
