@@ -63,9 +63,9 @@ func (r *RepositoryTestSuite) TestGetOne(c *C) {
 		IsInInventory: true,
 		IsEquipped:    0,
 	})
-	testItem, err = r.repo.GetOne(2, 2)
+	_, err = r.repo.GetOne(2, 2)
 	c.Check(err, NotNil)
-	testItem, err = r.repo.GetOne(1, 3)
+	_, err = r.repo.GetOne(1, 3)
 	c.Check(err, NotNil)
 
 	testItem, err = r.repo.GetOne(1, 2)

@@ -58,7 +58,10 @@ func (repo repository) checkUsersItem(userId, itemId int) (status bool, err erro
 
 func (repo repository) GetOne(userId, itemId int) (entity.Item, error) {
 	status, err := repo.checkUsersItem(userId, itemId)
-	if status == false {
+	if err != nil {
+		return entity.Item{}, err
+	}
+	if !status {
 		return entity.Item{}, errors.New("can`t find data in table")
 	}
 

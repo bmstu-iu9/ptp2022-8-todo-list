@@ -42,6 +42,9 @@ VALUES('test@example.com', 'test', 'Test123Test');
 INSERT INTO users(email, nickname, password)
 VALUES('test2@example.com', 'test2', 'Test123Test');
 `)
+	if err != nil {
+		return nil, err
+	}
 
 	_, err = db.Exec(`
 DROP TABLE IF EXISTS items CASCADE ;
@@ -59,7 +62,9 @@ VALUES ('testItem1','test.png','test1',65,'test1','test1');
 INSERT INTO items (item_name,image_src,description,price,category,rarity) 
  VALUES ('testItem2','test2.png','test2',62,'test2','test2');
 `)
-
+	if err != nil {
+		return nil, err
+	}
 	_, err = db.Exec(`
 DROP TABLE IF EXISTS users_items;
 CREATE TABLE users_items (
