@@ -2,6 +2,7 @@ package items
 
 import (
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/db"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	. "gopkg.in/check.v1"
 )
@@ -26,14 +27,24 @@ func (r *RepositoryTestSuite) SetUpTest(c *C) {
 func (r *RepositoryTestSuite) TestGetAll(c *C) {
 	testItems, err := r.repo.GetAll()
 	c.Check(err, IsNil)
-	c.Check(testItems, DeepEquals, []Item{
+	c.Check(testItems, DeepEquals, []entity.Item{
 		{
-			ItemId:   1,
-			ItemName: "testItem1",
+			ItemId:      1,
+			ItemName:    "testItem1",
+			ImageSrc:    "test.png",
+			Description: "test1",
+			Price:       65,
+			Rarity:      "test1",
+			Category:    "test1",
 		},
 		{
-			ItemId:   2,
-			ItemName: "testItem2",
+			ItemId:      2,
+			ItemName:    "testItem2",
+			ImageSrc:    "test2.png",
+			Description: "test2",
+			Price:       62,
+			Rarity:      "test2",
+			Category:    "test2",
 		},
 	})
 }
@@ -41,9 +52,16 @@ func (r *RepositoryTestSuite) TestGetAll(c *C) {
 func (r *RepositoryTestSuite) TestGetOne(c *C) {
 	testItem, err := r.repo.GetOne(1, 1)
 	c.Check(err, IsNil)
-	c.Check(testItem, Equals, Item{
-		ItemId:   1,
-		ItemName: "Sasha",
+	c.Check(testItem, Equals, entity.Item{
+		ItemId:        1,
+		ItemName:      "testItem1",
+		ImageSrc:      "test.png",
+		Description:   "test1",
+		Price:         65,
+		Rarity:        "test1",
+		Category:      "test1",
+		IsInInventory: true,
+		IsEquipped:    0,
 	})
 	testItem, err = r.repo.GetOne(2, 2)
 	c.Check(err, NotNil)
@@ -52,29 +70,37 @@ func (r *RepositoryTestSuite) TestGetOne(c *C) {
 
 	testItem, err = r.repo.GetOne(1, 2)
 	c.Check(err, IsNil)
-	c.Check(testItem, Equals, Item{
-		ItemId:   2,
-		ItemName: "testItem2",
+	c.Check(testItem, Equals, entity.Item{
+		ItemId:        2,
+		ItemName:      "testItem2",
+		ImageSrc:      "test2.png",
+		Description:   "test2",
+		Price:         62,
+		Rarity:        "test2",
+		Category:      "test2",
+		IsInInventory: true,
+		IsEquipped:    1,
 	})
 }
 
 func (r *RepositoryTestSuite) TestUpdate(c *C) {
-	item := Item{
-		ItemId:   1,
-		ItemName: "Sasha",
+	item := entity.Item{
+		ItemId:     1,
+		IsEquipped: 1,
 	}
-	err := r.repo.Update(item)
+	err := r.repo.Update(1, &item)
 	c.Check(err, IsNil)
-	testItems, err := r.repo.GetAll()
+	testItems, err := r.repo.GetOne(1, 1)
 	c.Check(err, IsNil)
-	c.Check(testItems, DeepEquals, []Item{
-		{
-			ItemId:   1,
-			ItemName: "Sasha",
-		},
-		{
-			ItemId:   2,
-			ItemName: "testItem2",
-		},
+	c.Check(testItems, Equals, entity.Item{
+		ItemId:        1,
+		ItemName:      "testItem1",
+		ImageSrc:      "test.png",
+		Description:   "test1",
+		Price:         65,
+		Rarity:        "test1",
+		Category:      "test1",
+		IsInInventory: true,
+		IsEquipped:    1,
 	})
 }

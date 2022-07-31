@@ -1,18 +1,17 @@
 package items
 
-type Item struct {
-	ItemId   int    `json:"ItemId"`
-	ItemName string `json:"ItemName"`
-}
+import "github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+
 type UpdateItemRequest struct {
-	ItemName string `json:"itemName"`
+	IsEquipped    *int  `json:"is_equipped"`
+	IsInInventory *bool `json:"is_in_inventory"`
 }
 
 // Service encapsulates usecase logic for users.
 type Service interface {
-	GetAll() ([]Item, error)
-	GetOne(userId, itemId int) (Item, error)
-	Modify(userId, itemId int, input *UpdateItemRequest) (Item, error)
+	GetAll() ([]entity.Item, error)
+	GetOne(userId, itemId int) (entity.Item, error)
+	Modify(userId, itemId int, input *UpdateItemRequest) (entity.Item, error)
 }
 
 type service struct {
@@ -23,22 +22,25 @@ func NewService(repo Repository) Service {
 	return service{repo}
 }
 
-func (s service) GetAll() ([]Item, error) {
+func (s service) GetAll() ([]entity.Item, error) {
 	return s.repo.GetAll()
 }
 
-func (s service) GetOne(userId, itemId int) (Item, error) {
+func (s service) GetOne(userId, itemId int) (entity.Item, error) {
 	return s.repo.GetOne(userId, itemId)
 }
 
-func (s service) Modify(userId, itemId int, input *UpdateItemRequest) (Item, error) {
+func (s service) Modify(userId, itemId int, input *UpdateItemRequest) (entity.Item, error) {
 	entityItem, err := s.repo.GetOne(userId, itemId)
 	if err != nil {
-		return Item{}, err
+		return entity.Item{}, err
 	}
-	if input.ItemName != "" {
-		entityItem.ItemName = input.ItemName
+	if input.IsEquipped != nil {
+		entityItem.IsEquipped = *input.IsEquipped
 	}
-	err = s.repo.Update(entityItem)
+	if input.IsInInventory != nil {
+		entityItem.IsInInventory = *input.IsInInventory
+	}
+	err = s.repo.Update(userId, &entityItem)
 	return entityItem, err
 }

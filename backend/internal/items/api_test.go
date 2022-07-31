@@ -3,6 +3,7 @@ package items
 import (
 	"encoding/json"
 	"errors"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"net/http"
 	"net/http/httptest"
@@ -37,10 +38,10 @@ func (s *ApiTestSuite) TestGetAll(c *C) {
 	}
 	makeRequest("1") //any userId
 	c.Check(s.writer.Code, Equals, http.StatusOK)
-	got := []Item{}
+	got := []entity.Item{}
 	err := json.NewDecoder(s.writer.Body).Decode(&got)
 	c.Check(err, Equals, nil)
-	c.Check(got, DeepEquals, []Item{
+	c.Check(got, DeepEquals, []entity.Item{
 		{
 			ItemId:   10,
 			ItemName: "sword",
@@ -50,7 +51,6 @@ func (s *ApiTestSuite) TestGetAll(c *C) {
 			ItemName: "head",
 		},
 	})
-
 }
 
 func (s *ApiTestSuite) TestGetOne(c *C) {
@@ -61,10 +61,10 @@ func (s *ApiTestSuite) TestGetOne(c *C) {
 	}
 	makeRequest("1", "10")
 	c.Check(s.writer.Code, Equals, http.StatusOK)
-	got := Item{}
+	got := entity.Item{}
 	err := json.NewDecoder(s.writer.Body).Decode(&got)
 	c.Check(err, Equals, nil)
-	c.Check(got, DeepEquals, Item{
+	c.Check(got, DeepEquals, entity.Item{
 		ItemId:   10,
 		ItemName: "sword",
 	})
@@ -82,14 +82,15 @@ func (s *ApiTestSuite) TestPatch(c *C) {
 		s.mux.ServeHTTP(s.writer, req)
 	}
 
-	makeRequest("1", "10", `{"ItemName": "test"}`)
+	makeRequest("1", "10", `{"is_equipped": 1}`)
 	c.Check(s.writer.Code, Equals, http.StatusOK)
-	got := Item{}
+	got := entity.Item{}
 	err := json.NewDecoder(s.writer.Body).Decode(&got)
 	c.Check(err, IsNil)
-	c.Check(got, DeepEquals, Item{
-		ItemId:   10,
-		ItemName: "test",
+	c.Check(got, DeepEquals, entity.Item{
+		ItemId:     10,
+		ItemName:   "sword",
+		IsEquipped: 1,
 	})
 	makeRequest("1", "2", `{"ItemName": "test"}`)
 	c.Check(s.writer.Code, Equals, http.StatusInternalServerError)
@@ -98,30 +99,30 @@ func (s *ApiTestSuite) TestPatch(c *C) {
 }
 
 type mockRepository struct {
-	data   []Item
+	data   []entity.Item
 	userId int
 }
 
-func (m mockRepository) GetAll() ([]Item, error) {
+func (m mockRepository) GetAll() ([]entity.Item, error) {
 	return m.data, nil
 }
 
-func (m mockRepository) GetOne(userId, itemId int) (Item, error) {
+func (m mockRepository) GetOne(userId, itemId int) (entity.Item, error) {
 	if userId != m.userId {
-		return Item{}, errors.New("No user")
+		return entity.Item{}, errors.New("No user")
 	}
 	for _, item := range m.data {
 		if item.ItemId == itemId {
 			return item, nil
 		}
 	}
-	return Item{}, errors.New("No data")
+	return entity.Item{}, errors.New("No data")
 }
 
-func (m mockRepository) Update(item Item) error {
+func (m mockRepository) Update(userId int, item *entity.Item) error {
 	for i, curItem := range m.data {
 		if curItem.ItemId == item.ItemId {
-			m.data[i] = item
+			m.data[i] = *item
 			return nil
 		}
 	}
@@ -130,7 +131,7 @@ func (m mockRepository) Update(item Item) error {
 
 func NewMockRerository() *mockRepository {
 	return &mockRepository{
-		data: []Item{
+		data: []entity.Item{
 			{
 				ItemId:   10,
 				ItemName: "sword",
