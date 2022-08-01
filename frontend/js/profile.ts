@@ -4,8 +4,12 @@ type UserInfo = {
     email: string,
     surname: string,
     aboutInfo: string,
-};
+    level: number,
+    health: number,
+    experience: number,
 
+};
+let userId: number = 1;
 namespace userDataFields {
     export const nickname: HTMLElement = document.getElementById("nicknameField") as HTMLElement;
     export const name: HTMLElement = document.getElementById("nameField") as HTMLElement;
@@ -34,21 +38,16 @@ namespace changeDataModal {
     });
     
     submitBtn.addEventListener("click", () => {
-        userDataFields.nickname.innerHTML = "@"+ nicknameForm.value;
-        userDataFields.name.innerHTML = nameForm.value;
-        userDataFields.surname.innerHTML = surnameForm.value;
-        userDataFields.aboutInfo.innerHTML = aboutInfoForm.value;
-        localStorage.setItem("userInfo", JSON.stringify({
+        sendRequest("PATCH", server + `/users/${userId}`, JSON.stringify({
             nickname: nicknameForm.value,
             name: nameForm.value,
             surname: surnameForm.value,
-            aboutInfo: aboutInfoForm.value,
-    
-        }));
-        /*
-            Тут, наверное, должен отправлятьcя запрос на сервер
-        */   
-    });
+            aboutInfo: aboutInfoForm.value}))
+            .then(r => updateHTML(r))
+            .catch(e => {
+                throw e;
+            })
+        });
 };
 
 namespace changePasswordModal {
@@ -83,12 +82,23 @@ namespace changePasswordModal {
 });
 };
 
-window.addEventListener("load", () => {
-    if (localStorage.getItem("userInfo") != null) {
-        let info: UserInfo = JSON.parse(localStorage.getItem("userInfo") || "");
-        userDataFields.name.innerHTML = info.name.trim() != "" ? info.name: "Неизвестно";
-        userDataFields.surname.innerHTML = info.surname.trim() != "" ? info.surname.trim() : "Неизвестно";
-        userDataFields.nickname.innerHTML = info.nickname.trim() != "" ?"@" + info.nickname.trim() : "@Неизвестно";
-        userDataFields.aboutInfo.innerHTML = info.aboutInfo.trim() != "" ? info.aboutInfo.trim() : "Неизвестно";
-    }
-});
+
+
+
+function updateHTML(info: UserInfo): void {
+    userDataFields.name.innerHTML = info.name ?? "Неизвестно";
+    userDataFields.surname.innerHTML = info.surname ?? "Неизвестно";
+    userDataFields.email.innerHTML = info.email ?? "Неизвестно";
+    userDataFields.nickname.innerHTML = "@" + info.nickname ?? "@Неизвестно";
+    userDataFields.aboutInfo.innerHTML = info.aboutInfo ?? "Неизвестно";
+}
+
+function renderProfile(id: number): void {
+    sendRequest("GET", server + `/users/${id}`)
+        .then(r => updateHTML(r))
+        .catch(e => {
+            throw e
+        });
+}
+
+renderProfile(userId)
