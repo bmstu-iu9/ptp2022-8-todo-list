@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const CATALOG = [
+const CATALOG_SHOP = [
     {
         id: 1,
         name: "Кожаный шлем",
