@@ -16,7 +16,7 @@ const CATALOG_SHOP = [
         imageSrc: "armorHelmet2.webp",
         price: 72,
         category: "armor",
-        rarity: "common"
+        rarity: "rare"
     },
     {
         id: 3,
@@ -25,7 +25,7 @@ const CATALOG_SHOP = [
         imageSrc: "armorHelmet3.webp",
         price: 78,
         category: "armor",
-        rarity: "common"
+        rarity: "epic"
     },
     {
         id: 4,
@@ -34,7 +34,7 @@ const CATALOG_SHOP = [
         imageSrc: "armorHelmet4.webp",
         price: 84,
         category: "armor",
-        rarity: "common"
+        rarity: "legendary"
     },
     {
         id: 5,
@@ -106,6 +106,6 @@ const CATALOG_SHOP = [
         imageSrc: "armorBeing4.webp",
         price: 132,
         category: "armor",
-        rarity: "common"
+        rarity: "mythical"
     }
 ]

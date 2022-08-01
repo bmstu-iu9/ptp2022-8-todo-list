@@ -2,8 +2,19 @@ class Products {
 
     render() {
         let htmlCatalog = '';
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let common = '#C8C8C8';
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let rare = '#FFB74D';
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let epic = '#F06292';
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let legendary = '#26A69A';
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let mythical = 'linear-gradient(#40E0D0, #FF8C00, #FF0080)';
+
         // eslint-disable-next-line no-undef
-        CATALOG_SHOP.forEach(({id, name, description, imageSrc, category}) => {
+        CATALOG_SHOP.forEach(({id, name, description, imageSrc, category, rarity}) => {
 
             if (category === 'armor' && id === 1) {
                 htmlCatalog += `
@@ -19,8 +30,7 @@ class Products {
                     <div class="card h-100">
                         <img src="${imageSrc}" class="card-img-top" alt="...">
 <!--                           подумать над заданием стиля-->
-<!--                           подумать над добавлением заголовков -->
-                        <div class="card-body" style="background: #C8C8C8">
+                        <div class="card-body" style="background: ${eval(`${rarity}`)}">
                             <h5 class="card-title">${name}</h5>
                                 <p class="card-text">${description}</p>
                         </div>
