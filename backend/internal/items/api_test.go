@@ -82,15 +82,15 @@ func (s *ApiTestSuite) TestPatch(c *C) {
 		s.mux.ServeHTTP(s.writer, req)
 	}
 
-	makeRequest("1", "10", `{"is_equipped": 1}`)
+	makeRequest("1", "10", `{"item_state":"equipped"}`)
 	c.Check(s.writer.Code, Equals, http.StatusOK)
 	got := entity.Item{}
 	err := json.NewDecoder(s.writer.Body).Decode(&got)
 	c.Check(err, IsNil)
 	c.Check(got, DeepEquals, entity.Item{
-		ItemId:     10,
-		ItemName:   "sword",
-		IsEquipped: 1,
+		ItemId:    10,
+		ItemName:  "sword",
+		ItemState: entity.Equipped,
 	})
 	makeRequest("1", "2", `{"ItemName": "test"}`)
 	c.Check(s.writer.Code, Equals, http.StatusInternalServerError)

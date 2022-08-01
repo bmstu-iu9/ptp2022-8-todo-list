@@ -52,27 +52,16 @@ func (s *ServiceTestSuite) TestGetOne(c *C) {
 }
 
 func (s *ServiceTestSuite) TestModify(c *C) {
-	isEquipped := 1
-	isInInventory := true
-	newItem := UpdateItemRequest{
-		IsEquipped:    &isEquipped,
-		IsInInventory: &isInInventory,
+	newItem := UpdateItemStateRequest{
+		ItemState: entity.Equipped,
 	}
 	for i := 0; i < 2; i++ {
 		item, err := s.service.Modify(1, 10, &newItem)
 		c.Check(err, IsNil)
 		c.Check(item, Equals, entity.Item{
-			ItemId:        10,
-			ItemName:      "sword",
-			IsEquipped:    1,
-			IsInInventory: true,
+			ItemId:    10,
+			ItemName:  "sword",
+			ItemState: entity.Equipped,
 		})
 	}
-	/*newItem.ItemName = ""
-	item, err := s.service.Modify(1, 10, &newItem)
-	c.Check(err, IsNil)
-	c.Check(item, Equals, Item{
-		ItemId:   10,
-		ItemName: "Sasha",
-	})*/
 }

@@ -10,6 +10,13 @@ type Item struct {
 	Category    string `json:"category"`
 	Rarity      string `json:"rarity"`
 
-	IsInInventory bool `json:"is_in_inventory"`
-	IsEquipped    int  `json:"is_equipped"`
+	ItemState State `json:"item_state"`
 }
+
+type State string
+
+const (
+	Unknown     State = ""
+	Equipped    State = "equipped"
+	Inventoried State = "inventoried"
+)

@@ -80,7 +80,7 @@ func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httpr
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
-	data := UpdateItemRequest{}
+	data := UpdateItemStateRequest{}
 	err = json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		res.logger.Info(err)

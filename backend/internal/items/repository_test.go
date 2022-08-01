@@ -34,8 +34,8 @@ func (r *RepositoryTestSuite) TestGetAll(c *C) {
 			ImageSrc:    "test.png",
 			Description: "test1",
 			Price:       65,
-			Rarity:      "test1",
-			Category:    "test1",
+			Rarity:      "rare",
+			Category:    "armor",
 		},
 		{
 			ItemId:      2,
@@ -43,25 +43,24 @@ func (r *RepositoryTestSuite) TestGetAll(c *C) {
 			ImageSrc:    "test2.png",
 			Description: "test2",
 			Price:       62,
-			Rarity:      "test2",
-			Category:    "test2",
+			Rarity:      "epic",
+			Category:    "weapon",
 		},
 	})
 }
 
 func (r *RepositoryTestSuite) TestGetOne(c *C) {
-	testItem, err := r.repo.GetOne(1, 1)
+	testItem, err := r.repo.GetOne(2, 1)
 	c.Check(err, IsNil)
 	c.Check(testItem, Equals, entity.Item{
-		ItemId:        1,
-		ItemName:      "testItem1",
-		ImageSrc:      "test.png",
-		Description:   "test1",
-		Price:         65,
-		Rarity:        "test1",
-		Category:      "test1",
-		IsInInventory: true,
-		IsEquipped:    0,
+		ItemId:      1,
+		ItemName:    "testItem1",
+		ImageSrc:    "test.png",
+		Description: "test1",
+		Price:       65,
+		Rarity:      "rare",
+		Category:    "armor",
+		ItemState:   entity.Equipped,
 	})
 	_, err = r.repo.GetOne(2, 2)
 	c.Check(err, NotNil)
@@ -71,36 +70,34 @@ func (r *RepositoryTestSuite) TestGetOne(c *C) {
 	testItem, err = r.repo.GetOne(1, 2)
 	c.Check(err, IsNil)
 	c.Check(testItem, Equals, entity.Item{
-		ItemId:        2,
-		ItemName:      "testItem2",
-		ImageSrc:      "test2.png",
-		Description:   "test2",
-		Price:         62,
-		Rarity:        "test2",
-		Category:      "test2",
-		IsInInventory: true,
-		IsEquipped:    1,
+		ItemId:      2,
+		ItemName:    "testItem2",
+		ImageSrc:    "test2.png",
+		Description: "test2",
+		Price:       62,
+		Rarity:      "epic",
+		Category:    "weapon",
+		ItemState:   entity.Inventoried,
 	})
 }
 
 func (r *RepositoryTestSuite) TestUpdate(c *C) {
 	item := entity.Item{
-		ItemId:     1,
-		IsEquipped: 1,
+		ItemId:    1,
+		ItemState: entity.Equipped,
 	}
 	err := r.repo.Update(1, &item)
 	c.Check(err, IsNil)
 	testItems, err := r.repo.GetOne(1, 1)
 	c.Check(err, IsNil)
 	c.Check(testItems, Equals, entity.Item{
-		ItemId:        1,
-		ItemName:      "testItem1",
-		ImageSrc:      "test.png",
-		Description:   "test1",
-		Price:         65,
-		Rarity:        "test1",
-		Category:      "test1",
-		IsInInventory: true,
-		IsEquipped:    1,
+		ItemId:      1,
+		ItemName:    "testItem1",
+		ImageSrc:    "test.png",
+		Description: "test1",
+		Price:       65,
+		Rarity:      "rare",
+		Category:    "armor",
+		ItemState:   entity.Equipped,
 	})
 }

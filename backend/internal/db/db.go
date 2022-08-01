@@ -70,17 +70,19 @@ VALUES ('testItem2', 'test2.png', 'test2', 62, 'weapon', 'epic');
 		return nil, err
 	}
 	_, err = db.Exec(`
-DROP TABLE IF EXISTS users_items;
-CREATE TABLE users_items (
+DROP TYPE IF EXISTS states CASCADE;
+CREATE TYPE states AS ENUM ('equipped','inventoried');
+DROP TABLE IF EXISTS inventory;
+CREATE TABLE inventory (
     user_id int,
     item_id int,
-    is_equipped boolean,
+    item_state states DEFAULT 'inventoried',
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (item_id) REFERENCES items (id)
 );
-INSERT INTO users_items (user_id, item_id, is_equipped) VALUES (1, 1, 'false');
-INSERT INTO users_items (user_id, item_id, is_equipped) VALUES (2, 1, 'false');
-INSERT INTO users_items (user_id, item_id, is_equipped) VALUES (1, 2, 'true');
+INSERT INTO inventory (user_id, item_id) VALUES (1, 1);
+INSERT INTO inventory (user_id, item_id, item_state) VALUES (2, 1, 'equipped');
+INSERT INTO inventory (user_id, item_id) VALUES (1, 2);
 `)
 	return db, err
 }
