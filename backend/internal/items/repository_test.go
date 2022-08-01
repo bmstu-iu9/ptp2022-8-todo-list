@@ -25,7 +25,24 @@ func (r *RepositoryTestSuite) SetUpTest(c *C) {
 }
 
 func (r *RepositoryTestSuite) TestGetAll(c *C) {
-	testItems, err := r.repo.GetAll()
+	testItems, err := r.repo.GetAll(1, entity.Filter{StateFilter: entity.Store})
+	c.Check(err, IsNil)
+	c.Check(testItems, DeepEquals, []entity.Item{
+		{
+			ItemId:      3,
+			ItemName:    "testItem3",
+			ImageSrc:    "test3.png",
+			Description: "test3",
+			Price:       69,
+			Rarity:      "legendary",
+			Category:    "weapon",
+			ItemState:   entity.Store,
+		},
+	})
+	testItems, err = r.repo.GetAll(1, entity.Filter{RarityFilter: "rare", CategoryFilter: "weapon"})
+	c.Check(err, IsNil)
+	c.Check(testItems, DeepEquals, []entity.Item{})
+	testItems, err = r.repo.GetAll(1, entity.Filter{CategoryFilter: "armor"})
 	c.Check(err, IsNil)
 	c.Check(testItems, DeepEquals, []entity.Item{
 		{
@@ -36,21 +53,13 @@ func (r *RepositoryTestSuite) TestGetAll(c *C) {
 			Price:       65,
 			Rarity:      "rare",
 			Category:    "armor",
-		},
-		{
-			ItemId:      2,
-			ItemName:    "testItem2",
-			ImageSrc:    "test2.png",
-			Description: "test2",
-			Price:       62,
-			Rarity:      "epic",
-			Category:    "weapon",
+			ItemState:   entity.Inventoried,
 		},
 	})
 }
 
 func (r *RepositoryTestSuite) TestGetOne(c *C) {
-	testItem, err := r.repo.GetOne(2, 1)
+	testItem, err := r.repo.GetOne(1, 1)
 	c.Check(err, IsNil)
 	c.Check(testItem, Equals, entity.Item{
 		ItemId:      1,
@@ -60,7 +69,7 @@ func (r *RepositoryTestSuite) TestGetOne(c *C) {
 		Price:       65,
 		Rarity:      "rare",
 		Category:    "armor",
-		ItemState:   entity.Equipped,
+		ItemState:   entity.Inventoried,
 	})
 	_, err = r.repo.GetOne(2, 2)
 	c.Check(err, NotNil)
@@ -77,7 +86,7 @@ func (r *RepositoryTestSuite) TestGetOne(c *C) {
 		Price:       62,
 		Rarity:      "epic",
 		Category:    "weapon",
-		ItemState:   entity.Inventoried,
+		ItemState:   entity.Equipped,
 	})
 }
 

@@ -31,12 +31,12 @@ func (s *ApiTestSuite) SetUpTest(c *C) {
 func Test(t *testing.T) { TestingT(t) }
 
 func (s *ApiTestSuite) TestGetAll(c *C) {
-	makeRequest := func(userId string) {
+	makeRequest := func(userId string, filters string) {
 		s.writer = httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/users/"+userId+"/items", nil)
+		req, _ := http.NewRequest("GET", "/users/"+userId+"/items"+filters, nil)
 		s.mux.ServeHTTP(s.writer, req)
 	}
-	makeRequest("1") //any userId
+	makeRequest("1", "?rarityfilter=rare") //any userId
 	c.Check(s.writer.Code, Equals, http.StatusOK)
 	got := []entity.Item{}
 	err := json.NewDecoder(s.writer.Body).Decode(&got)
@@ -45,10 +45,7 @@ func (s *ApiTestSuite) TestGetAll(c *C) {
 		{
 			ItemId:   10,
 			ItemName: "sword",
-		},
-		{
-			ItemId:   6,
-			ItemName: "head",
+			Rarity:   "rare",
 		},
 	})
 }
@@ -67,6 +64,7 @@ func (s *ApiTestSuite) TestGetOne(c *C) {
 	c.Check(got, DeepEquals, entity.Item{
 		ItemId:   10,
 		ItemName: "sword",
+		Rarity:   "rare",
 	})
 	makeRequest("4", "10")
 	c.Check(s.writer.Code, Equals, http.StatusNotFound)
@@ -90,6 +88,7 @@ func (s *ApiTestSuite) TestPatch(c *C) {
 	c.Check(got, DeepEquals, entity.Item{
 		ItemId:    10,
 		ItemName:  "sword",
+		Rarity:    "rare",
 		ItemState: entity.Equipped,
 	})
 	makeRequest("1", "2", `{"ItemName": "test"}`)
@@ -103,7 +102,16 @@ type mockRepository struct {
 	userId int
 }
 
-func (m mockRepository) GetAll() ([]entity.Item, error) {
+func (m mockRepository) GetAll(userId int, filters entity.Filter) ([]entity.Item, error) {
+	ans := make([]entity.Item, 0)
+	if filters.RarityFilter != "" {
+		for _, item := range m.data {
+			if item.Rarity == filters.RarityFilter {
+				ans = append(ans, item)
+			}
+		}
+		return ans, nil
+	}
 	return m.data, nil
 }
 
@@ -135,10 +143,12 @@ func NewMockRerository() *mockRepository {
 			{
 				ItemId:   10,
 				ItemName: "sword",
+				Rarity:   "rare",
 			},
 			{
 				ItemId:   6,
 				ItemName: "head",
+				Rarity:   "legendary",
 			},
 		},
 		userId: 1,

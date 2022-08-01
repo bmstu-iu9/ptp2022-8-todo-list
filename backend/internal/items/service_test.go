@@ -18,16 +18,18 @@ func (s *ServiceTestSuite) SetUpTest(c *C) {
 }
 
 func (s *ServiceTestSuite) TestGetAll(c *C) {
-	items, err := s.service.GetAll()
+	items, err := s.service.GetAll(1, entity.Filter{})
 	c.Check(err, IsNil)
 	c.Check(items, DeepEquals, []entity.Item{
 		{
 			ItemId:   10,
 			ItemName: "sword",
+			Rarity:   "rare",
 		},
 		{
 			ItemId:   6,
 			ItemName: "head",
+			Rarity:   "legendary",
 		},
 	})
 }
@@ -38,12 +40,14 @@ func (s *ServiceTestSuite) TestGetOne(c *C) {
 	c.Check(item, Equals, entity.Item{
 		ItemId:   10,
 		ItemName: "sword",
+		Rarity:   "rare",
 	})
 	item, err = s.service.GetOne(1, 6)
 	c.Check(err, IsNil)
 	c.Check(item, Equals, entity.Item{
 		ItemId:   6,
 		ItemName: "head",
+		Rarity:   "legendary",
 	})
 	_, err = s.service.GetOne(10, 6)
 	c.Check(err, NotNil)
@@ -62,6 +66,7 @@ func (s *ServiceTestSuite) TestModify(c *C) {
 			ItemId:    10,
 			ItemName:  "sword",
 			ItemState: entity.Equipped,
+			Rarity:    "rare",
 		})
 	}
 }

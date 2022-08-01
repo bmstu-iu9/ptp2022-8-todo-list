@@ -65,6 +65,8 @@ INSERT INTO items (name, image_src, description, price, item_category, item_rari
 VALUES ('testItem1', 'test.png', 'test1', 65, 'armor', 'rare');
 INSERT INTO items (name, image_src, description, price, item_category, item_rarity) 
 VALUES ('testItem2', 'test2.png', 'test2', 62, 'weapon', 'epic');
+INSERT INTO items (name, image_src, description, price, item_category, item_rarity) 
+VALUES ('testItem3', 'test3.png', 'test3', 69, 'weapon', 'legendary');
 `)
 	if err != nil {
 		return nil, err
@@ -82,7 +84,7 @@ CREATE TABLE inventory (
 );
 INSERT INTO inventory (user_id, item_id) VALUES (1, 1);
 INSERT INTO inventory (user_id, item_id, item_state) VALUES (2, 1, 'equipped');
-INSERT INTO inventory (user_id, item_id) VALUES (1, 2);
+INSERT INTO inventory (user_id, item_id,item_state) VALUES (1, 2, 'equipped');
 `)
 	return db, err
 }

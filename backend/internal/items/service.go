@@ -1,6 +1,8 @@
 package items
 
-import "github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+import (
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+)
 
 // UpdateItemStateRequest represents the data for modifing ItemState.
 type UpdateItemStateRequest struct {
@@ -9,7 +11,7 @@ type UpdateItemStateRequest struct {
 
 // Service encapsulates usecase logic for items.
 type Service interface {
-	GetAll() ([]entity.Item, error)
+	GetAll(userId int, filters entity.Filter) ([]entity.Item, error)
 	GetOne(userId, itemId int) (entity.Item, error)
 	Modify(userId, itemId int, input *UpdateItemStateRequest) (entity.Item, error)
 }
@@ -24,8 +26,8 @@ func NewService(repo Repository) Service {
 }
 
 //GetAll returns all items.
-func (s service) GetAll() ([]entity.Item, error) {
-	return s.repo.GetAll()
+func (s service) GetAll(userId int, filters entity.Filter) ([]entity.Item, error) {
+	return s.repo.GetAll(userId, filters)
 }
 
 // GetOne returns item with specified id owned by user with specified id.

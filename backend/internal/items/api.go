@@ -3,6 +3,7 @@ package items
 import (
 	"encoding/json"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/accesslog"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"net/http"
 	"strconv"
@@ -23,8 +24,23 @@ type resource struct {
 	logger  log.Logger
 }
 
+func newFilter(r *http.Request) entity.Filter {
+	return entity.Filter{
+		StateFilter:    entity.State(r.URL.Query().Get("statefilter")),
+		RarityFilter:   r.URL.Query().Get("rarityfilter"),
+		CategoryFilter: r.URL.Query().Get("categoryfilter"),
+	}
+}
+
 func (res *resource) handleGetAll(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	items, err := res.service.GetAll()
+	userId, err := getUserId(p)
+	if err != nil {
+		res.logger.Info(err)
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	filters := newFilter(r)
+	items, err := res.service.GetAll(userId, filters)
 	if err != nil {
 		res.logger.Info(err)
 		w.WriteHeader(http.StatusNotFound)
