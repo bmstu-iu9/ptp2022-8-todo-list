@@ -87,7 +87,7 @@ func TestUpdateUserRequest_Validate(t *testing.T) {
 		{
 			Name: "bad email", IsValid: false,
 			Data: UpdateUserRequest{
-				Email:           newStr("email@test.com."),
+				Email:           newStr("email@@test.com"),
 				CurrentPassword: "Asjh2k123",
 			},
 		},
