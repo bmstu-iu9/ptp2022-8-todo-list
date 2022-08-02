@@ -63,10 +63,8 @@ func (repo repository) GetAll(userId int, filters entity.Filter) ([]entity.Item,
 			return nil, err
 		}
 
-		status, err := repo.IsItemInInventory(userId, curItem.ItemId)
-		if err != nil {
-			curItem.ItemState = status
-		}
+		status, _ := repo.IsItemInInventory(userId, curItem.ItemId)
+		curItem.ItemState = status
 		if filters.StateFilter != entity.Unknown {
 			if curItem.ItemState == filters.StateFilter {
 				items = append(items, curItem)
@@ -88,7 +86,7 @@ func (repo repository) IsItemInInventory(userId, itemId int) (status entity.Stat
 	row.Next()
 	err = row.Scan(&status)
 	if err != nil {
-		return entity.Unknown, err
+		return entity.Store, err
 	}
 	if status == entity.Store {
 		return status, fmt.Errorf("The item with id = %d does not belong to user with id =%d",
