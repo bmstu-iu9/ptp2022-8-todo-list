@@ -13,13 +13,12 @@ class Products {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         let mythical = 'linear-gradient(#40E0D0, #FF8C00, #FF0080)';
 
-
-
+        let numberBlock = 1;
 
         CATALOG_SHOP.forEach(({id, name, description, imageSrc, category, rarity}) => {
 
-            // вместо id поставить флаг
-            if (category === 'armor' && id === 1) {
+            if (category === 'armor' && numberBlock === 1) {
+                numberBlock += 1;
                 htmlCatalog += `
                 <div class="padding-right px-3 padding-left px-3">
                     <h3 class="display-4 text-center" id="clothes">
@@ -28,7 +27,8 @@ class Products {
                     <div class="row row-cols-lg-6 row-cols-md-4 row-cols-sm-3 row-cols-2 g-4">
                 `;
             }
-            else if (category === 'weapon' && id === 13) {
+            else if (category === 'weapon' && numberBlock === 2) {
+                numberBlock += 1;
                 htmlCatalog += `
                     <h3 class="display-4 text-center" id="accessories">
                         <a href="#top" style="text-decoration: none">Аксессуары</a></h3>
@@ -36,7 +36,8 @@ class Products {
                     <div class="row row-cols-lg-6 row-cols-md-4 row-cols-sm-3 row-cols-2 g-4">
                 `;
             }
-            else if (category === 'pet' && id === 19) {
+            else if (category === 'pet' && numberBlock === 3) {
+                numberBlock += 1;
                 htmlCatalog += `
                     <h3 class="display-4 text-center" id="pet">
                         <a href="#top" style = "text-decoration: none">Питомцы</a></h3>
@@ -44,7 +45,8 @@ class Products {
                     <div class="row row-cols-lg-6 row-cols-md-4 row-cols-sm-3 row-cols-2 g-4">
                 `;
             }
-            else if (category === 'skin' && id === 31) {
+            else if (category === 'skin' && numberBlock === 4) {
+                numberBlock += 1;
                 htmlCatalog += `
                     <h3 class="display-4 text-center" id="other">
                         <a href="#top" style = "text-decoration: none">Облик</a></h3>
@@ -64,28 +66,9 @@ class Products {
                     </div>
                 </div>
             `;
-            if (category === 'armor' && id === 12) {
-                htmlCatalog += `
-                        </div>
-                    </div>
-                    <br>
-                `;
-            }
-            else if (category === 'weapon' && id === 18) {
-                htmlCatalog += `
-                        </div>
-                    </div>
-                    <br>
-                `;
-            }
-            else if (category === 'pet' && id === 30) {
-                htmlCatalog += `
-                        </div>
-                    </div>
-                    <br>
-                `;
-            }
-            else if (category === 'skin' && id === 36) {
+            // TODO: избавиться от тега id
+            if (category === 'armor' && id === 12 || category === 'weapon' && id === 18 ||
+                category === 'pet' && id === 30 || category === 'skin' && id === 36) {
                 htmlCatalog += `
                         </div>
                     </div>
