@@ -28,7 +28,7 @@ class Products {
             htmlCatalog += `
                 <div class="col">
                     <div class="card h-100">
-                        <img src="${imageSrc}" class="card-img-top" alt="...">
+                        <img src="http://grechkogv.ru:3000/assets/${imageSrc}" class="card-img-top" alt="...">
 <!--                           подумать над заданием стиля-->
                         <div class="card-body" style="background: ${eval(`${rarity}`)}">
                             <h5 class="card-title">${name}</h5>
