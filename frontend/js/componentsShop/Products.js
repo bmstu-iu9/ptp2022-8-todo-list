@@ -13,7 +13,9 @@ class Products {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         let mythical = 'linear-gradient(#40E0D0, #FF8C00, #FF0080)';
 
-        // eslint-disable-next-line no-undef
+
+
+
         CATALOG_SHOP.forEach(({id, name, description, imageSrc, category, rarity}) => {
 
             if (category === 'armor' && id === 1) {
@@ -58,4 +60,17 @@ class Products {
 }
 
 const productsPage = new Products();
-productsPage.render();
+
+let CATALOG_SHOP = [];
+
+
+fetch('https://json.grechkogv.ru/items')
+    .then(res => res.json())
+    .then(body => {
+        CATALOG_SHOP = body;
+        productsPage.render();
+    })
+    .catch(error => {
+        console.log(error);
+    })
+
