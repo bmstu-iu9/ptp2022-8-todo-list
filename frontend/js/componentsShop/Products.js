@@ -18,6 +18,7 @@ class Products {
 
         CATALOG_SHOP.forEach(({id, name, description, imageSrc, category, rarity}) => {
 
+            // вместо id поставить флаг
             if (category === 'armor' && id === 1) {
                 htmlCatalog += `
                 <div class="padding-right px-3 padding-left px-3">
@@ -27,11 +28,34 @@ class Products {
                     <div class="row row-cols-lg-6 row-cols-md-4 row-cols-sm-3 row-cols-2 g-4">
                 `;
             }
+            else if (category === 'weapon' && id === 13) {
+                htmlCatalog += `
+                    <h3 class="display-4 text-center" id="accessories">
+                        <a href="#top" style="text-decoration: none">Аксессуары</a></h3>
+                    <br>
+                    <div class="row row-cols-lg-6 row-cols-md-4 row-cols-sm-3 row-cols-2 g-4">
+                `;
+            }
+            else if (category === 'pet' && id === 19) {
+                htmlCatalog += `
+                    <h3 class="display-4 text-center" id="pet">
+                        <a href="#top" style = "text-decoration: none">Питомцы</a></h3>
+                    <br>
+                    <div class="row row-cols-lg-6 row-cols-md-4 row-cols-sm-3 row-cols-2 g-4">
+                `;
+            }
+            else if (category === 'skin' && id === 31) {
+                htmlCatalog += `
+                    <h3 class="display-4 text-center" id="other">
+                        <a href="#top" style = "text-decoration: none">Облик</a></h3>
+                    <br>
+                    <div class="row row-cols-lg-6 row-cols-md-4 row-cols-sm-3 row-cols-2 g-4">
+                `;
+            }
             htmlCatalog += `
                 <div class="col">
                     <div class="card h-100">
                         <img src="http://grechkogv.ru:3000/assets/${imageSrc}" class="card-img-top" alt="...">
-<!--                           подумать над заданием стиля-->
                         <div class="card-body" style="background: ${eval(`${rarity}`)}">
                             <h5 class="card-title">${name}</h5>
                                 <p class="card-text">${description}</p>
@@ -47,7 +71,27 @@ class Products {
                     <br>
                 `;
             }
-
+            else if (category === 'weapon' && id === 18) {
+                htmlCatalog += `
+                        </div>
+                    </div>
+                    <br>
+                `;
+            }
+            else if (category === 'pet' && id === 30) {
+                htmlCatalog += `
+                        </div>
+                    </div>
+                    <br>
+                `;
+            }
+            else if (category === 'skin' && id === 36) {
+                htmlCatalog += `
+                        </div>
+                    </div>
+                    <br>
+                `;
+            }
         });
 
         const html = `
