@@ -2,7 +2,17 @@ package items
 
 import (
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+	"net/http"
 )
+
+// // NewFilter creates a new filter.
+func NewFilter(r *http.Request) entity.Filter {
+	return entity.Filter{
+		StateFilter:    entity.State(r.URL.Query().Get("statefilter")),
+		RarityFilter:   r.URL.Query().Get("rarityfilter"),
+		CategoryFilter: r.URL.Query().Get("categoryfilter"),
+	}
+}
 
 // UpdateItemStateRequest represents the data for modifing ItemState.
 type UpdateItemStateRequest struct {
@@ -32,12 +42,16 @@ func (s service) GetAll(userId int, filters entity.Filter) ([]entity.Item, error
 
 // GetOne returns item with specified id owned by user with specified id.
 func (s service) GetOne(userId, itemId int) (entity.Item, error) {
+	_, err := s.repo.IsItemInInventory(userId, itemId)
+	if err != nil {
+		return entity.Item{}, err
+	}
 	return s.repo.GetOne(userId, itemId)
 }
 
 // Modify returns item with specified id with new ItemState.
 func (s service) Modify(userId, itemId int, input *UpdateItemStateRequest) (entity.Item, error) {
-	entityItem, err := s.repo.GetOne(userId, itemId)
+	entityItem, err := s.GetOne(userId, itemId)
 	if err != nil {
 		return entity.Item{}, err
 	}

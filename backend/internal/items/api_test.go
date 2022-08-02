@@ -3,6 +3,7 @@ package items
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"net/http"
@@ -100,6 +101,18 @@ func (s *ApiTestSuite) TestPatch(c *C) {
 type mockRepository struct {
 	data   []entity.Item
 	userId int
+}
+
+func (m mockRepository) IsItemInInventory(userId, itemId int) (status entity.State, err error) {
+	if userId == m.userId {
+		for _, item := range m.data {
+			if item.ItemId == itemId {
+				return entity.Inventoried, nil
+			}
+		}
+	}
+	return entity.Store, fmt.Errorf("The item with id = %d does not belong to user with id =%d",
+		itemId, userId)
 }
 
 func (m mockRepository) GetAll(userId int, filters entity.Filter) ([]entity.Item, error) {

@@ -15,6 +15,8 @@ type Repository interface {
 	GetOne(userId, itemId int) (entity.Item, error)
 	// Update modifies the user's item status with specified id.
 	Update(userId int, item *entity.Item) error
+	// IsItemInInventory checks if an item is in inventory.
+	IsItemInInventory(userId, itemId int) (status entity.State, err error)
 }
 
 // repository persists items in database.
@@ -61,13 +63,10 @@ func (repo repository) GetAll(userId int, filters entity.Filter) ([]entity.Item,
 			return nil, err
 		}
 
-		status, err := repo.isItemInInventory(userId, curItem.ItemId)
+		status, err := repo.IsItemInInventory(userId, curItem.ItemId)
 		if err != nil {
-			curItem.ItemState = entity.Store
-		} else {
 			curItem.ItemState = status
 		}
-
 		if filters.StateFilter != entity.Unknown {
 			if curItem.ItemState == filters.StateFilter {
 				items = append(items, curItem)
@@ -75,24 +74,23 @@ func (repo repository) GetAll(userId int, filters entity.Filter) ([]entity.Item,
 		} else {
 			items = append(items, curItem)
 		}
-
 	}
 
 	return items, nil
 }
 
-func (repo repository) isItemInInventory(userId, itemId int) (status entity.State, err error) {
+func (repo repository) IsItemInInventory(userId, itemId int) (status entity.State, err error) {
 	row, err := repo.db.Query("SELECT item_state FROM inventory WHERE user_id = $1 AND item_id = $2",
 		userId, itemId)
 	if err != nil {
-		return entity.Unknown, err
+		return entity.Store, err
 	}
 	row.Next()
 	err = row.Scan(&status)
 	if err != nil {
 		return entity.Unknown, err
 	}
-	if status == entity.Unknown {
+	if status == entity.Store {
 		return status, fmt.Errorf("The item with id = %d does not belong to user with id =%d",
 			itemId, userId)
 	}
@@ -101,11 +99,6 @@ func (repo repository) isItemInInventory(userId, itemId int) (status entity.Stat
 
 // GetOne reads the item with specified id owned by the user with the specified id from database.
 func (repo repository) GetOne(userId, itemId int) (entity.Item, error) {
-	_, err := repo.isItemInInventory(userId, itemId)
-	if err != nil {
-		return entity.Item{}, err
-	}
-
 	row, err := repo.db.Query("SELECT items.id, name, image_src,"+
 		" description, price, item_category, item_rarity, inventory.item_state FROM items INNER JOIN inventory ON items.id = $1"+
 		"AND inventory.item_id = $2 AND inventory.user_id = $3", itemId, itemId, userId)
@@ -121,12 +114,7 @@ func (repo repository) GetOne(userId, itemId int) (entity.Item, error) {
 
 // Update changes the item's state in database.
 func (repo repository) Update(userId int, item *entity.Item) error {
-	_, err := repo.isItemInInventory(userId, item.ItemId)
-	if err != nil {
-		return err
-	}
-
-	_, err = repo.db.Exec("UPDATE inventory SET item_state = $1 WHERE item_id = $2 AND user_id =$3",
+	_, err := repo.db.Exec("UPDATE inventory SET item_state = $1 WHERE item_id = $2 AND user_id =$3",
 		item.ItemState, item.ItemId, userId)
 	return err
 }
