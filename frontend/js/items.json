@@ -15,7 +15,7 @@
     "imageSrc": "armorHelmet2.webp",
     "price": 72,
     "category": "armor",
-    "rarity": "common"
+    "rarity": "rare"
   },
   {
     "id": 3,
@@ -24,7 +24,7 @@
     "imageSrc": "armorHelmet3.webp",
     "price": 78,
     "category": "armor",
-    "rarity": "common"
+    "rarity": "epic"
   },
   {
     "id": 4,
@@ -33,7 +33,7 @@
     "imageSrc": "armorHelmet4.webp",
     "price": 84,
     "category": "armor",
-    "rarity": "common"
+    "rarity": "legendary"
   },
   {
     "id": 5,
@@ -51,7 +51,7 @@
     "imageSrc": "armorChest2.webp",
     "price": 96,
     "category": "armor",
-    "rarity": "common"
+    "rarity": "rare"
   },
   {
     "id": 7,
@@ -60,7 +60,7 @@
     "imageSrc": "armorChest3.webp",
     "price": 102,
     "category": "armor",
-    "rarity": "common"
+    "rarity": "epic"
   },
   {
     "id": 8,
@@ -69,7 +69,7 @@
     "imageSrc": "armorChest4.webp",
     "price": 108,
     "category": "armor",
-    "rarity": "common"
+    "rarity": "legendary"
   },
   {
     "id": 9,
@@ -87,7 +87,7 @@
     "imageSrc": "armorBeing2.webp",
     "price": 120,
     "category": "armor",
-    "rarity": "common"
+    "rarity": "rare"
   },
   {
     "id": 11,
@@ -96,22 +96,22 @@
     "imageSrc": "armorBeing3.webp",
     "price": 126,
     "category": "armor",
-    "rarity": "common"
+    "rarity": "epic"
   },
   {
     "id": 12,
     "name": "Алмазные штаны",
     "description": "",
-    "imageSrc": "armorBeing4.webp",
+    "imageSrc": "armorBeingMiph.webp",
     "price": 132,
     "category": "armor",
-    "rarity": "common"
+    "rarity": "mythical"
   },
   {
     "id": 13,
     "name": "Каменная зубочистка",
     "description": "",
-    "imageSrc": "armorBeing1.webp",
+    "imageSrc": "weapon1.webp",
     "price": 138,
     "category": "weapon",
     "rarity": "common"
@@ -120,46 +120,46 @@
     "id": 14,
     "name": "Железная палка",
     "description": "",
-    "imageSrc": "armorBeing2.webp",
+    "imageSrc": "weapon2.webp",
     "price": 144,
     "category": "weapon",
-    "rarity": "common"
+    "rarity": "rare"
   },
   {
     "id": 15,
     "name": "Золотой меч",
     "description": "",
-    "imageSrc": "armorBeing3.webp",
+    "imageSrc": "weapon3.webp",
     "price": 150,
     "category": "weapon",
-    "rarity": "common"
+    "rarity": "epic"
   },
   {
     "id": 16,
     "name": "Алмазная секира",
     "description": "",
-    "imageSrc": "armorBeing4.webp",
+    "imageSrc": "weapon4.webp",
     "price": 156,
     "category": "weapon",
-    "rarity": "common"
+    "rarity": "mythical"
   },
   {
     "id": 17,
     "name": "Незерский меч",
     "description": "",
-    "imageSrc": "armorBeing5.webp",
+    "imageSrc": "weapon5.webp",
     "price": 162,
     "category": "weapon",
-    "rarity": "common"
+    "rarity": "legendary"
   },
   {
     "id": 18,
     "name": "Крылья удачи",
     "description": "",
-    "imageSrc": "armorBeing6.webp",
+    "imageSrc": "weapon6.webp",
     "price": 168,
     "category": "weapon",
-    "rarity": "common"
+    "rarity": "mythical"
   },
   {
     "id": 19,
@@ -177,7 +177,7 @@
     "imageSrc": "pet2.webp",
     "price": 180,
     "category": "pet",
-    "rarity": "common"
+    "rarity": "rare"
   },
   {
     "id": 21,
@@ -186,7 +186,7 @@
     "imageSrc": "pet3.webp",
     "price": 186,
     "category": "pet",
-    "rarity": "common"
+    "rarity": "epic"
   },
   {
     "id": 22,
@@ -195,7 +195,7 @@
     "imageSrc": "pet4.webp",
     "price": 192,
     "category": "pet",
-    "rarity": "common"
+    "rarity": "legendary"
   },
   {
     "id": 23,
@@ -213,7 +213,7 @@
     "imageSrc": "pet6.webp",
     "price": 204,
     "category": "pet",
-    "rarity": "common"
+    "rarity": "mythical"
   },
   {
     "id": 25,
@@ -231,7 +231,7 @@
     "imageSrc": "pet8.webp",
     "price": 216,
     "category": "pet",
-    "rarity": "common"
+    "rarity": "rare"
   },
   {
     "id": 27,
@@ -240,7 +240,7 @@
     "imageSrc": "pet9.webp",
     "price": 222,
     "category": "pet",
-    "rarity": "common"
+    "rarity": "epic"
   },
   {
     "id": 28,
@@ -249,7 +249,7 @@
     "imageSrc": "pet10.webp",
     "price": 228,
     "category": "pet",
-    "rarity": "common"
+    "rarity": "legendary"
   },
   {
     "id": 29,
@@ -267,13 +267,13 @@
     "imageSrc": "pet12.webp",
     "price": 240,
     "category": "pet",
-    "rarity": "common"
+    "rarity": "mythical"
   },
   {
     "id": 31,
     "name": "Бэкендер",
     "description": "",
-    "imageSrc": "man1.webp",
+    "imageSrc": "man1.png",
     "price": 246,
     "category": "skin",
     "rarity": "common"
@@ -282,45 +282,45 @@
     "id": 32,
     "name": "Человек паук",
     "description": "",
-    "imageSrc": "man2.webp",
+    "imageSrc": "man2.png",
     "price": 252,
     "category": "skin",
-    "rarity": "common"
+    "rarity": "rare"
   },
   {
     "id": 33,
     "name": "Обычный парень",
     "description": "",
-    "imageSrc": "man3.webp",
+    "imageSrc": "man3.png",
     "price": 258,
     "category": "skin",
-    "rarity": "common"
+    "rarity": "epic"
   },
   {
     "id": 34,
     "name": "Блогер",
     "description": "",
-    "imageSrc": "man4.webp",
+    "imageSrc": "man4.png",
     "price": 264,
     "category": "skin",
-    "rarity": "common"
+    "rarity": "legendary"
   },
   {
     "id": 35,
     "name": "Фронтендер",
     "description": "",
-    "imageSrc": "woman1.webp",
+    "imageSrc": "woman1.png",
     "price": 270,
     "category": "skin",
-    "rarity": "common"
+    "rarity": "mythical"
   },
   {
     "id": 36,
     "name": "Фулстак",
     "description": "",
-    "imageSrc": "woman2.webp",
+    "imageSrc": "woman2.png",
     "price": 276,
     "category": "skin",
-    "rarity": "common"
+    "rarity": "mythical"
   }
 ]
