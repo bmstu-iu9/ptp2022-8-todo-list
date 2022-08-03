@@ -6,4 +6,44 @@ body {
     #strength_field, #agility_field, #intelligence_field {
         font-size: 1.5rem;
     }
+    #helmut {
+        display: none;
+        height: 180px;
+        width: 170px;
+        position: absolute;
+        top: 0;
+        left: 5px;
+        z-index: 1;
+    }
+
+    #chestplate {
+        display: none;
+        width: 200px;
+        height: 400px;
+        left: -3px;
+        z-index: 2;
+        position: absolute;
+    }
+    #leggings {
+        display: none;
+        width: 185px;
+        left: -2px;
+        height: 400px;
+        z-index: 1;
+        position: absolute;
+    }
+    #boots {
+        display: none;
+        width: 185px;
+        height: 400px;
+        top: -2px;
+        left: -5px;
+        z-index: 2;
+        position: absolute;
+    }
+
+    .character {
+        display: inline-block;
+        position: relative;
+    }
 }

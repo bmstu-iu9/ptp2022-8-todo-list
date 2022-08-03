@@ -1,4 +1,4 @@
-type UserInfo = {
+type User = {
     nickname: string,
     name: string,
     email: string,
@@ -7,6 +7,12 @@ type UserInfo = {
     level: number,
     health: number,
     experience: number,
+    equipment: {
+        helmut: number | null,
+        chestplate: number | null,
+        leggings: number | null,
+        boots: number | null,
+    }
 
 };
 let userId: number = 1;
@@ -82,16 +88,14 @@ namespace changePasswordModal {
 });
 };
 
-
-
-
-function updateHTML(info: UserInfo): void {
-    userDataFields.name.innerHTML = info.name ?? "Неизвестно";
-    userDataFields.surname.innerHTML = info.surname ?? "Неизвестно";
-    userDataFields.email.innerHTML = info.email ?? "Неизвестно";
-    userDataFields.nickname.innerHTML = "@" + info.nickname ?? "@Неизвестно";
-    userDataFields.aboutInfo.innerHTML = info.aboutInfo ?? "Неизвестно";
+function updateHTML(user: User): void {
+    userDataFields.name.innerHTML = user.name ?? "Неизвестно";
+    userDataFields.surname.innerHTML = user.surname ?? "Неизвестно";
+    userDataFields.email.innerHTML = user.email ?? "Неизвестно";
+    userDataFields.nickname.innerHTML = "@" + user.nickname ?? "@Неизвестно";
+    userDataFields.aboutInfo.innerHTML = user.aboutInfo ?? "Неизвестно";
 }
+
 
 function renderProfile(id: number): void {
     sendRequest("GET", server + `/users/${id}`)
