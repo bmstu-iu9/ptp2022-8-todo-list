@@ -2,23 +2,23 @@ class Products {
 
     render() {
         let htmlCatalog = '';
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        let common = '#C8C8C8';
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        let rare = '#FFB74D';
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        let epic = '#F06292';
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        let legendary = '#26A69A';
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        let mythical = 'linear-gradient(#40E0D0, #FF8C00, #FF0080)';
-
         let numberBlock = 0;
-        let namingBlock = ['Одежда', 'Аксессуары', 'Питомцы', 'Облик'];
+        const namingBlock: string[] = ['Одежда', 'Аксессуары', 'Питомцы', 'Облик'];
+        let previousCategory = 'helmet';
 
-        CATALOG_SHOP.forEach(({id, name, description, imageSrc, category, rarity}) => {
+        CATALOG_SHOP.forEach(({name, description, imageSrc, category, rarity}) => {
 
-            if (category === 'armor' && numberBlock === 0 ||
+            if (category != previousCategory && category != 'helmet') {
+                if (category != 'armor') {
+                    htmlCatalog += `
+                            </div>
+                        </div>
+                        <br>
+                    `;
+                }
+                previousCategory = category;
+            }
+            if ((category === 'armor' || category === 'helmet') && numberBlock === 0 ||
                 category === 'weapon' && numberBlock === 1 ||
                 category === 'pet' && numberBlock === 2 ||
                 category === 'skin' && numberBlock === 3) {
@@ -35,8 +35,8 @@ class Products {
             htmlCatalog += `
                 <div class="col">
                     <div class="card h-100">
-                        <img src="http://grechkogv.ru:3000/assets/${imageSrc}" class="card-img-top" alt="${imageSrc}">
-                        <div class="card-body" style="background: ${eval(`${rarity}`)}">
+                        <img src="http://grechkogv.ru:3000/assets/${imageSrc}" class="card-img-top" alt="...">
+                        <div class="card-body" style="background: ${color(rarity)}"">
                             <h5 class="card-title">${name}</h5>
                                 <p class="card-text">${description}</p>
                         </div>
@@ -44,15 +44,6 @@ class Products {
                     </div>
                 </div>
             `;
-            // TODO: избавиться от тега id
-            if (category === 'armor' && id === 12 || category === 'weapon' && id === 18 ||
-                category === 'pet' && id === 30 || category === 'skin' && id === 36) {
-                htmlCatalog += `
-                        </div>
-                    </div>
-                    <br>
-                `;
-            }
         });
 
         const html = `
@@ -68,6 +59,12 @@ const productsPage = new Products();
 
 let CATALOG_SHOP = [];
 
+function color(rarity): string {
+    if (rarity === "common") return "#C8C8C8"
+    else if (rarity === 'rare') return "#2bfff4"
+    else if (rarity === 'epic') return "#f04dff"
+    return "#linear-gradient(#40E0D0, #91e047, #fff456, #fff456, #ffa856, #e64f4f)"
+}
 
 fetch('https://json.grechkogv.ru/items')
     .then(res => res.json())
@@ -78,4 +75,3 @@ fetch('https://json.grechkogv.ru/items')
     .catch(error => {
         console.log(error);
     })
-
