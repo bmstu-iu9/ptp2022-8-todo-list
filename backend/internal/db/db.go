@@ -37,10 +37,9 @@ CREATE TABLE users (
        nickname varchar(45) NOT NULL,
        password varchar(100) NOT NULL
 );
-INSERT INTO users (email, nickname, password)
-VALUES ('test@example.com', 'test', 'Test123Test');
-INSERT INTO users (email, nickname, password)
-VALUES ('test2@example.com', 'test2', 'Test123Test');
+INSERT INTO users (email, nickname, password) VALUES 
+('test@example.com', 'test', 'Test123Test'),
+('test2@example.com', 'test2', 'Test123Test');
 `)
 	if err != nil {
 		return nil, err
@@ -61,12 +60,10 @@ CREATE TABLE items (
     item_category category NOT NULL,
     item_rarity rarity NOT NULL
 );
-INSERT INTO items (name, image_src, description, price, item_category, item_rarity) 
-VALUES ('testItem1', 'test.png', 'test1', 65, 'armor', 'rare');
-INSERT INTO items (name, image_src, description, price, item_category, item_rarity) 
-VALUES ('testItem2', 'test2.png', 'test2', 62, 'weapon', 'epic');
-INSERT INTO items (name, image_src, description, price, item_category, item_rarity) 
-VALUES ('testItem3', 'test3.png', 'test3', 69, 'weapon', 'legendary');
+INSERT INTO items (name, image_src, description, price, item_category, item_rarity) VALUES 
+('testItem1', 'test.png', 'test1', 65, 'armor', 'rare'),
+('testItem2', 'test2.png', 'test2', 62, 'weapon', 'epic'),
+('testItem3', 'test3.png', 'test3', 69, 'weapon', 'legendary');
 `)
 	if err != nil {
 		return nil, err
@@ -82,9 +79,10 @@ CREATE TABLE inventory (
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (item_id) REFERENCES items (id)
 );
-INSERT INTO inventory (user_id, item_id) VALUES (1, 1);
-INSERT INTO inventory (user_id, item_id, item_state) VALUES (2, 1, 'equipped');
-INSERT INTO inventory (user_id, item_id,item_state) VALUES (1, 2, 'equipped');
+INSERT INTO inventory (user_id, item_id, item_state) VALUES 
+(1, 1, 'inventoried'),
+(2, 1, 'equipped'),
+(1, 2, 'equipped');
 `)
 	return db, err
 }
