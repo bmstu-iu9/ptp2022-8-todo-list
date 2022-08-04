@@ -1,0 +1,81 @@
+$card__border-color: rgb(69, 72, 77);
+$card__border-w: .16rem;
+
+.body {
+
+    position: relative;
+
+    @media screen and (max-width: 768px) {
+        padding: 40px 35px 0;
+    }
+
+    .h2 {
+        font-size: calc(.8vw + .9rem);
+    }
+
+    .inventory {
+        
+        margin: auto;
+
+        @media all and (orientation:landscape) {
+            display: grid;
+            grid-template-columns: auto 1fr;
+
+            .inventory__user {
+                img {
+                    height: calc(95vh - 9vw - 1.3rem);
+                }
+            }
+        }
+
+        .inventory__box {
+
+            padding: calc(1vw + .4rem);
+            border-radius: .5rem;
+
+            .inventory__user {
+                border-radius: .5rem;
+            }
+
+            .inventory__items {
+                height: calc(95vh - 9vw - 1.3rem);
+                max-height: calc(95vh - 9vw - 1.3rem);
+                overflow-x: hidden;
+                overflow-y: auto;
+                border-radius: .5rem;
+
+                .inventory__item {
+                    border: .2rem solid rgb(58, 61, 65);
+                    border-radius: .5rem;
+
+                    .inventory__box-img {
+                        border: $card__border-w solid $card__border-color;
+                        border-bottom: none;
+                        border-top-left-radius: .2rem;
+                        border-top-right-radius: .2rem;
+                    }
+
+                    .inventory__box-title {
+                        border-radius: 0;
+                        border: $card__border-w solid $card__border-color;
+                        border-top: none;
+                        border-bottom: none;
+                        padding: auto 0;
+
+                        p {
+                            font-size: calc(.2vw + .8rem);
+                        }
+                    }
+
+                    .inventory__item-btn {
+                        border-top-left-radius: 0;
+                        border-top-right-radius: 0;
+                        border: $card__border-w solid $card__border-color;
+                        border-top: none;
+
+                    }
+                }
+            }
+        }
+    }
+}
