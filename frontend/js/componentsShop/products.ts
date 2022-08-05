@@ -6,7 +6,7 @@ class Products {
         const namingBlock: string[] = ['Одежда', 'Аксессуары', 'Питомцы', 'Облик'];
         let previousCategory = 'helmet';
 
-        CATALOG_SHOP.forEach(({name, description, imageSrc, category, rarity}) => {
+        CATALOG_SHOP.forEach(({id, name, description, imageSrc, category, rarity, price}) => {
 
             if (category != previousCategory && category != 'helmet') {
                 if (category != 'armor') {
@@ -36,11 +36,49 @@ class Products {
                 <div class="col">
                     <div class="card h-100">
                         <img src="http://grechkogv.ru:3000/assets/${imageSrc}" class="card-img-top" alt="...">
-                        <div class="card-body" style="background: ${color(rarity)}"">
+                        <div class="card-body" style="background: ${color(rarity)}">
                             <h5 class="card-title">${name}</h5>
                                 <p class="card-text">${description}</p>
                         </div>
-                            <a href="" class="btn btn-primary">Buy</a>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#selling${id}" id="changeDataBtn">Купить</button>
+
+                        <!- модальное окно --->
+                        <div id="selling${id}" class="modal fade" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Купить ${name.toLowerCase()}?</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+
+                                        <div class="card h-100">
+                                            <img src="http://grechkogv.ru:3000/assets/${imageSrc}"
+                                             class="card-img-top" alt="${imageSrc}">
+                                            <div class="card-body" style="background: ${color(rarity)}">
+                                                <p class="card-text">${description}</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <div class="container d-grid">
+                                            <button type="button"
+                                                    class="btn btn-primary btn-lg">Купить за ${price} todoкоинов
+                                                    </button>
+                                        </div>
+                                    </div>
+
+                                    <br>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -59,7 +97,7 @@ const productsPage = new Products();
 
 let CATALOG_SHOP = [];
 
-function color(rarity): string {
+function color(rarity: string): string {
     if (rarity === "common") return "#C8C8C8"
     else if (rarity === 'rare') return "#2bfff4"
     else if (rarity === 'epic') return "#f04dff"

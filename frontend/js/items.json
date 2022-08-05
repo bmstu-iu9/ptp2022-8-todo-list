@@ -5,7 +5,7 @@
     "description": "",
     "imageSrc": "armorHelmet1.webp",
     "price": 66,
-    "category": "armor",
+    "category": "helmet",
     "rarity": "common"
   },
   {
@@ -14,7 +14,7 @@
     "description": "",
     "imageSrc": "armorHelmet2.webp",
     "price": 72,
-    "category": "armor",
+    "category": "helmet",
     "rarity": "rare"
   },
   {
@@ -23,7 +23,7 @@
     "description": "",
     "imageSrc": "armorHelmet3.webp",
     "price": 78,
-    "category": "armor",
+    "category": "helmet",
     "rarity": "epic"
   },
   {
@@ -32,7 +32,7 @@
     "description": "",
     "imageSrc": "armorHelmet4.webp",
     "price": 84,
-    "category": "armor",
+    "category": "helmet",
     "rarity": "legendary"
   },
   {
