@@ -7,7 +7,6 @@ WORKDIR /code
 ADD package.json /code
 ADD yarn.lock /code
 
-RUN npm install -g parcel
 RUN yarn install
 
 COPY frontend/ /code/frontend/
@@ -16,6 +15,10 @@ FROM base AS lint
 ADD .prettierrc /code
 CMD ["npm", "run", "lint"]
 
-FROM base
+FROM base AS default
 CMD ["npm", "run", "dev"]
 EXPOSE 8000
+
+FROM base AS deploy
+CMD [ "npm", "run", "deploy" ]
+EXPOSE 3000

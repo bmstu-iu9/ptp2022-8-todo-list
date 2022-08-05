@@ -16,12 +16,12 @@ services:
   frontend:
     build:
       context: .
-      target: deploy
+      target: default
     container_name: frontend
     volumes:
       - ./frontend:/code/frontend
     ports:
-      - 8000:3000
+      - 8000:8000
     deploy:
       restart_policy:
         condition: on-failure
