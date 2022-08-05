@@ -6,10 +6,10 @@ class Products {
         const namingBlock: string[] = ['Одежда', 'Аксессуары', 'Питомцы', 'Облик'];
         let previousCategory = 'helmet';
 
-        CATALOG_SHOP.forEach(({id, name, description, imageSrc, category, rarity, price}) => {
+        CATALOG_SHOP.forEach(({id, name, description, imageSrc, category, rarity, price, state}) => {
 
             if (category != previousCategory && category != 'helmet') {
-                if (category != 'armor') {
+                if (category != 'chest' && category != 'leggins') {
                     htmlCatalog += `
                             </div>
                         </div>
@@ -40,8 +40,7 @@ class Products {
                             <h5 class="card-title">${name}</h5>
                                 <p class="card-text">${description}</p>
                         </div>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#selling${id}" id="changeDataBtn">Купить</button>
+                            ${buildingBuyBotton(id, state)}
 
                         <!- модальное окно --->
                         <div id="selling${id}" class="modal fade" tabindex="-1">
@@ -73,7 +72,6 @@ class Products {
                                                     </button>
                                         </div>
                                     </div>
-
                                     <br>
 
                                 </div>
@@ -98,11 +96,34 @@ const productsPage = new Products();
 let CATALOG_SHOP = [];
 
 function color(rarity: string): string {
-    if (rarity === "common") return "#C8C8C8"
-    else if (rarity === 'rare') return "#2bfff4"
-    else if (rarity === 'epic') return "#f04dff"
-    return "#linear-gradient(#40E0D0, #91e047, #fff456, #fff456, #ffa856, #e64f4f)"
+    if (rarity === "common") return "#C8C8C8";
+    else if (rarity === 'rare') return "#FFB74D";
+    else if (rarity === 'epic') return "#26A69A";
+    else if (rarity === 'legendary') return "#F06292";
+    return "linear-gradient(#40E0D0, #FF8C00, #FF0080)";
 }
+
+function alreadyBought(state: string): boolean {
+    if (state === 'inventoried' || state === 'equipped') return true;
+    else return false;
+}
+
+function buildingBuyBotton(id: number, state: string): string {
+    if (alreadyBought(state) === true) {
+        return `
+            <button type="button" class="btn btn-success disabled" data-bs-toggle="modal"
+                                data-bs-target="#selling${id}" id="changeDataBtn">Куплено</button>
+        `;
+    }
+    else {
+        return `
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#selling${id}" id="changeDataBtn">Купить</button>
+        `;
+    }
+}
+
+
 
 fetch('https://json.grechkogv.ru/items')
     .then(res => res.json())
