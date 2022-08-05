@@ -16,7 +16,7 @@ type Repository interface {
 	// Update modifies the user's item status with specified id.
 	Update(userId int, item *entity.Item) error
 	// IsItemInInventory checks if an item is in inventory.
-	IsItemInInventory(userId, itemId int) (status entity.State, err error)
+	IsItemInInventory(userId, itemId int) (entity.State, error)
 }
 
 // repository persists items in database.
@@ -30,7 +30,8 @@ func NewRepository(db *sql.DB, logger log.Logger) Repository {
 	return repository{db, logger}
 }
 
-func createSqlQueries(filters entity.Filter) (sqlQueryRarity, sqlQueryCategory string) {
+func createSqlQuery(filters entity.Filter) string {
+	var sqlQueryRarity, sqlQueryCategory string
 	countOfFilters := 0
 	if filters.RarityFilter != "" {
 		sqlQueryRarity = fmt.Sprintf("WHERE item_rarity = '%s'", filters.RarityFilter)
@@ -44,13 +45,13 @@ func createSqlQueries(filters entity.Filter) (sqlQueryRarity, sqlQueryCategory s
 			sqlQueryCategory = fmt.Sprintf(" AND item_category = '%s'", filters.CategoryFilter)
 		}
 	}
-	return sqlQueryRarity, sqlQueryCategory
+	return sqlQueryRarity + sqlQueryCategory
 }
 
 // GetAll reads all items from database.
 func (repo repository) GetAll(userId int, filters entity.Filter) ([]entity.Item, error) {
-	sqlQueryRarity, sqlQueryCategory := createSqlQueries(filters)
-	rows, err := repo.db.Query("SELECT * FROM items " + sqlQueryRarity + sqlQueryCategory + "ORDER BY id")
+	sqlQueryFilters := createSqlQuery(filters)
+	rows, err := repo.db.Query("SELECT * FROM items " + sqlQueryFilters + "ORDER BY id")
 	if err != nil {
 		return nil, err
 	}
@@ -77,13 +78,14 @@ func (repo repository) GetAll(userId int, filters entity.Filter) ([]entity.Item,
 	return items, nil
 }
 
-func (repo repository) IsItemInInventory(userId, itemId int) (status entity.State, err error) {
+func (repo repository) IsItemInInventory(userId, itemId int) (entity.State, error) {
 	row, err := repo.db.Query("SELECT item_state FROM inventory WHERE user_id = $1 AND item_id = $2",
 		userId, itemId)
 	if err != nil {
 		return entity.Store, err
 	}
 	row.Next()
+	var status entity.State
 	err = row.Scan(&status)
 	if err != nil {
 		return entity.Store, err

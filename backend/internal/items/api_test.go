@@ -37,7 +37,7 @@ func (s *ApiTestSuite) TestGetAll(c *C) {
 		req, _ := http.NewRequest("GET", "/users/"+userId+"/items"+filters, nil)
 		s.mux.ServeHTTP(s.writer, req)
 	}
-	makeRequest("1", "?rarityfilter=rare") //any userId
+	makeRequest("1", "?rarityfilter=rare")
 	c.Check(s.writer.Code, Equals, http.StatusOK)
 	got := []entity.Item{}
 	err := json.NewDecoder(s.writer.Body).Decode(&got)

@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// // NewFilter creates a new filter.
+// NewFilter creates a new filter.
 func NewFilter(r *http.Request) entity.Filter {
 	return entity.Filter{
 		StateFilter:    entity.State(r.URL.Query().Get("statefilter")),
@@ -35,7 +35,7 @@ func NewService(repo Repository) Service {
 	return service{repo}
 }
 
-//GetAll returns all items.
+// GetAll returns all items.
 func (s service) GetAll(userId int, filters entity.Filter) ([]entity.Item, error) {
 	return s.repo.GetAll(userId, filters)
 }
