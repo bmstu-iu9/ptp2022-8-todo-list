@@ -95,29 +95,29 @@
     <div class="body h-100">
         <div class="inventory mx-auto h-100 px-3">
 
-            <div class="inventory__box align-self-center p-3">
+            <div class="align-self-center p-3">
                 <div class="inventory__box text-center" style="background: #d7d7d7">
 
                     <p id="nickname" class="h2 p-2">NickName</p>
 
                     <div class="inventory__user container-fluid" style="background: white">
-                        <img id="inventory__user-img" src="../images/inventory__character.webp" alt="user-model" class="img-fluid">
+                        <img id="inventory__user-img" src="../images/inventory__character.webp" alt="user-model"
+                            class="img-fluid">
                     </div>
 
                 </div>
             </div>
 
-            <div class="inventory__box align-self-center p-3">
+            <div class="align-self-center p-3">
                 <div class="inventory__box text-center" style="background: #d7d7d7">
 
 
                     <p class="h2 p-2">Инвентарь</p>
 
                     <div class="inventory__items p-3" style="background: white">
-                        <!--                             Этот блок удалить, пока только как пример-->
                         <div class="inventory__box__items 
                         row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-3 row-cols-sm-2 row-cols-1">
-                            
+
                         </div>
 
                     </div>
@@ -125,16 +125,16 @@
             </div>
         </div>
 
-        <div class="window__form modal fade" id="inventoryModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            opened-task-id="" aria-hidden="true" keyboard="true">
-            <div class="modal-dialog modal-dialog-centered">
+        <div class="modal fade" id="inventoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+            keyboard="true">
+            <div class="inventory__form modal-dialog m-0">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="inventoryModalTitle"></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="inventoryModalBoby">
-                        
+
                     </div>
                 </div>
             </div>
