@@ -1,12 +1,13 @@
 {
-    "name": "minimal-login-page",
+    "name": "ptp2022-8-todo-list",
     "version": "0.1.0",
     "description": "",
     "source": "frontend/index.html",
     "scripts": {
         "dev": "npx parcel ./frontend/index.html -p 8000",
-        "build": "npx parcel build --public-url ./ ./frontend/index.html --dist-dir ./frontend/dist",
-        "lint": "npx eslint ./frontend/js/*.js && npx tsc -t es6 --noEmit frontend/js/*.ts"
+        "build": "npx parcel build --dist-dir ./frontend/dist",
+        "lint": "npx eslint ./frontend/js/*.js && npx tsc -t es6 --noEmit frontend/js/*.ts",
+        "deploy": "npx parcel build --dist-dir ./frontend/dist --no-cache && cd frontend/deploy && node parse.js && node start.js"
     },
     "repository": {
         "type": "git",
