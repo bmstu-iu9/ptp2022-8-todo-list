@@ -41,21 +41,16 @@ namespace changeDataModal {
     });
     
     submitBtn.addEventListener("click", () => {
-        userDataFields.nickname.innerHTML = "@"+ nicknameForm.value;
-        userDataFields.name.innerHTML = nameForm.value;
-        userDataFields.surname.innerHTML = surnameForm.value;
-        userDataFields.aboutInfo.innerHTML = aboutInfoForm.value;
-        localStorage.setItem("userInfo", JSON.stringify({
+        sendRequest("PATCH", server + `/users/${userId}`, JSON.stringify({
             nickname: nicknameForm.value,
             name: nameForm.value,
             surname: surnameForm.value,
-            aboutInfo: aboutInfoForm.value,
-    
-        }));
-        /*
-            Тут, наверное, должен отправлятьcя запрос на сервер
-        */   
-    });
+            aboutInfo: aboutInfoForm.value,}))
+            .then(r => updateHTML(r))
+            .catch(e => {
+                throw e;
+            })
+        });
 };
 
 namespace changePasswordModal {
@@ -113,52 +108,3 @@ function renderProfile(id: number): void {
 }
 
 renderProfile(userId);
-sendRequest("PATCH", server + `/users/3`, JSON.stringify(
-    {
-    Items: [
-        {
-          ItemId: 1,
-          ItemName: "Кожаный шлем",
-          Description: "",
-          ImageSrc: "armorHelmet1.webp",
-          ImageForHero: "https://psv4.userapi.com/c235031/u179231152/docs/d4/f2cf1861a0ce/Kozhany_shlem_JE4_BE3.png?extra=A4xAyRgIKqcX-owdpzRfegyMNT08Qg8CyRcEQrB3j5uHhwyY9DzUtcR8J-z5TAbY_oJUlekCLMIE-IkBcFdhJUEYISY6F1qR4mLEgTEUXjfnXwEV6Htcvtn8LClV7QgWTRUThVgj5q6Zlger8BgeQJIdJQ",
-          Price: 66,
-          Category: "helmet",
-          Rarity: "common",
-          ItemState: "equipped"
-        },
-        {
-            ItemId: 2,
-            ItemName: "Железный нагрудник",
-            Description: "",
-            ImageSrc: "armorHelmet1.webp",
-            ImageForHero: "https://psv4.userapi.com/c536236/u179231152/docs/d16/08a915a12893/Nagrudnik.png?extra=aWuQQXKwwdxQ05XW5JQNIw7xkETXrY5fYzrXgck5rqpuwy8NCtlEYhAjvi5zB0KzB6n2y4Mlchfpin0rGtOC-fFLpYHxtWQEQaerBoXOnkEHGqxqcA9XfpLBfu9ApsBOrhDj97Tp8-308jhjsARQ6z5G-A",
-            Price: 66,
-            Category: "chestplate",
-            Rarity: "common",
-            ItemState: "equipped"
-          },
-          {
-            ItemId: 3,
-            ItemName: "Алмазные поножи",
-            Description: "",
-            ImageSrc: "armorHelmet1.webp",
-            ImageForHero: "https://psv4.userapi.com/c236331/u179231152/docs/d3/633d544801f6/ponozhi.png?extra=SQigaDT9BeZDP71GZvVts51jGBl6lySOt8rDyhTSyeHeH9ID11qUMO2wQoRVPkQsxMMaoTDbG__bE_vr2dMGf3iJnfgPEVxQwYMsDi4BedBZ6rAvkNDnmlgMsPlauCgUnWsz4stuJkUrnRo-TBDnW_7i_g",
-            Price: 66,
-            Category: "leggings",
-            Rarity: "common",
-            ItemState: "equipped"
-          },
-          {
-            ItemId: 1,
-            ItemName: "Золотые ботинки",
-            Description: "",
-            ImageSrc: "armorHelmet1.webp",
-            ImageForHero: "https://psv4.userapi.com/c237131/u179231152/docs/d25/3908b0d82e16/botinki.png?extra=V2fkpsFSxl7aWlmQpxSuDv5HQWOMOP2ACueqPZ2_d6k0wQpD5yGmj3W2t-I2UuULH3XRoFbjuBxFDw56KITeutYG24962m6h-WL7UJRTFWqmQr6tWM9IgKCmeLSi1ejvEbsF6d59kqWQYy9Zg1AIhfiYMA",
-            Price: 66,
-            Category: "boots",
-            Rarity: "common",
-            ItemState: "inventoried"
-          },
-    ]}
-));
