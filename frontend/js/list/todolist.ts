@@ -121,8 +121,7 @@ document.addEventListener('click', (e) => {
         let regexp = /id=\d+/
         let strId = findID(target, regexp)
         let id = parseInt(strId!.substring(3))
-        let modal = document.getElementById('modal__editor')
-        modal?.setAttribute('opened-task-id', `${id}`)
+        document.getElementById('modal__editor')!.setAttribute('opened-task-id', `${id}`)
         let buf = tasks.get(id)
         let titleModal = <HTMLInputElement>document.getElementById('modal-title-info') //меняем заголовок
         titleModal.innerHTML = 'Информация о задаче'
@@ -181,8 +180,6 @@ document.addEventListener('click', (e) => {
         }
     } else if (target.classList.contains('btn-edit')) {
         // редактирование задачи
-        let modal = document.getElementById('modal__editor')
-        let id = modal?.getAttribute('opened-task-id')!
         let titleModal = <HTMLInputElement>document.getElementById('modal-title-info') //меняем заголовок
         titleModal.innerHTML = 'Редактирование задачи'
         let btnEditSave = <HTMLInputElement>document.getElementsByClassName('btn-edit-save')[0] //меняем кнопку внизу
@@ -246,8 +243,7 @@ document.addEventListener('click', (e) => {
         colorInput.value = '#' + Math.random().toString(16).slice(-6)
     } else if (target.classList.contains('btn-edit-save')) {
         // сохранение изменений при редактировании
-        let modal = document.getElementById('modal__editor')
-        let id = modal?.getAttribute('opened-task-id')!
+        let id = document.getElementById('modal__editor')!.getAttribute('opened-task-id')!
         let nameEdit = (<HTMLInputElement>document.getElementById('nameE')).value
         let dateEdit = (<HTMLInputElement>document.getElementById('dateE')).value
         let timeEdit = (<HTMLInputElement>document.getElementById('timeE')).value
@@ -332,7 +328,6 @@ document.addEventListener('click', (e) => {
         tasks.forEach(task => {
             if (task.getStatus() === status || status === 'all')
                 task.toHTMLBlock()
-            console.log(status)
         })
         let elem = <HTMLDivElement>document.getElementById('sort__form__category')
         elem.classList.remove('show')

@@ -38,7 +38,7 @@ class Task {
             })
         }
         let str: string
-        str = `<li class="list-group-item id=${this.id}" ${this.status === 'archived' ? 'style="background-color: #e9ecef"' : ''}> 
+        str = `<li class="${this.labels.length !== 0 ? 'pb-0 ' : ''}list-group-item id=${this.id}" ${this.status === 'archived' ? 'style="background-color: #e9ecef"' : ''}> 
                     <div>
                     <input class="form-check-input me-2" type="checkbox" value="1" ${this.status === 'completed' ? 'checked' : ''
                 } ${this.status === 'archived' ? 'disabled' : ''} id="${this.id}">
