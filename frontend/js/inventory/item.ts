@@ -27,4 +27,4 @@ function getRarityColor(rarity: Rarity): string {
 }
 
 type ItemState = 'store' | 'equipped' | 'inventoried'
-type Category = 'helmet' | 'chest' | 'leggins' | 'boots' | 'weapon' | 'pet'
+type Category = 'helmet' | 'chest' | 'leggins' | 'boots' | 'weapon' | 'pet' | 'skin'
