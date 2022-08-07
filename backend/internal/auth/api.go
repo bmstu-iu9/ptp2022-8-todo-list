@@ -35,7 +35,6 @@ func (res *resource) handleLog(w http.ResponseWriter, r *http.Request, p httprou
 		Value:    tokens.RefreshToken,
 		Expires:  time.Now().Add(30 * 24 * time.Hour),
 		HttpOnly: true,
-		Secure:   true,
 	})
 	err = json.NewEncoder(w).Encode(user)
 	err = json.NewEncoder(w).Encode(tokens)
@@ -96,7 +95,6 @@ func (res *resource) handleRefresh(w http.ResponseWriter, r *http.Request, p htt
 		Value:    tokens.RefreshToken,
 		Expires:  time.Now().Add(30 * 24 * time.Hour),
 		HttpOnly: true,
-		Secure:   true,
 	})
 	err = json.NewEncoder(w).Encode(user)
 	err = json.NewEncoder(w).Encode(tokens)

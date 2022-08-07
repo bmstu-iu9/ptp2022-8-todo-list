@@ -29,7 +29,7 @@ func (repo repository) GetUser(email string, userId int) (entity.User, error) {
 	if userId == -1 {
 		row, err = repo.db.Query("SELECT * FROM users WHERE email = $1", email)
 	} else {
-		row, err = repo.db.Query("SELECT * FROM users WHERE user_id = $1", userId)
+		row, err = repo.db.Query("SELECT * FROM users WHERE id = $1", userId)
 	}
 	if err != nil {
 		return entity.User{}, err
@@ -63,6 +63,6 @@ func (repo repository) DeleteToken(refreshToken string) error {
 }
 
 func (repo repository) CreateToken(userId int, refreshToken string) error {
-	_, err := repo.db.Exec("INSERT INTO tokens (user_id, token) VALUES ($1,$2)", refreshToken, userId)
+	_, err := repo.db.Exec("INSERT INTO tokens (user_id, token) VALUES ($1,$2)", userId, refreshToken)
 	return err
 }

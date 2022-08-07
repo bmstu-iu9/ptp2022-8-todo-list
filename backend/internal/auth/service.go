@@ -130,16 +130,30 @@ func GenerateTokens(email string) (Token, error) {
 
 func validateAccessToken(accessToken string) bool {
 	claims := &Claims{}
-	token, _ := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (interface{}, error) {
-		return JWT_ACCESS_SECRET, nil
+	token, err := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (interface{}, error) {
+		_, ok := token.Method.(*jwt.SigningMethodHMAC)
+		if !ok {
+			return nil, errors.New("invalid token")
+		}
+		return []byte(JWT_ACCESS_SECRET), nil
 	})
+	if err != nil {
+		return false
+	}
 	return token != nil
 }
 
 func validateRefreshToken(refreshToken string) bool {
 	claims := &Claims{}
-	token, _ := jwt.ParseWithClaims(refreshToken, claims, func(token *jwt.Token) (interface{}, error) {
-		return JWT_REFRESH_SECRET, nil
+	token, err := jwt.ParseWithClaims(refreshToken, claims, func(token *jwt.Token) (interface{}, error) {
+		_, ok := token.Method.(*jwt.SigningMethodHMAC)
+		if !ok {
+			return nil, errors.New("invalid token")
+		}
+		return []byte(JWT_REFRESH_SECRET), nil
 	})
+	if err != nil {
+		return false
+	}
 	return token != nil
 }

@@ -3,6 +3,7 @@ package users
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/auth"
 	"log"
 	"net/http"
 	"strconv"
@@ -16,14 +17,14 @@ func RegisterHandlers(mux *httprouter.Router, service Service, logger *log.Logge
 	res := resource{service, logger}
 
 	mux.POST("/users", res.handlePost)
-	mux.GET("/users/:id", res.handleGet)
+	mux.GET("/users/:id", auth.AuthCheck(res.handleGet))
 	mux.DELETE("/users/:id", res.handleDelete)
 	mux.PATCH("/users/:id", res.handlePatch)
 }
 
 type resource struct {
 	service Service
-	logger *log.Logger
+	logger  *log.Logger
 }
 
 func (res *resource) handleGet(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
@@ -46,7 +47,6 @@ func (res *resource) handleGet(w http.ResponseWriter, r *http.Request, p httprou
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }
 
 func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
