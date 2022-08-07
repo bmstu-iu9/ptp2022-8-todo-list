@@ -4,14 +4,23 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta name="theme-color" content="#712cf9" />
 
     <title>Svatidika Shop</title>
     <link rel="icon" href="../images/to-do.png">
     <link href="../scss/shop.scss" rel="stylesheet" />
     <link href="../scss/menu.scss" rel="stylesheet" />
+
+    <!-- Функции для модального окна -->
+    <script src="../js/request.ts"></script>
+    <script defer src="../js/config.ts"></script>
+    <script defer src="../js/list/utility.ts"></script>
+
+    <script defer src="../js/componentsShop/dom_modal.ts"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -102,6 +111,33 @@
         </nav>
 
 
+        <div class="modal fade" id="shopModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="shop__form modal-dialog m-0">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-content border-0">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="ShopModalTitle"> </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body" id="shopModalBody">
+
+
+                            </div>
+
+                            <div class="modal-footer" id="shopModalFooter">
+                                <div class="container d-grid">
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--    Типы карточек:
             Обычная:     #C8C8C8 ($gray-200)
             Редкая:      #FFB74D ($orange-300)
@@ -113,11 +149,9 @@
         <!--    Загружаю магазин с сервера -->
         <div id="products">
             <script src="../js/componentsShop/products.ts"></script>
+
         </div>
         <br>
-
-        <!--    Подключаю модальные окна через бустрап    -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
     </div>
 </div>

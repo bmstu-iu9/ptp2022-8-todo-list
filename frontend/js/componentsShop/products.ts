@@ -6,7 +6,7 @@ class Products {
         const namingBlock: string[] = ['Одежда', 'Аксессуары', 'Питомцы', 'Облик'];
         let previousCategory = 'helmet';
 
-        CATALOG_SHOP.forEach(({id, name, description, imageSrc, category, rarity, price, state}) => {
+        CATALOG_SHOP.forEach(({id, name, description, imageSrc, category, rarity, state}) => {
 
             if (category != previousCategory && category != 'helmet') {
                 if (category != 'chest' && category != 'leggins') {
@@ -25,7 +25,7 @@ class Products {
 
                 htmlCatalog += `
                 <div class="padding-right px-3 padding-left px-3">
-                    <h3 class="display-4 text-center" id="${category}">
+                    <h3 class="display-4 text-center">
                         <a href="#top" style = "text-decoration: none">${namingBlock[numberBlock]}</a></h3>
                     <br>
                     <div class="row row-cols-lg-6 row-cols-md-4 row-cols-sm-3 row-cols-2 g-4">
@@ -33,50 +33,17 @@ class Products {
                 numberBlock += 1;
             }
             htmlCatalog += `
-                <div class="col">
+                <div class="col idItem=${id}">
                     <div class="card h-100">
                         <img src="http://grechkogv.ru:3000/assets/${imageSrc}" class="card-img-top" alt="...">
                         <div class="card-body" style="background: ${color(rarity)}">
                             <h5 class="card-title">${name}</h5>
                                 <p class="card-text">${description}</p>
                         </div>
-                            ${buildingBuyBotton(id, state)}
+                            ${buildingBuyButton(id, state)}
 
                         <!- модальное окно --->
-                        <div id="selling${id}" class="modal fade" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Купить ${name.toLowerCase()}?</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                    </div>
-
-                                    <div class="modal-body">
-
-                                        <div class="card h-100">
-                                            <img src="http://grechkogv.ru:3000/assets/${imageSrc}"
-                                             class="card-img-top" alt="${imageSrc}">
-                                            <div class="card-body" style="background: ${color(rarity)}">
-                                                <p class="card-text">${description}</p>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <div class="container d-grid">
-                                            <button type="button"
-                                                    class="btn btn-primary btn-lg">Купить за ${price} todoкоинов
-                                                    </button>
-                                        </div>
-                                    </div>
-                                    <br>
-
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             `;
@@ -104,21 +71,20 @@ function color(rarity: string): string {
 }
 
 function alreadyBought(state: string): boolean {
-    if (state === 'inventoried' || state === 'equipped') return true;
-    else return false;
+    return state === 'inventoried' || state === 'equipped';
 }
 
-function buildingBuyBotton(id: number, state: string): string {
+function buildingBuyButton(id: number, state: string): string {
     if (alreadyBought(state) === true) {
         return `
-            <button type="button" class="btn btn-success disabled" data-bs-toggle="modal"
-                                data-bs-target="#selling${id}" id="changeDataBtn">Куплено</button>
+            <button type="button" class="for__click btn btn-success idItem=${id}" data-bs-toggle="modal"
+                                data-bs-target="#selling${id}" id="buttonBuy${id}">Куплено</button>
         `;
     }
     else {
         return `
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#selling${id}" id="changeDataBtn">Купить</button>
+            <button type="button" class="for__click btn btn-primary idItem=${id}" data-bs-toggle="modal"
+                                data-bs-target="#selling${id}">Купить</button>
         `;
     }
 }
