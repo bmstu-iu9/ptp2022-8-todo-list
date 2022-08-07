@@ -2,6 +2,7 @@ package users
 
 import (
 	"encoding/json"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -12,7 +13,7 @@ import (
 )
 
 type ApiTestSuite struct {
-	mux *httprouter.Router
+	mux    *httprouter.Router
 	writer *httptest.ResponseRecorder
 }
 
@@ -26,7 +27,7 @@ func (s *ApiTestSuite) SetUpTest(c *C) {
 }
 
 func (s *ApiTestSuite) TestPost(c *C) {
-	makeRequest := func (body string) {
+	makeRequest := func(body string) {
 		s.writer = httptest.NewRecorder()
 		bodyReader := strings.NewReader(body)
 		request, _ := http.NewRequest("POST", "/users", bodyReader)
@@ -49,20 +50,20 @@ func (s *ApiTestSuite) TestPost(c *C) {
 }
 
 func (s *ApiTestSuite) TestGet(c *C) {
-	makeRequest := func (id string) {
+	makeRequest := func(id string) {
 		s.writer = httptest.NewRecorder()
-		request, _ := http.NewRequest("GET", "/users/" + id, nil)
+		request, _ := http.NewRequest("GET", "/users/"+id, nil)
 		s.mux.ServeHTTP(s.writer, request)
 	}
 
 	makeRequest("5")
 	c.Check(s.writer.Code, Equals, http.StatusOK)
-	got := User{}
+	got := entity.UserDto{}
 	err := json.NewDecoder(s.writer.Body).Decode(&got)
 	c.Check(err, Equals, nil)
-	c.Check(got, DeepEquals, User {
-		Id: 5,
-		Email: "geogreck@example.com",
+	c.Check(got, DeepEquals, entity.UserDto{
+		Id:       5,
+		Email:    "geogreck@example.com",
 		Nickname: "geogreck",
 	})
 
@@ -71,21 +72,21 @@ func (s *ApiTestSuite) TestGet(c *C) {
 }
 
 func (s *ApiTestSuite) TestPatch(c *C) {
-	makeRequest := func (id string, body string) {
+	makeRequest := func(id string, body string) {
 		s.writer = httptest.NewRecorder()
 		bodyReader := strings.NewReader(body)
-		request, _ := http.NewRequest("PATCH", "/users/"+ id, bodyReader)
+		request, _ := http.NewRequest("PATCH", "/users/"+id, bodyReader)
 		s.mux.ServeHTTP(s.writer, request)
 	}
 
 	makeRequest("5", `{"email": "test@example.com", "currentPassword": "test123test"}`)
 	c.Check(s.writer.Code, Equals, http.StatusOK)
-	got := User{}
+	got := entity.UserDto{}
 	err := json.NewDecoder(s.writer.Body).Decode(&got)
 	c.Check(err, Equals, nil)
-	c.Check(got, DeepEquals, User {
-		Id: 5,
-		Email: "test@example.com",
+	c.Check(got, DeepEquals, entity.UserDto{
+		Id:       5,
+		Email:    "test@example.com",
 		Nickname: "geogreck",
 	})
 
@@ -100,7 +101,7 @@ func (s *ApiTestSuite) TestPatch(c *C) {
 }
 
 func (s *ApiTestSuite) TestDelete(c *C) {
-	makeRequest := func (id string) {
+	makeRequest := func(id string) {
 		s.writer = httptest.NewRecorder()
 		request, _ := http.NewRequest("DELETE", "/users/"+id, nil)
 		s.mux.ServeHTTP(s.writer, request)

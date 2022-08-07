@@ -10,7 +10,7 @@ var config = map[string]string{
 	"DB_HOST":     "localhost",
 	"DB_USER":     "postgres",
 	"DB_NAME":     "slavatidika",
-	"DB_PASSWORD": "example",
+	"DB_PASSWORD": "asdwasd4545",
 	"DB_SSL_MODE": "disable",
 }
 

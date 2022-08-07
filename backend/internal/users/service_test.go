@@ -12,7 +12,7 @@ type UsersTestSuite struct {
 	service service
 }
 
-type ValidateTestSuite struct {}
+type ValidateTestSuite struct{}
 
 func init() {
 	Suite(&UsersTestSuite{})
@@ -22,49 +22,49 @@ func Test(t *testing.T) { TestingT(t) }
 
 func (s *ValidateTestSuite) TestCreateUserRequest_Validate(c *C) {
 	req := CreateUserRequest{
-		Email: "slava@example.com",
+		Email:    "slava@example.com",
 		Nickname: "slavaruswarrior",
 		Password: "Asjh2k123",
 	}
 	c.Check(req.Validate(), IsNil)
 
 	req = CreateUserRequest{
-		Email: "email@test.com.",
+		Email:    "email@test.com.",
 		Nickname: "slavaruswarrior",
 		Password: "Asjh2k123",
 	}
 	c.Check(req.Validate(), NotNil)
 
 	req = CreateUserRequest{
-		Email: "slava@example.com",
+		Email:    "slava@example.com",
 		Nickname: "sl",
 		Password: "Asjh2k123",
 	}
 	c.Check(req.Validate(), NotNil)
 
 	req = CreateUserRequest{
-		Email: "slava@example.com",
+		Email:    "slava@example.com",
 		Nickname: "12345",
 		Password: "Asjh2k123",
 	}
 	c.Check(req.Validate(), IsNil)
 
 	req = CreateUserRequest{
-		Email: "slava@example.com",
+		Email:    "slava@example.com",
 		Nickname: "-slavaruswarrior",
 		Password: "Asjh2k123",
 	}
 	c.Check(req.Validate(), NotNil)
 
 	req = CreateUserRequest{
-		Email: "slava@example.com",
+		Email:    "slava@example.com",
 		Nickname: "slavaruswarrior",
 		Password: "123",
 	}
 	c.Check(req.Validate(), NotNil)
 
 	req = CreateUserRequest{
-		Email: "slava@example.com",
+		Email:    "slava@example.com",
 		Nickname: "slavaruswarrior",
 		Password: "dsfkskfhs^3dsfsf",
 	}
@@ -82,12 +82,12 @@ func (s *UsersTestSuite) SetUpTest(c *C) {
 func (s *UsersTestSuite) TestGet(c *C) {
 	user, err := s.service.Get(0)
 	c.Check(user, DeepEquals,
-		User{0, "slava@example.com", "slavaruswarrior"})
+		entity.UserDto{0, "slava@example.com", "slavaruswarrior"})
 	c.Check(err, IsNil)
 
 	user, err = s.service.Get(5)
 	c.Check(user, DeepEquals,
-		User{5, "geogreck@example.com", "geogreck"})
+		entity.UserDto{5, "geogreck@example.com", "geogreck"})
 	c.Check(err, IsNil)
 
 	_, err = s.service.Get(-10)
@@ -125,7 +125,7 @@ func (s *UsersTestSuite) TestCreate(c *C) {
 func (s *UsersTestSuite) TestDelete(c *C) {
 	user, err := s.service.Delete(5)
 	c.Check(user, DeepEquals,
-		User{5, "geogreck@example.com", "geogreck"})
+		entity.UserDto{5, "geogreck@example.com", "geogreck"})
 	c.Check(err, IsNil)
 
 	userGet, err := s.service.Get(5)
@@ -210,8 +210,8 @@ func NewMockRerository() *mockRepository {
 				Password: "wasdqwertytest",
 			},
 			{
-				Id: 5,
-				Email: "geogreck@example.com",
+				Id:       5,
+				Email:    "geogreck@example.com",
 				Nickname: "geogreck",
 				Password: "test123test",
 			},

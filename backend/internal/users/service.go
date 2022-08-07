@@ -1,7 +1,9 @@
 package users
 
 import (
+	"crypto/md5"
 	"errors"
+	"fmt"
 	"regexp"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
@@ -9,25 +11,10 @@ import (
 
 // Service encapsulates usecase logic for users.
 type Service interface {
-	Get(id int64) (User, error)
-	Delete(id int64) (User, error)
-	Create(input *CreateUserRequest) (User, error)
-	Update(id int64, input *UpdateUserRequest) (User, error)
-}
-
-// User represents the data about an API user.
-type User struct {
-	Id       int64    `json:"id"`
-	Email    string `json:"email"`
-	Nickname string `json:"nickname"`
-}
-
-func newUser(entity *entity.User) User {
-	return User{
-		Id:       entity.Id,
-		Email:    entity.Email,
-		Nickname: entity.Nickname,
-	}
+	Get(id int64) (entity.UserDto, error)
+	Delete(id int64) (entity.UserDto, error)
+	Create(input *CreateUserRequest) (entity.UserDto, error)
+	Update(id int64, input *UpdateUserRequest) (entity.UserDto, error)
 }
 
 // NewUser represents the data for creating new User.
@@ -95,60 +82,60 @@ func NewService(repo Repository) Service {
 }
 
 // Get returns User with specified id.
-func (s service) Get(id int64) (User, error) {
+func (s service) Get(id int64) (entity.UserDto, error) {
 	user, err := s.repo.Get(id)
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
-	return newUser(&user), nil
+	return entity.NewUserDto(user), nil
 }
 
 // Delete removes User with specified id.
-func (s service) Delete(id int64) (User, error) {
+func (s service) Delete(id int64) (entity.UserDto, error) {
 	user, err := s.repo.Get(id)
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
 	err = s.repo.Delete(id)
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
-	return newUser(&user), nil
+	return entity.NewUserDto(user), nil
 }
 
 // Create creates User from input data.
-func (s service) Create(input *CreateUserRequest) (User, error) {
+func (s service) Create(input *CreateUserRequest) (entity.UserDto, error) {
 	err := input.Validate()
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
 
-	entityUser := &entity.User{
+	entityUser := entity.User{
 		Email:    input.Email,
 		Nickname: input.Nickname,
-		Password: input.Password,
+		Password: fmt.Sprintf("%x", md5.Sum([]byte(input.Password))),
 	}
-	err = s.repo.Create(entityUser)
+	err = s.repo.Create(&entityUser)
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
-	return newUser(entityUser), nil
+	return entity.NewUserDto(entityUser), nil
 }
 
 // Update modifies User with given id.
-func (s service) Update(id int64, input *UpdateUserRequest) (User, error) {
+func (s service) Update(id int64, input *UpdateUserRequest) (entity.UserDto, error) {
 	err := input.Validate()
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
 
 	entityUser, err := s.repo.Get(id)
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
 
 	if entityUser.Password != input.CurrentPassword {
-		return User{}, errors.New("Wrong password")
+		return entity.UserDto{}, errors.New("Wrong password")
 	}
 
 	if input.Email != nil {
@@ -162,7 +149,7 @@ func (s service) Update(id int64, input *UpdateUserRequest) (User, error) {
 	}
 	err = s.repo.Update(&entityUser)
 	if err != nil {
-		return User{}, nil
+		return entity.UserDto{}, nil
 	}
-	return newUser(&entityUser), nil
+	return entity.NewUserDto(entityUser), nil
 }
