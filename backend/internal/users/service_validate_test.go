@@ -1,6 +1,10 @@
 package users
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+)
 
 func TestCreateUserRequest_Validate(t *testing.T) {
 	tests := []struct {
@@ -18,7 +22,7 @@ func TestCreateUserRequest_Validate(t *testing.T) {
 		{
 			Name: "bad email", IsValid: false,
 			Data: CreateUserRequest{
-				Email:    "email@test.com.",
+				Email:    "email@@test.com",
 				Nickname: "slavaruswarrior",
 				Password: "Asjh2k123",
 			}},
@@ -79,57 +83,57 @@ func TestUpdateUserRequest_Validate(t *testing.T) {
 		{
 			Name: "OK", IsValid: true,
 			Data: UpdateUserRequest{
-				Email:           newStr("slava@example.com"),
-				Nickname:        newStr("slavaruswarrior"),
+				Email:           entity.NewEmail("slava@example.com"),
+				Nickname:        entity.NewNickname("slavaruswarrior"),
 				CurrentPassword: "Asjh2k123",
 			},
 		},
 		{
 			Name: "bad email", IsValid: false,
 			Data: UpdateUserRequest{
-				Email:           newStr("email@@test.com"),
+				Email:           entity.NewEmail("email@@test.com"),
 				CurrentPassword: "Asjh2k123",
 			},
 		},
 		{
 			Name: "bad nickname", IsValid: false,
 			Data: UpdateUserRequest{
-				Email:           newStr("slava@example.com"),
-				Nickname:        newStr("sl"),
+				Email:           entity.NewEmail("slava@example.com"),
+				Nickname:        entity.NewNickname("sl"),
 				CurrentPassword: "Asjh2k123",
 			},
 		},
 		{
 			Name: "OK", IsValid: true,
 			Data: UpdateUserRequest{
-				Email:           newStr("slava@example.com"),
-				Nickname:        newStr("12345"),
+				Email:           entity.NewEmail("slava@example.com"),
+				Nickname:        entity.NewNickname("12345"),
 				CurrentPassword: "Asjh2k123",
 			},
 		},
 		{
 			Name: "bad nickname", IsValid: false,
 			Data: UpdateUserRequest{
-				Email:           newStr("slava@example.com"),
-				Nickname:        newStr("-slavaruswarrior"),
+				Email:           entity.NewEmail("slava@example.com"),
+				Nickname:        entity.NewNickname("-slavaruswarrior"),
 				CurrentPassword: "Asjh2k123",
 			},
 		},
 		{
 			Name: "bad password", IsValid: false,
 			Data: UpdateUserRequest{
-				Email:           newStr("slava@example.com"),
-				Nickname:        newStr("slavaruswarrior"),
-				NewPassword:     newStr("123"),
+				Email:           entity.NewEmail("slava@example.com"),
+				Nickname:        entity.NewNickname("slavaruswarrior"),
+				NewPassword:     entity.NewPassword("123"),
 				CurrentPassword: "DSfsfiusbn234",
 			},
 		},
 		{
 			Name: "bad password", IsValid: false,
 			Data: UpdateUserRequest{
-				Email:           newStr("slava@example.com"),
-				Nickname:        newStr("slavaruswarrior"),
-				NewPassword:     newStr("dsfkskfhs^3dsfsf"),
+				Email:           entity.NewEmail("slava@example.com"),
+				Nickname:        entity.NewNickname("slavaruswarrior"),
+				NewPassword:     entity.NewPassword("dsfkskfhs^3dsfsf"),
 				CurrentPassword: "DSfsfiusbn234",
 			},
 		},

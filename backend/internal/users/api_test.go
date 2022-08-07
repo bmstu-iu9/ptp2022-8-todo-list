@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/router"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/test"
@@ -34,14 +35,18 @@ func init() {
 }
 
 func TestApi(t *testing.T) {
-	toJson := func(user User) string {
+	toJson := func(data interface{}) string {
 		buf := new(bytes.Buffer)
-		err := json.NewEncoder(buf).Encode(user)
+		err := json.NewEncoder(buf).Encode(data)
 		if err != nil {
 			panic(err)
 		}
 		return buf.String()
 	}
+
+	badRequest := toJson(errors.Problem{Title: "Bad request", Status: http.StatusBadRequest})
+	notFound := toJson(errors.Problem{Title: "Not found", Status: http.StatusNotFound})
+	forbidden := toJson(errors.Problem{Title: "Forbidden", Status: http.StatusForbidden})
 
 	tests := []test.ApiTestCase{
 		{Name: "create OK", Method: "POST", Url: "/users",
@@ -53,13 +58,16 @@ func TestApi(t *testing.T) {
 			WantCode: http.StatusOK},
 		{Name: "create input error", Method: "POST", Url: "/users",
 			Body: `"email": "slava@example.com", "nickname": "slavarusvarrior", "password": "sDFHgjssndbfns123"`,
+			WantBody: badRequest,
 			WantCode: http.StatusBadRequest},
-		{Name: "Create input error", Method: "POST", Url: "/users",
+		{Name: "create input error", Method: "POST", Url: "/users",
 			Body: `{"email": "slava@example.com", "password": "sDFHgjssndbfns123"}`,
+			WantBody: badRequest,
 			WantCode: http.StatusBadRequest},
 		{Name: "get OK", Method: "GET", Url: "/users/1",
 			WantCode: http.StatusOK, WantBody: toJson(User{Id: 1, Email: "geogreck@example.com", Nickname: "geogreck"})},
 		{Name: "get id error", Method: "GET", Url: "/users/33",
+			WantBody: notFound,
 			WantCode: http.StatusNotFound},
 		{Name: "modify OK", Method: "PATCH", Url: "/users/1",
 			Body:     `{"email": "test@example.com", "currentPassword": "Test123Test"}`,
@@ -67,20 +75,26 @@ func TestApi(t *testing.T) {
 		{Name: "modify verify", Method: "GET", Url: "/users/1",
 			WantCode: http.StatusOK, WantBody: toJson(User{Id: 1, Email: "test@example.com", Nickname: "geogreck"})},
 		{Name: "modify id error", Method: "PATCH", Url: "/users/33",
+			Body:     `{"email": "test@example.com", "currentPassword": "Test123Test"}`,
+			WantBody: notFound,
 			WantCode: http.StatusNotFound},
 		{Name: "modify current password error", Method: "PATCH", Url: "/users/1",
 			Body:     `{"email": "test@example.com", "currentPassword": "test12test"}`,
+			WantBody: forbidden,
 			WantCode: http.StatusForbidden},
 		{Name: "modify verify", Method: "GET", Url: "/users/1",
 			WantCode: http.StatusOK, WantBody: toJson(User{Id: 1, Email: "test@example.com", Nickname: "geogreck"})},
 		{Name: "modify input error", Method: "PATCH", Url: "/users/1",
 			Body:     `{"email": "testexample.com", "currentPassword": "Test123Test"}`,
+			WantBody: badRequest,
 			WantCode: http.StatusBadRequest},
 		{Name: "delete OK", Method: "DELETE", Url: "/users/1",
 			WantCode: http.StatusNoContent},
 		{Name: "delete verify", Method: "DELETE", Url: "/users/1",
+			WantBody: notFound,
 			WantCode: http.StatusNotFound},
 		{Name: "delete id error", Method: "DELETE", Url: "/users/33",
+			WantBody: notFound,
 			WantCode: http.StatusNotFound},
 	}
 
