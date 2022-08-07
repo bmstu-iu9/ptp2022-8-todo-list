@@ -16,6 +16,7 @@ type Service interface {
 	SaveRefreshToken(userId int, refreshToken string) error
 	Login(email, password string) (entity.UserDto, Token, error)
 	Logout(refreshToken string) error
+	Refresh(refreshToken string) (entity.UserDto, Token, error)
 }
 
 type service struct {
@@ -31,6 +32,11 @@ type Token struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
+type DbToken struct {
+	userId       int    `json:"user_id"`
+	refreshToken string `json:"refresh_token"`
+}
+
 type LoginUserRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
@@ -42,7 +48,7 @@ type Claims struct {
 }
 
 func (s service) Login(email, password string) (entity.UserDto, Token, error) {
-	entityUser, err := s.repo.GetUserByEmail(email)
+	entityUser, err := s.repo.GetUser(email, -1)
 	if err != nil {
 		return entity.UserDto{}, Token{}, errors.New("user not found")
 	}
@@ -63,12 +69,31 @@ func (s service) Logout(refreshToken string) error {
 	return s.repo.DeleteToken(refreshToken)
 }
 
-func (s service) SaveRefreshToken(userId int, refreshToken string) error {
-	ok, err := s.repo.CheckToken(userId)
-	if err != nil {
-		return err
+func (s service) Refresh(refreshToken string) (entity.UserDto, Token, error) {
+	if refreshToken == "" {
+		return entity.UserDto{}, Token{}, errors.New("no token")
 	}
-	if ok {
+	isTokenValid := validateRefreshToken(refreshToken)
+	tokenFromDb, err := s.repo.GetToken(refreshToken)
+	if !isTokenValid || err != nil {
+		return entity.UserDto{}, Token{}, errors.New("wrong token")
+	}
+	entityUser, err := s.repo.GetUser("", tokenFromDb.userId)
+	if err != nil {
+		return entity.UserDto{}, Token{}, err
+	}
+	user := entity.NewUserDto(entityUser)
+	tokens, err := GenerateTokens(user.Email)
+	if err != nil {
+		return entity.UserDto{}, Token{}, err
+	}
+	err = s.SaveRefreshToken(int(user.Id), tokens.RefreshToken)
+	return user, tokens, err
+}
+
+func (s service) SaveRefreshToken(userId int, refreshToken string) error {
+	_, err := s.repo.GetToken(refreshToken)
+	if err == nil {
 		err = s.repo.UpdateToken(userId, refreshToken)
 		if err != nil {
 			return err
@@ -101,4 +126,20 @@ func GenerateTokens(email string) (Token, error) {
 		return Token{}, err
 	}
 	return Token{AccessToken: accessTokenString, RefreshToken: refreshTokenString}, nil
+}
+
+func validateAccessToken(accessToken string) bool {
+	claims := &Claims{}
+	token, _ := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (interface{}, error) {
+		return JWT_ACCESS_SECRET, nil
+	})
+	return token != nil
+}
+
+func validateRefreshToken(refreshToken string) bool {
+	claims := &Claims{}
+	token, _ := jwt.ParseWithClaims(refreshToken, claims, func(token *jwt.Token) (interface{}, error) {
+		return JWT_REFRESH_SECRET, nil
+	})
+	return token != nil
 }
