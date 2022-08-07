@@ -1,10 +1,10 @@
 package users
 
 import (
-	"errors"
 	"testing"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/test"
 )
 
@@ -102,9 +102,9 @@ func TestCRUD(t *testing.T) {
 			Name: "create validate error",
 			Input: CreateTestCase{
 				&CreateUserRequest{
-					Email:    "example.com",
-					Nickname: "stewkk",
-					Password: "oadfahdks",
+					Email:    "stewkk",
+					Nickname: "oadfahdks",
+					Password: "",
 				},
 			},
 			IsOK: false,
@@ -145,7 +145,7 @@ func TestCRUD(t *testing.T) {
 			Input: UpdateTestCase{
 				Id: 0,
 				Data: &UpdateUserRequest{
-					Email:           newStr("test@example.com"),
+					Email:           newEmail("test@example.com"),
 					CurrentPassword: "wasdqwertytest",
 				},
 			},
@@ -171,7 +171,7 @@ func TestCRUD(t *testing.T) {
 			Input: UpdateTestCase{
 				Id: 0,
 				Data: &UpdateUserRequest{
-					NewPassword:     newStr("test321test"),
+					NewPassword:     newPassword("test321test"),
 					CurrentPassword: "wasdqwertytest",
 				},
 			},
@@ -187,7 +187,7 @@ func TestCRUD(t *testing.T) {
 			Input: UpdateTestCase{
 				Id: 0,
 				Data: &UpdateUserRequest{
-					Nickname:        newStr("example"),
+					Nickname:        newNickname("example"),
 					CurrentPassword: "test321test",
 				},
 			},
@@ -218,7 +218,7 @@ func TestCRUD(t *testing.T) {
 			Input: UpdateTestCase{
 				Id: 0,
 				Data: &UpdateUserRequest{
-					Nickname:        newStr("example123"),
+					Nickname:        newNickname("example123"),
 					CurrentPassword: "wrongPassword",
 				},
 			},
@@ -230,7 +230,7 @@ func TestCRUD(t *testing.T) {
 			Input: UpdateTestCase{
 				Id: 0,
 				Data: &UpdateUserRequest{
-					Email:           newStr("example123"),
+					Email:           newEmail("example123"),
 					CurrentPassword: "test321test",
 				},
 			},
@@ -295,7 +295,7 @@ func (repo mockRepository) Get(id int64) (entity.User, error) {
 			return item, nil
 		}
 	}
-	return entity.User{}, errors.New("repo: can't find User with given id")
+	return entity.User{}, errors.ErrNotFound
 }
 
 func (repo *mockRepository) Delete(id int64) error {
@@ -315,9 +315,6 @@ func (repo mockRepository) Update(user *entity.User) error {
 			return nil
 		}
 	}
-	return errors.New("repo: can't find User with given id")
+	return errors.ErrNotFound
 }
 
-func newStr(str string) *string {
-	return &str
-}
