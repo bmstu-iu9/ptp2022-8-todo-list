@@ -54,28 +54,58 @@ namespace changeDataModal {
 };
 
 namespace changePasswordModal {
-    export const modal: HTMLElement = document.getElementById("changePasswordModal") as HTMLElement;
-    export const passwordForm: HTMLFormElement = document.getElementById("newPasswordInput") as HTMLFormElement;
-    export const passwordRepeatForm: HTMLFormElement = document.getElementById("newPasswordRepeatInput") as HTMLFormElement;
-    export const submitBtn: HTMLFormElement = document.getElementById("changePasswordSubmitBtn") as HTMLFormElement;
-    export const validationSpan: HTMLElement = document.getElementById("validationResult") as HTMLElement;
-    export const closeBtn: HTMLElement = document.getElementById("closeChangePasswordModalBtn") as HTMLElement;
+    const modal: HTMLElement = document.getElementById("changePasswordModal") as HTMLElement;
+    const passwordForm: HTMLFormElement = document.getElementById("newPasswordInput") as HTMLFormElement;
+    const passwordRepeatForm: HTMLFormElement = document.getElementById("newPasswordRepeatInput") as HTMLFormElement;
+    const submitBtn: HTMLFormElement = document.getElementById("changePasswordSubmitBtn") as HTMLFormElement;
+    const validationSpan: HTMLElement = document.getElementById("validationResult") as HTMLElement;
+    const closeBtn: HTMLElement = document.getElementById("closeChangePasswordModalBtn") as HTMLElement;
+    const oldPasswordForm: HTMLElement = document.getElementById("oldPasswordInput") as HTMLElement;
 
     function clearPasswordForm(): void {
-        changePasswordModal.passwordForm.value = "";
-        changePasswordModal.passwordRepeatForm.value = "";
-        changePasswordModal.validationSpan.innerHTML = "";
+        oldPasswordForm.value = "";
+        passwordForm.value = "";
+        passwordRepeatForm.value = "";
+        validationSpan.innerHTML = "";
+    } 
+
+    function setSuccesValidationStyles(msg: string): void {
+            validationSpan.innerHTML = `&#10003 ${msg}`;
+            validationSpan.style.color = "green";
     }
+
+    function setFailValidationStyles(msg: string): void {
+            validationSpan.innerHTML = `&#10060 ${msg}`;
+            validationSpan.style.color = "red";
+    }
+
+    passwordForm.addEventListener("input", () => {
+        if (passwordRepeatForm.value != "") {
+            if (passwordRepeatForm.value === passwordForm.value) {
+                setSuccesValidationStyles("Пароли совпадают");
+            } else {
+                setFailValidationStyles("Пароли не совпадают");
+            }
+        }
+    })
 
     passwordRepeatForm.addEventListener("input", () => {
         if (passwordRepeatForm.value == passwordForm.value) {
-            validationSpan.innerHTML = "&#10003 Пароли совпадают";
-            validationSpan.style.color = "green";
+            setSuccesValidationStyles("Пароли совпадают");
         } else {
-            validationSpan.innerHTML = "&#10060 Пароли не совпадают";
-            validationSpan.style.color = "red";
+            setFailValidationStyles("Пароли не совпадают");
         }
     });
+
+    submitBtn.addEventListener("click", () => {
+        if (passwordForm.value === passwordRepeatForm.value) {
+            if (passwordForm.value.length < 8) {
+                setFailValidationStyles("Длина нового пароля меньше 8 символов");
+            } else {
+                /* тут должен отправляться запрос на сервер*/
+            }
+        }
+    })
 
     closeBtn.addEventListener("click", clearPasswordForm);
     modal.addEventListener("click", (evt) => {
@@ -96,15 +126,18 @@ function updateHTML(user: User): void {
 
 
 
-function renderProfile(id: number): void {
-    sendRequest("GET", server + `/users/${id}`)
+sendRequest("GET", server + "/users/3")
         .then(r => {
-            updateHTML(r);
-            renderHero("mainProfileCard");
+            renderHero("mainProfileCard", r.Items)
         })
         .catch(e => {
-            throw e
-        });
-}
+            throw e;
+        })
 
-renderProfile(userId);
+sendRequest("GET", server + `/users/${userId}`)
+    .then(r => {
+        updateHTML(r);
+    })
+    .catch(e => {
+    throw e
+    });

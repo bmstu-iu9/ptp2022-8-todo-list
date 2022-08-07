@@ -67,16 +67,11 @@ function getHeroHtml(e: Equipment): HTMLElement {
     return result;
 }
 
-function renderHero(parentElementId: string): void {
-    sendRequest("GET", server + "/users/3")
-        .then(r => {
-            let equipment: Equipment = getEquipment(r.Items);
+function renderHero(parentElementId: string, items: Item[]): void {
+            let equipment: Equipment = getEquipment(items);
             const parentElement: HTMLElement = document.getElementById(parentElementId) as HTMLElement;
             if (parentElement != null) {
                 parentElement.prepend(getHeroHtml(equipment));    
             }
-        })
-        .catch(e => {
-            throw e;
-        }) 
+ 
 }
