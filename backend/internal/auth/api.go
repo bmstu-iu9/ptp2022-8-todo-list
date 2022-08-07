@@ -30,22 +30,47 @@ func (res *resource) handleLog(w http.ResponseWriter, r *http.Request, p httprou
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refreshToken",
+		Value:    tokens.RefreshToken,
+		Expires:  time.Now().Add(30 * 24 * time.Hour),
+		HttpOnly: true,
+		Secure:   false,
+	})
 	err = json.NewEncoder(w).Encode(user)
 	err = json.NewEncoder(w).Encode(tokens)
 	if err != nil {
 		res.logger.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+}
+
+func (res *resource) handleLogOut(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	cookie, err := r.Cookie("refreshToken")
+	if err != nil {
+		res.logger.Println(err)
+		if err == http.ErrNoCookie {
+			w.WriteHeader(http.StatusUnauthorized)
+		} else {
+			w.WriteHeader(http.StatusBadRequest)
+		}
+		return
+	}
+	refreshToken := cookie.Value
+	err = res.service.Logout(refreshToken)
+	if err != nil {
+		res.logger.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	http.SetCookie(w, &http.Cookie{
 		Name:    "refreshToken",
-		Value:   tokens.RefreshToken,
-		Expires: time.Now().Add(30 * 24 * time.Hour),
+		Value:   "",
+		Expires: time.Unix(0, 0),
+
+		HttpOnly: true,
 	})
-}
-
-func (res *resource) handleLogOut(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-
+	w.WriteHeader(http.StatusOK)
 }
 
 func (res *resource) handleRefresh(w http.ResponseWriter, r *http.Request, p httprouter.Params) {

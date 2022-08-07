@@ -10,6 +10,7 @@ type Repository interface {
 	CheckToken(userId int) (bool, error)
 	UpdateToken(userId int, refreshToken string) error
 	CreateToken(userId int, refreshToken string) error
+	DeleteToken(refreshToken string) error
 	GetUserByEmail(email string) (entity.User, error)
 }
 
@@ -47,6 +48,11 @@ func (repo repository) CheckToken(userId int) (bool, error) {
 
 func (repo repository) UpdateToken(userId int, refreshToken string) error {
 	_, err := repo.db.Exec("UPDATE tokens SET token=$1 WHERE user_id=$2", refreshToken, userId)
+	return err
+}
+
+func (repo repository) DeleteToken(refreshToken string) error {
+	_, err := repo.db.Exec("DELETE FROM tokens  WHERE token=$1", refreshToken)
 	return err
 }
 

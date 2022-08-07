@@ -15,6 +15,7 @@ const JWT_REFRESH_SECRET = "refresh-key"
 type Service interface {
 	SaveRefreshToken(userId int, refreshToken string) error
 	Login(email, password string) (entity.UserDto, Token, error)
+	Logout(refreshToken string) error
 }
 
 type service struct {
@@ -56,6 +57,10 @@ func (s service) Login(email, password string) (entity.UserDto, Token, error) {
 	}
 	err = s.SaveRefreshToken(int(user.Id), tokens.RefreshToken)
 	return user, tokens, err
+}
+
+func (s service) Logout(refreshToken string) error {
+	return s.repo.DeleteToken(refreshToken)
 }
 
 func (s service) SaveRefreshToken(userId int, refreshToken string) error {
