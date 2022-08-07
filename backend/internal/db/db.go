@@ -9,15 +9,15 @@ import (
 )
 
 var (
-	db *sql.DB
+	db  *sql.DB
 	err error
 
-	host = config.Get("DB_HOST")
-	port = config.Get("DB_PORT")
-	user = config.Get("DB_USER")
-	dbName = config.Get("DB_NAME")
+	host     = config.Get("DB_HOST")
+	port     = config.Get("DB_PORT")
+	user     = config.Get("DB_USER")
+	dbName   = config.Get("DB_NAME")
 	password = config.Get("DB_PASSWORD")
-	sslMode = config.Get("DB_SSL_MODE")
+	sslMode  = config.Get("DB_SSL_MODE")
 )
 
 func init() {
@@ -37,7 +37,16 @@ CREATE TABLE users (
        password varchar(100) NOT NULL
 );
 INSERT INTO users(email, nickname, password)
-VALUES('test@example.com', 'test', 'Test123Test');
+VALUES('test@example.com', 'test', 'bd73d8db35a186a62c081da14526866c');
+`)
+	_, err = db.Exec(`
+DROP TABLE IF EXISTS tokens;
+CREATE TABLE tokens (
+       user_id int NOT NULL,
+       token varchar(255) NOT NULL
+);
+INSERT INTO tokens(user_id, token)
+VALUES(1,'token');
 `)
 }
 
