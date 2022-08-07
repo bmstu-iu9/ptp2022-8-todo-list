@@ -1,15 +1,24 @@
+type Equipment = {
+    helmet: Item;
+    leggins: Item;
+    chest: Item;
+    weapon: Item;
+    boots: Item;
+    pet: Item;
+}
+
 function getEquipment(items: Item[]): Equipment {
     let equipment: Equipment = {}
     items.forEach(el => {
-        if (el.ItemState === "equipped") {
-            switch (el.Category) {
+        if (el.state === "equipped") {
+            switch (el.category) {
                 case ("helmet"):
                     equipment.helmet = el;
                     break;
-                case ("chestplate"): 
+                case ("chest"): 
                     equipment.chestplate = el;
                     break;
-                case ("leggings"):
+                case ("leggins"):
                     equipment.leggings = el;
                     break;
                 case ("boots"):
@@ -27,8 +36,8 @@ function getEquipment(items: Item[]): Equipment {
 function createEquipHtml(item: Item): HTMLElement {
     let html = document.createElement("img");
     html.setAttribute("class", "img-fluid");
-    html.setAttribute("src", item.ImageForHero);
-    html.setAttribute("id", item.Category);
+    html.setAttribute("src", item.imageForHero);
+    html.setAttribute("id", item.category);
     return html;
 }
   
@@ -68,10 +77,10 @@ function getHeroHtml(e: Equipment): HTMLElement {
 }
 
 function renderHero(parentElementId: string, items: Item[]): void {
-            let equipment: Equipment = getEquipment(items);
-            const parentElement: HTMLElement = document.getElementById(parentElementId) as HTMLElement;
-            if (parentElement != null) {
-                parentElement.prepend(getHeroHtml(equipment));    
-            }
- 
+    let equipment: Equipment = getEquipment(items);
+    console.log(equipment)
+    const parentElement: HTMLElement = document.getElementById(parentElementId) as HTMLElement;
+    if (parentElement != null) {
+        parentElement.prepend(getHeroHtml(equipment));    
+    }
 }

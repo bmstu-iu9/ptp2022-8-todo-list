@@ -7,13 +7,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta name="theme-color" content="#712cf9" />
-
+    
     <title>Document</title>
 
     <script src="../js/request.ts"></script>
     <script defer src="../js/config.ts"></script>
+    <link href="../scss/hero.scss" rel="stylesheet"/>
     <link href="../scss/inventory.scss" rel="stylesheet" />
     <link href="../scss/menu.scss" rel="stylesheet" />
+    <script defer src="../js/Hero.ts"></script>
     <script defer src="../js/inventory/inventory.ts"></script>
     <script defer src="../js/inventory/item.ts"></script>
     <script defer src="../js/list/utility.ts"></script>
@@ -100,9 +102,8 @@
 
                     <p id="nickname" class="h2 p-2">NickName</p>
 
-                    <div class="inventory__user container-fluid" style="background: white">
-                        <img id="inventory__user-img" src="../images/inventory__character.webp" alt="user-model"
-                            class="img-fluid">
+                    <div class="inventory__user container-fluid" style="background: white" id="inventory__user">
+                    
                     </div>
 
                 </div>

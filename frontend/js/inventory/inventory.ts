@@ -13,23 +13,27 @@ let Equipped = {
     skin: -1,
 }
 // получение предметов с сервера
-sendRequest('GET', server + '/items').then((data) => {
+sendRequest('GET', server + '/users/3').then((d) => {
+    let data: Item[] = d.Items;
+    let equipment: Equipment = {};
     for (let i = 0; i < data.length; i++) {
+        
         let item: Item = data[i]
         if (item.state !== 'store') {
             toInventoryHTMLBlock(item)
             itemsInventory.set(item.id, item)
             if (item.state === 'equipped') {
+                equipment[item.category] = item
                 equipped(item)
             }
         }
     }
-    if (Equipped.skin !== -1) {
-        let userImg = document.getElementById('inventory__user-img')
-        let id = Equipped.skin
-        let item = itemsInventory.get(id)!
-        //userImg!.setAttribute('src', `https://wg.grechkogv.ru/assets/${item.imageSrc}`)
-    }
+    // for (let key of Object.keys(Equipped)) {
+    //     equipment[key] = itemsInventory.get(Equipped[key]);
+    // }
+    // console.log(equipment);
+    document.getElementById("inventory__user")?.appendChild(getHeroHtml(equipment));
+    
 })
 // Общая обработка кликов по странице
 document.addEventListener('click', (e) => {
