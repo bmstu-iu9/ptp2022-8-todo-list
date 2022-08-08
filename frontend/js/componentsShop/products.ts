@@ -89,7 +89,22 @@ function buildingBuyButton(id: number, state: string): string {
     }
 }
 
+// Загружаю баланс
 
+// для примера возьмем первого
+const user = 0;
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+sendRequest('GET', server + '/users/' + user).then((data) => {
+    const balance: number = data.balance;
+    const balanceShop = <HTMLInputElement>document.getElementById('balance');
+    balanceShop.innerText = 'Ваш баланс: ' + balance.toString() + ' коинов';
+
+})
+
+
+// Получаю предметы пользователя (пока просто предметы)
 
 fetch('https://json.grechkogv.ru/items')
     .then(res => res.json())

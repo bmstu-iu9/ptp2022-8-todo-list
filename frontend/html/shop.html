@@ -17,6 +17,7 @@
     <script defer src="../js/list/utility.ts"></script>
 
     <script defer src="../js/componentsShop/dom_modal.ts"></script>
+    <script defer src="../js/componentsShop/products.ts"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
             crossorigin="anonymous"></script>
@@ -103,8 +104,9 @@
                             <a class="nav-link fw-bold py-1 px-0 mx-md-3 mx-auto my-auto" href="#pet">Питомцы</a>
                             <a class="nav-link fw-bold py-1 px-0 mx-md-3 mx-auto my-auto" href="#skin">Облик</a>
 
-                            <a class="nav-link fw-bold py-1 px-0 mx-md-3 mx-auto my-auto disabled">Баланс: ${коины}</a>
-<!--                            TODO: получать баланс с сервера-->
+                            <a id="balance" class="nav-link fw-bold py-1 px-0 mx-md-3 mx-auto my-auto disabled">
+                                Ваш баланс: коинов</a>
+
                         </nav>
                     </header>
                 </div>
@@ -148,7 +150,6 @@
 
         <!--    Загружаю магазин с сервера -->
         <div id="products">
-            <script src="../js/componentsShop/products.ts"></script>
 
         </div>
         <br>

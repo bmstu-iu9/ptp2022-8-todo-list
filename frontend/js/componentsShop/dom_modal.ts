@@ -39,7 +39,7 @@ type Category = 'helmet' | 'chest' | 'leggins' | 'boots' | 'weapon' | 'pet' | 's
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const modalInventory = new bootstrap.Modal(<HTMLFormElement>document.getElementById('shopModal'));
+const modalShop = new bootstrap.Modal(<HTMLFormElement>document.getElementById('shopModal'));
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -74,11 +74,12 @@ document.addEventListener('click', (e) => {
         const windowForm = <HTMLElement>document.getElementsByClassName('shop__form')[0];
         const buf = (<HTMLElement>document.getElementsByClassName(`idItem=${id}`)[0]).getBoundingClientRect();
 
+        // делать по центру одинаково
         windowForm.style.top = `${buf.y}px`;
         windowForm.style.left = `calc(${buf.x}px - 1vw - 1.4rem)`;
         windowForm.style.width = `calc(${buf.right - buf.x}px + 2vw + 2.8rem)`;
         windowForm.style.borderColor = `${getRarityColor('common')}`;
-        modalInventory.show();
+        modalShop.show();
 
         const titleModal = <HTMLInputElement>document.getElementById('ShopModalTitle');
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
