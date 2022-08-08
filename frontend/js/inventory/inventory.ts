@@ -12,6 +12,7 @@ let Equipped = {
     pet: -1,
     skin: -1,
 }
+
 // получение предметов с сервера
 sendRequest('GET', server + '/items').then((data) => {
     for (let i = 0; i < data.length; i++) {
@@ -31,6 +32,7 @@ sendRequest('GET', server + '/items').then((data) => {
         //userImg!.setAttribute('src', `https://wg.grechkogv.ru/assets/${item.imageSrc}`)
     }
 })
+
 // Общая обработка кликов по странице
 document.addEventListener('click', (e) => {
     const target = <HTMLElement>e.target
@@ -69,6 +71,7 @@ document.addEventListener('click', (e) => {
             putOn(item)
         }
     }
+
 })
 // создание карты предмета в HTML
 function createInventoryHTMLBlock(item: Item) {
@@ -91,6 +94,7 @@ function createInventoryHTMLBlock(item: Item) {
         </div>
     </div>`
     return str
+
 }
 // добавление HTML-блока карты на страницу
 function toInventoryHTMLBlock(item: Item) {
@@ -98,6 +102,7 @@ function toInventoryHTMLBlock(item: Item) {
     let buf = document.querySelector('.inventory__box__items')!.innerHTML
     document.querySelector('.inventory__box__items')!.innerHTML = buf.concat(str)
 }
+
 // добавление айди предмета item в хранилище айди надетых предметов
 function equipped(item: Item) {
     switch (item.category) {
@@ -127,6 +132,7 @@ function equipped(item: Item) {
         }
     }
 }
+
 // удаление предмета нужной категории из хранилища айди надетых предметов 
 function unEquipped(item: Item) {
     switch (item.category) {
@@ -156,6 +162,7 @@ function unEquipped(item: Item) {
         }
     }
 }
+
 // функция надевания
 function putOn(item: Item) {
     item.state = 'equipped'
@@ -163,6 +170,7 @@ function putOn(item: Item) {
     itemsInventory.set(item.id, item)
     equipItemHTML(item)
     equipped(item)
+
 }
 // функция снятия 
 function takeOff(item: Item) {
@@ -171,6 +179,7 @@ function takeOff(item: Item) {
     itemsInventory.set(item.id, item)
     equipItemHTML(item, true)
 }
+
 // получение айди надетого предмета нужной категории
 function idEquipped(item: Item): number {
     switch (item.category) {
@@ -189,6 +198,7 @@ function idEquipped(item: Item): number {
         default:
             return Equipped.skin
     }
+
 }
 // отрисовка состояния предмета в HTML
 function equipItemHTML(item: Item, unEquip: boolean = false) {
