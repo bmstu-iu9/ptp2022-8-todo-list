@@ -1,11 +1,10 @@
 // @ts-check
 
 import fs from 'fs'
-import path from 'path'
 
 var workdir = '../dist/'
-var regexp = new RegExp(/<div class="body">.+<\/div>/)
-var files = ['todo.html', 'shop.html', 'profile_page.html']
+var regexp = new RegExp(/<div class="body.+">.+<\/div>/)
+var files = ['todo.html', 'shop.html', 'profile_page.html', 'inventory.html']
 
 if (!fs.existsSync(workdir + 'spa/views/')) {
     fs.mkdirSync(workdir + 'spa/views/', {recursive: true})
