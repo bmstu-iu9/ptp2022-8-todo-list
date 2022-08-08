@@ -14,7 +14,7 @@ const JWT_REFRESH_SECRET = "refresh-key"
 
 type Service interface {
 	SaveRefreshToken(userId int, refreshToken string) error
-	Login(email, password string) (entity.UserDto, Token, error)
+	Login(email entity.Email, password entity.Password) (entity.UserDto, Token, error)
 	Logout(refreshToken string) error
 	Refresh(refreshToken string) (entity.UserDto, Token, error)
 }
@@ -38,21 +38,21 @@ type DbToken struct {
 }
 
 type LoginUserRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    entity.Email    `json:"email"`
+	Password entity.Password `json:"password"`
 }
 
 type Claims struct {
-	Email string
+	Email entity.Email
 	jwt.RegisteredClaims
 }
 
-func (s service) Login(email, password string) (entity.UserDto, Token, error) {
+func (s service) Login(email entity.Email, password entity.Password) (entity.UserDto, Token, error) {
 	entityUser, err := s.repo.GetUser(email, -1)
 	if err != nil {
 		return entity.UserDto{}, Token{}, errors.New("user not found")
 	}
-	isPassEquals := entityUser.Password == fmt.Sprintf("%x", md5.Sum([]byte(password)))
+	isPassEquals := entityUser.Password == *entity.NewPassword(fmt.Sprintf("%x", md5.Sum([]byte(password))))
 	if !isPassEquals {
 		return entity.UserDto{}, Token{}, errors.New("incorrect password")
 	}
@@ -107,7 +107,7 @@ func (s service) SaveRefreshToken(userId int, refreshToken string) error {
 	return nil
 }
 
-func GenerateTokens(email string) (Token, error) {
+func GenerateTokens(email entity.Email) (Token, error) {
 	claims := &Claims{
 		Email: email,
 		RegisteredClaims: jwt.RegisteredClaims{

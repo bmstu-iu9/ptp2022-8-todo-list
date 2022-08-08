@@ -22,10 +22,10 @@ func TestRepo(t *testing.T) {
 		got, err := repo.Get(1)
 
 		want := entity.User{
-			Id: 1,
-			Email: "test@example.com",
+			Id:       1,
+			Email:    "test@example.com",
 			Nickname: "test",
-			Password: "Test123Test",
+			Password: "bd73d8db35a186a62c081da14526866c",
 		}
 
 		test.IsNil(t, err)
@@ -56,14 +56,14 @@ func TestRepo(t *testing.T) {
 		}
 	})
 
-	t.Run("update", func (t *testing.T) {
+	t.Run("update", func(t *testing.T) {
 		user.Email = "example@example.com"
 		err = repo.Update(user)
 
 		test.IsNil(t, err)
 	})
 
-	t.Run("update validate", func (t *testing.T) {
+	t.Run("update validate", func(t *testing.T) {
 		got, err := repo.Get(user.Id)
 
 		want := *user
@@ -72,13 +72,13 @@ func TestRepo(t *testing.T) {
 		test.DeepEqual(t, want, got)
 	})
 
-	t.Run("delete", func (t *testing.T) {
+	t.Run("delete", func(t *testing.T) {
 		err = repo.Delete(user.Id)
 
 		test.IsNil(t, err)
 	})
 
-	t.Run("delete validate", func (t *testing.T) {
+	t.Run("delete validate", func(t *testing.T) {
 		_, err = repo.Get(user.Id)
 
 		test.NotNil(t, err)

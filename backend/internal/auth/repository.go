@@ -3,7 +3,7 @@ package auth
 import (
 	"database/sql"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
-	"log"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 )
 
 type Repository interface {
@@ -11,19 +11,19 @@ type Repository interface {
 	UpdateToken(userId int, refreshToken string) error
 	CreateToken(userId int, refreshToken string) error
 	DeleteToken(refreshToken string) error
-	GetUser(email string, userId int) (entity.User, error)
+	GetUser(email entity.Email, userId int) (entity.User, error)
 }
 
 type repository struct {
 	db     *sql.DB
-	logger *log.Logger
+	logger log.Logger
 }
 
-func NewRepository(db *sql.DB, logger *log.Logger) Repository {
+func NewRepository(db *sql.DB, logger log.Logger) Repository {
 	return repository{db, logger}
 }
 
-func (repo repository) GetUser(email string, userId int) (entity.User, error) {
+func (repo repository) GetUser(email entity.Email, userId int) (entity.User, error) {
 	var row *sql.Rows
 	var err error
 	if userId == -1 {

@@ -2,33 +2,34 @@ package auth
 
 import (
 	"encoding/json"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/accesslog"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"github.com/julienschmidt/httprouter"
-	"log"
 	"net/http"
 	"time"
 )
 
-func RegisterHandlers(mux *httprouter.Router, service Service, logger *log.Logger) {
+func RegisterHandlers(mux *httprouter.Router, service Service, logger log.Logger) {
 	res := resource{service, logger}
 
-	mux.POST("/login", res.handleLog)
-	mux.POST("/logout", res.handleLogOut)
-	mux.GET("/refresh", res.handleRefresh)
+	mux.POST("/login", accesslog.Log(errors.Handle(res.handleLog, logger), logger))
+	mux.POST("/logout", accesslog.Log(errors.Handle(res.handleLogOut, logger), logger))
+	mux.GET("/refresh", accesslog.Log(errors.Handle(res.handleRefresh, logger), logger))
 }
 
 type resource struct {
 	service Service
-	logger  *log.Logger
+	logger  log.Logger
 }
 
-func (res *resource) handleLog(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (res *resource) handleLog(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
 	data := LoginUserRequest{}
 	err := json.NewDecoder(r.Body).Decode(&data)
 	user, tokens, err := res.service.Login(data.Email, data.Password)
 	if err != nil {
-		res.logger.Println(err)
 		w.WriteHeader(http.StatusBadRequest)
-		return
+		return err
 	}
 	http.SetCookie(w, &http.Cookie{
 		Name:     "refreshToken",
@@ -39,28 +40,26 @@ func (res *resource) handleLog(w http.ResponseWriter, r *http.Request, p httprou
 	err = json.NewEncoder(w).Encode(user)
 	err = json.NewEncoder(w).Encode(tokens)
 	if err != nil {
-		res.logger.Println(err)
-		return
+		return err
 	}
+	return nil
 }
 
-func (res *resource) handleLogOut(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (res *resource) handleLogOut(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
 	cookie, err := r.Cookie("refreshToken")
 	if err != nil {
-		res.logger.Println(err)
 		if err == http.ErrNoCookie {
 			w.WriteHeader(http.StatusUnauthorized)
 		} else {
 			w.WriteHeader(http.StatusBadRequest)
 		}
-		return
+		return err
 	}
 	refreshToken := cookie.Value
 	err = res.service.Logout(refreshToken)
 	if err != nil {
-		res.logger.Println(err)
 		w.WriteHeader(http.StatusBadRequest)
-		return
+		return err
 	}
 	http.SetCookie(w, &http.Cookie{
 		Name:    "refreshToken",
@@ -70,25 +69,24 @@ func (res *resource) handleLogOut(w http.ResponseWriter, r *http.Request, p http
 		HttpOnly: true,
 	})
 	w.WriteHeader(http.StatusOK)
+	return nil
 }
 
-func (res *resource) handleRefresh(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (res *resource) handleRefresh(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
 	cookie, err := r.Cookie("refreshToken")
 	if err != nil {
-		res.logger.Println(err)
 		if err == http.ErrNoCookie {
 			w.WriteHeader(http.StatusUnauthorized)
 		} else {
 			w.WriteHeader(http.StatusBadRequest)
 		}
-		return
+		return err
 	}
 	refreshToken := cookie.Value
 	user, tokens, err := res.service.Refresh(refreshToken)
 	if err != nil {
-		res.logger.Println(err)
 		w.WriteHeader(http.StatusUnauthorized)
-		return
+		return err
 	}
 	http.SetCookie(w, &http.Cookie{
 		Name:     "refreshToken",
@@ -99,7 +97,7 @@ func (res *resource) handleRefresh(w http.ResponseWriter, r *http.Request, p htt
 	err = json.NewEncoder(w).Encode(user)
 	err = json.NewEncoder(w).Encode(tokens)
 	if err != nil {
-		res.logger.Println(err)
-		return
+		return err
 	}
+	return nil
 }
