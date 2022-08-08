@@ -1,11 +1,15 @@
 // @ts-check
 
-let fs = require('fs'),
-    path = require('path')
+import fs from 'fs'
+import path from 'path'
 
 var workdir = '../dist/'
 var regexp = new RegExp(/<div class="body">.+<\/div>/)
 var files = ['todo.html', 'shop.html', 'profile_page.html']
+
+if (!fs.existsSync(workdir + 'spa/views/')) {
+    fs.mkdirSync(workdir + 'spa/views/', {recursive: true})
+}
 
 var readAndParse = (filename) => {
     fs.readFile(workdir + 'html/' + filename, function (err, data) {
@@ -18,6 +22,7 @@ var readAndParse = (filename) => {
                 throw err
             }
         })
+        
     })
 }
 

@@ -1,6 +1,6 @@
-let fs = require('fs'),
-    path = require('path'),
-    http = require('http')
+import { exists, readFile } from 'fs'
+import { basename } from 'path'
+import { createServer } from 'http'
 
 const cache = {}
 
@@ -47,7 +47,7 @@ function send404(res) {
  * sending file response
  */
 function sendFile(res, filePath, fileContents) {
-    res.writeHead(200, { 'Content-Type': lookupContentType(path.basename(filePath)) })
+    res.writeHead(200, { 'Content-Type': lookupContentType(basename(filePath)) })
     res.end(fileContents)
 }
 
@@ -59,10 +59,10 @@ function serveStatic(res, cache, absPath) {
     if (cache[absPath]) {
         sendFile(res, absPath, cache[absPath])
     } else {
-        fs.exists(absPath, function (fileExists) {
+        exists(absPath, function (fileExists) {
             // attempt to read the resource only if it exist
             if (fileExists) {
-                fs.readFile(absPath, function (err, data) {
+                readFile(absPath, function (err, data) {
                     // not able to read the resource
                     if (err) {
                         send404(res)
@@ -79,11 +79,11 @@ function serveStatic(res, cache, absPath) {
     }
 }
 
-module.exports = function startServer(spec) {
+export default function startServer(spec) {
     let { path, port } = spec
 
     // create server object
-    var server = http.createServer(function (req, res) {
+    var server = createServer(function (req, res) {
         // if no resource is specified use index.html
         if (req.url === '/') {
             const filePath = path + 'index.html'
