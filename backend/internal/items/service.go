@@ -51,6 +51,16 @@ func (s service) GetOne(userId, itemId int) (entity.Item, error) {
 
 // Modify returns item with specified id with new ItemState.
 func (s service) Modify(userId, itemId int, input *UpdateItemStateRequest) (entity.Item, error) {
+	status, err := s.repo.IsItemInInventory(userId, itemId)
+	if status == entity.Unknown {
+		return entity.Item{}, err
+	}
+	if status == entity.Store {
+		err = s.repo.Create(userId, itemId, input.ItemState)
+		if err != nil {
+			return entity.Item{}, err
+		}
+	}
 	entityItem, err := s.GetOne(userId, itemId)
 	if err != nil {
 		return entity.Item{}, err

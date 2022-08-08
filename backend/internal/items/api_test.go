@@ -34,7 +34,7 @@ func Test(t *testing.T) { TestingT(t) }
 func (s *ApiTestSuite) TestGetAll(c *C) {
 	makeRequest := func(userId string, filters string) {
 		s.writer = httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/users/"+userId+"/items"+filters, nil)
+		req, _ := http.NewRequest("GET", "/user/"+userId+"/items"+filters, nil)
 		s.mux.ServeHTTP(s.writer, req)
 	}
 	makeRequest("1", "?rarityfilter=rare")
@@ -54,7 +54,7 @@ func (s *ApiTestSuite) TestGetAll(c *C) {
 func (s *ApiTestSuite) TestGetOne(c *C) {
 	makeRequest := func(userId, itemId string) {
 		s.writer = httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/users/"+userId+"/items/"+itemId, nil)
+		req, _ := http.NewRequest("GET", "/user/"+userId+"/items/"+itemId, nil)
 		s.mux.ServeHTTP(s.writer, req)
 	}
 	makeRequest("1", "10")
@@ -77,7 +77,7 @@ func (s *ApiTestSuite) TestPatch(c *C) {
 	makeRequest := func(userId, itemId, body string) {
 		s.writer = httptest.NewRecorder()
 		bodyReader := strings.NewReader(body)
-		req, _ := http.NewRequest("PATCH", "/users/"+userId+"/items/"+itemId, bodyReader)
+		req, _ := http.NewRequest("PATCH", "/user/"+userId+"/items/"+itemId, bodyReader)
 		s.mux.ServeHTTP(s.writer, req)
 	}
 
@@ -113,6 +113,10 @@ func (m mockRepository) IsItemInInventory(userId, itemId int) (status entity.Sta
 	}
 	return entity.Store, fmt.Errorf("The item with id = %d does not belong to user with id =%d",
 		itemId, userId)
+}
+
+func (m *mockRepository) Create(userId, itemId int, state entity.State) error {
+	return nil
 }
 
 func (m mockRepository) GetAll(userId int, filters entity.Filter) ([]entity.Item, error) {

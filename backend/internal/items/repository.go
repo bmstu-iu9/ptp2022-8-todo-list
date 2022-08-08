@@ -17,6 +17,8 @@ type Repository interface {
 	Update(userId int, item *entity.Item) error
 	// IsItemInInventory checks if an item is in inventory.
 	IsItemInInventory(userId, itemId int) (entity.State, error)
+	// Create creates the item in inventory.
+	Create(userId, itemId int, state entity.State) error
 }
 
 // repository persists items in database.
@@ -78,20 +80,18 @@ func (repo repository) GetAll(userId int, filters entity.Filter) ([]entity.Item,
 	return items, nil
 }
 
+// IsItemInInventory checks if an item is in inventory.
 func (repo repository) IsItemInInventory(userId, itemId int) (entity.State, error) {
 	row, err := repo.db.Query("SELECT item_state FROM inventory WHERE user_id = $1 AND item_id = $2",
 		userId, itemId)
 	if err != nil {
-		return entity.Store, err
+		return entity.Unknown, err
 	}
 	row.Next()
 	var status entity.State
 	err = row.Scan(&status)
 	if err != nil {
-		return entity.Store, err
-	}
-	if status == entity.Store {
-		return status, fmt.Errorf("The item with id = %d does not belong to user with id =%d",
+		return entity.Store, fmt.Errorf("The item with id = %d does not belong to user with id =%d",
 			itemId, userId)
 	}
 	return status, nil
@@ -116,5 +116,12 @@ func (repo repository) GetOne(userId, itemId int) (entity.Item, error) {
 func (repo repository) Update(userId int, item *entity.Item) error {
 	_, err := repo.db.Exec("UPDATE inventory SET item_state = $1 WHERE item_id = $2 AND user_id =$3",
 		item.ItemState, item.ItemId, userId)
+	return err
+}
+
+// Create creates the item in inventory.
+func (repo repository) Create(userId, itemId int, state entity.State) error {
+	_, err := repo.db.Exec("INSERT INTO inventory (user_id,item_id,item_state) VALUES ($1,$2,$3)",
+		userId, itemId, state)
 	return err
 }

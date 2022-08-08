@@ -13,9 +13,9 @@ import (
 func RegisterHandlers(mux *httprouter.Router, service Service, logger log.Logger) {
 	res := resource{service, logger}
 
-	mux.GET("/users/:userId/items", accesslog.Log(res.handleGetAll, logger))
-	mux.GET("/users/:userId/items/:itemId", accesslog.Log(res.handleGetOne, logger))
-	mux.PATCH("/users/:userId/items/:itemId", accesslog.Log(res.handlePatch, logger))
+	mux.GET("/user/:userId/items", accesslog.Log(res.handleGetAll, logger))
+	mux.GET("/user/:userId/items/:itemId", accesslog.Log(res.handleGetOne, logger))
+	mux.PATCH("/user/:userId/items/:itemId", accesslog.Log(res.handlePatch, logger))
 }
 
 type resource struct {
