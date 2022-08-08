@@ -2,11 +2,10 @@ package users
 
 import (
 	"crypto/md5"
-	"errors"
 	"fmt"
-	"regexp"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 )
 
 // Service encapsulates usecase logic for users.
@@ -19,57 +18,54 @@ type Service interface {
 
 // NewUser represents the data for creating new User.
 type CreateUserRequest struct {
-	Email    string `json:"email"`
-	Nickname string `json:"nickname"`
-	Password string `json:"password"`
-}
-
-func validateField(field string, minLen, maxLen int, regex string) bool {
-	if matched, _ := regexp.MatchString(regex, field); !matched ||
-		len(field) < minLen || len(field) > maxLen {
-		return false
-	}
-	return true
+	Email    entity.Email    `json:"email"`
+	Nickname entity.Nickname `json:"nickname"`
+	Password entity.Password `json:"password"`
 }
 
 // Validate validates the CreateUserRequest fields.
 func (req *CreateUserRequest) Validate() error {
-	switch {
-	case !validateField(req.Email, 1, 200, `^[^\s@]+@[^\s@]+\.[^\s@]+$`):
-		return errors.New("Wrong email")
-	case !validateField(req.Nickname, 4, 20, `^([a-z\d]+-)*[a-z\d]+$`):
-		return errors.New("Wrong nickname")
-	case !validateField(req.Password, 8, 100, `^[A-Za-z0-9]\w{8,}$`):
-		return errors.New("Wrong password")
-	default:
-		return nil
+	wrap := func(err error) error {
+		return fmt.Errorf("%w: %v", errors.ErrValidation, err)
 	}
+
+	if err := req.Email.Validate(); err != nil {
+		return wrap(err)
+	}
+	if err := req.Nickname.Validate(); err != nil {
+		return wrap(err)
+	}
+	if err := req.Password.Validate(); err != nil {
+		return wrap(err)
+	}
+	return nil
 }
 
 // UpdateUserRequest represents the data for modifing User.
 // Fields Email, Nickname and NewPassword are optional.
 type UpdateUserRequest struct {
-	Email           *string `json:"email"`
-	Nickname        *string `json:"nickname"`
-	NewPassword     *string `json:"newPassword"`
-	CurrentPassword string  `json:"currentPassword"`
+	Email           *entity.Email    `json:"email"`
+	Nickname        *entity.Nickname `json:"nickname"`
+	NewPassword     *entity.Password `json:"newPassword"`
+	CurrentPassword entity.Password  `json:"currentPassword"`
 }
 
 // Validate validates the UpdateUserRequest fields.
 func (req *UpdateUserRequest) Validate() error {
-	switch {
-	case req.Email != nil &&
-		!validateField(*req.Email, 1, 200, `^[^\s@]+@[^\s@]+\.[^\s@]+$`):
-		return errors.New("Wrong email")
-	case req.Nickname != nil &&
-		!validateField(*req.Nickname, 4, 20, `^([a-z\d]+-)*[a-z\d]+$`):
-		return errors.New("Wrong nickname")
-	case req.NewPassword != nil &&
-		!validateField(*req.NewPassword, 8, 100, `^[A-Za-z0-9]\w{8,}$`):
-		return errors.New("Wrong password")
-	default:
-		return nil
+	wrap := func(err error) error {
+		return fmt.Errorf("%w: %v", errors.ErrValidation, err)
 	}
+
+	if err := req.Email.Validate(); err != nil {
+		return wrap(err)
+	}
+	if err := req.Nickname.Validate(); err != nil {
+		return wrap(err)
+	}
+	if err := req.NewPassword.Validate(); err != nil {
+		return wrap(err)
+	}
+	return nil
 }
 
 type service struct {
@@ -113,7 +109,7 @@ func (s service) Create(input *CreateUserRequest) (entity.UserDto, error) {
 	entityUser := entity.User{
 		Email:    input.Email,
 		Nickname: input.Nickname,
-		Password: fmt.Sprintf("%x", md5.Sum([]byte(input.Password))),
+		Password: *entity.NewPassword(fmt.Sprintf("%x", md5.Sum([]byte(input.Password)))),
 	}
 	err = s.repo.Create(&entityUser)
 	if err != nil {
@@ -135,7 +131,7 @@ func (s service) Update(id int64, input *UpdateUserRequest) (entity.UserDto, err
 	}
 
 	if entityUser.Password != input.CurrentPassword {
-		return entity.UserDto{}, errors.New("Wrong password")
+		return entity.UserDto{}, errors.ErrWrongPassword
 	}
 
 	if input.Email != nil {

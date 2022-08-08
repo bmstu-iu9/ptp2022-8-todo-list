@@ -2,11 +2,13 @@ package users
 
 import (
 	"database/sql"
-	"log"
+	"fmt"
 
 	_ "github.com/lib/pq"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 )
 
 // Repository encapsulates the logic to access users from the data source.
@@ -21,14 +23,25 @@ type Repository interface {
 	Update(user *entity.User) error
 }
 
+func wrapSql(err error) error {
+	switch err {
+	case nil:
+		return nil
+	case sql.ErrNoRows:
+		return fmt.Errorf("%w: %v", errors.ErrNotFound, err)
+	default:
+		return fmt.Errorf("%w: %v", errors.ErrDb, err)
+	}
+}
+
 // repository persists users in database.
 type repository struct {
 	db     *sql.DB
-	logger *log.Logger
+	logger log.Logger
 }
 
 // NewRepository creates a new users repository.
-func NewRepository(db *sql.DB, logger *log.Logger) Repository {
+func NewRepository(db *sql.DB, logger log.Logger) Repository {
 	return repository{db, logger}
 }
 
@@ -38,31 +51,31 @@ func (repo repository) Create(user *entity.User) error {
 	err := repo.db.QueryRow("INSERT INTO users(email, nickname, password)"+
 		"VALUES ($1, $2, $3) RETURNING id", user.Email, user.Nickname, user.Password).
 		Scan(&user.Id)
-	return err
+	return wrapSql(err)
 }
 
 // Get reads the user with specified id from database.
 func (repo repository) Get(id int64) (entity.User, error) {
 	row, err := repo.db.Query("SELECT * FROM users WHERE id = $1", id)
 	if err != nil {
-		return entity.User{}, err
+		return entity.User{}, wrapSql(err)
 	}
 	defer row.Close()
 	user := entity.User{}
 	row.Next()
 	err = row.Scan(&user.Id, &user.Email, &user.Nickname, &user.Password)
-	return user, err
+	return user, wrapSql(err)
 }
 
 // Delete removes a user with specified id from database.
 func (repo repository) Delete(id int64) error {
 	_, err := repo.db.Exec("DELETE FROM users WHERE id = $1", id)
-	return err
+	return wrapSql(err)
 }
 
 // Update saves changes to a user from database.
 func (repo repository) Update(user *entity.User) error {
 	_, err := repo.db.Exec("UPDATE users SET email = $1, nickname = $2,"+
 		"password = $3 WHERE id = $4", user.Email, user.Nickname, user.Password, user.Id)
-	return err
+	return wrapSql(err)
 }

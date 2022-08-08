@@ -2,34 +2,26 @@ package ping
 
 import (
 	"net/http"
-	"net/http/httptest"
 	"testing"
 
-	"github.com/julienschmidt/httprouter"
-	. "gopkg.in/check.v1"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/router"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/test"
 )
 
-type PingTestSuite struct{
-	mux *httprouter.Router
-	writer *httptest.ResponseRecorder
-}
+func TestApi(t *testing.T) {
+	mux := router.New()
+	logger := log.New()
+	RegisterHandlers(mux, logger)
 
-func init() {
-	Suite(&PingTestSuite{})
-}
+	tests := []test.ApiTestCase{
+		{Name: "Ping OK", Method: "GET", Url: "/ping", Body: "",
+			WantCode: http.StatusTeapot},
+		{Name: "Ping non-empty body", Method: "GET", Url: "/ping", Body: "12345",
+			WantCode: http.StatusTeapot},
+		{Name: "Ping wrong method", Method: "POST", Url: "/ping", Body: "{}",
+			WantCode: http.StatusMethodNotAllowed, WantBody: "Method Not Allowed\n"},
+	}
 
-func Test(t *testing.T) { TestingT(t) }
-
-func (s *PingTestSuite) SetUpSuite(c *C) {
-	s.mux = httprouter.New()
-	RegisterHandlers(s.mux)
-	s.writer = httptest.NewRecorder()
-}
-
-func (s *PingTestSuite) TestPing(c *C) {
-	request, _ := http.NewRequest("GET", "/ping", nil)
-	s.mux.ServeHTTP(s.writer, request)
-
-	c.Check(s.writer.Code, Equals, 418)
-	c.Check(s.writer.Body.Len(), Equals, 0)
+	test.Endpoint(t, tests, mux)
 }

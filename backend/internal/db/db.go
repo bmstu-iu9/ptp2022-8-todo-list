@@ -5,13 +5,11 @@ import (
 	"fmt"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/config"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	_ "github.com/lib/pq"
 )
 
 var (
-	db  *sql.DB
-	err error
-
 	host     = config.Get("DB_HOST")
 	port     = config.Get("DB_PORT")
 	user     = config.Get("DB_USER")
@@ -20,14 +18,17 @@ var (
 	sslMode  = config.Get("DB_SSL_MODE")
 )
 
-func init() {
-	db, err = sql.Open("postgres",
-		fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
-			host, port, user, dbName, password, sslMode))
+func New(logger log.Logger) (*sql.DB, error) {
+	params := fmt.Sprintf(
+		"host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
+		host, port, user, dbName, password, sslMode)
+	logger.Debug("Connecting to DB:", params)
+	db, err := sql.Open("postgres", params)
 	if err != nil {
-		return
+		return nil, err
 	}
 
+	logger.Debug("Creating new table and test user")
 	_, err = db.Exec(`
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
@@ -48,8 +49,6 @@ CREATE TABLE tokens (
 INSERT INTO tokens(user_id, token)
 VALUES(1,'token');
 `)
-}
 
-func New() (*sql.DB, error) {
 	return db, err
 }

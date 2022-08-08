@@ -12,6 +12,7 @@ var config = map[string]string{
 	"DB_NAME":     "slavatidika",
 	"DB_PASSWORD": "asdwasd4545",
 	"DB_SSL_MODE": "disable",
+	"RUNTIME_MODE": "debug",
 }
 
 func init() {
