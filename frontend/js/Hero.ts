@@ -24,6 +24,8 @@ function getEquipment(items: Item[]): Equipment {
                 case ("boots"):
                     equipment.boots = el;
                     break;
+                case ("weapon"):
+                    equipment.weapon = el;
                 case ("pet"):
                     equipment.pet = el;
                     break;

@@ -2,7 +2,6 @@
     display: inline-block;
     position: relative;
     #helmet {
-   
         position: absolute;
         z-index: 1;
     }
@@ -13,6 +12,10 @@
     }
     #leggins {
         z-index: 1;
+        position: absolute;
+    }
+    #weapon {
+        z-index: 3;
         position: absolute;
     }
     #boots {
