@@ -16,10 +16,10 @@ function getEquipment(items: Item[]): Equipment {
                     equipment.helmet = el;
                     break;
                 case ("chest"): 
-                    equipment.chestplate = el;
+                    equipment.chest = el;
                     break;
                 case ("leggins"):
-                    equipment.leggings = el;
+                    equipment.leggins = el;
                     break;
                 case ("boots"):
                     equipment.boots = el;
@@ -42,13 +42,14 @@ function createEquipHtml(item: Item): HTMLElement {
 }
   
 
-function setEquipmentImg(id: number, category: "string"): void{
-    let equip: HTMLElement = document.getElementById(category)!;
+function setEquipmentImg(item: Item): void {
+    console.log(item);
+    let equip: HTMLElement = document.getElementById(item.category)!;
     if (equip != null) {
-        equip.setAttribute("src", itemsInventory[id].ImageForHero);
+        equip.setAttribute("src", item.imageForHero);
     } else {
-        let hero: HTMLElement = document.getElementById("hero")!;
-        hero.appendChild(createEquipHtml(itemsInventory[id]));
+        let hero: HTMLElement = document.querySelector(".hero") as HTMLElement;
+        hero.prepend(createEquipHtml(item));
     }
 }
 
@@ -78,7 +79,6 @@ function getHeroHtml(e: Equipment): HTMLElement {
 
 function renderHero(parentElementId: string, items: Item[]): void {
     let equipment: Equipment = getEquipment(items);
-    console.log(equipment)
     const parentElement: HTMLElement = document.getElementById(parentElementId) as HTMLElement;
     if (parentElement != null) {
         parentElement.prepend(getHeroHtml(equipment));    

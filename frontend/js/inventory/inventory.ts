@@ -16,8 +16,7 @@ let Equipped = {
 sendRequest('GET', server + '/users/3').then((d) => {
     let data: Item[] = d.Items;
     let equipment: Equipment = {};
-    for (let i = 0; i < data.length; i++) {
-        
+    for (let i = 0; i < data.length; i++) {   
         let item: Item = data[i]
         if (item.state !== 'store') {
             toInventoryHTMLBlock(item)
@@ -28,10 +27,6 @@ sendRequest('GET', server + '/users/3').then((d) => {
             }
         }
     }
-    // for (let key of Object.keys(Equipped)) {
-    //     equipment[key] = itemsInventory.get(Equipped[key]);
-    // }
-    // console.log(equipment);
     document.getElementById("inventory__user")?.appendChild(getHeroHtml(equipment));
     
 })
@@ -62,6 +57,7 @@ document.addEventListener('click', (e) => {
     } else if (hasParentClass(target, 'inventory__item-btn')) {
         // надеть/снять предмет
         if (item.state === 'equipped') {
+            removeEquipmentImg(item.category)
             takeOff(item)
             unEquipped(item)
         } else {
@@ -70,6 +66,7 @@ document.addEventListener('click', (e) => {
                 let itemEquipped = itemsInventory.get(idE)!
                 takeOff(itemEquipped)
             }
+            setEquipmentImg(item)
             putOn(item)
         }
     }
