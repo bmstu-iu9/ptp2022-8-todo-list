@@ -1,8 +1,9 @@
 class Router {
-    private routes: Route[]
+    private routes: Map<string, Route>
     private rootElem: HTMLDivElement
+    private curPage: string
 
-    constructor(routes: Route[]) {
+    constructor(routes: Map<string, Route>) {
         try {
             if (!routes) {
                 throw 'error: routes param is mandatory'
@@ -17,43 +18,37 @@ class Router {
 
     private init() {
         var routes = this.routes
-        ;(function (scope, routes) {
+        ;(function (scope: Router) {
             window.addEventListener('hashchange', function (e) {
                 scope.hasChanged()
             })
-        })(this, routes)
+        })(this)
         this.hasChanged()
     }
 
     public hasChanged() {
         if (window.location.hash.length > 0) {
-            for (var i = 0, length = this.routes.length; i < length; i++) {
-                var route = this.routes[i]
-                let href = document.querySelector(`[href="#${route.getName()}"]`)
-                href?.parentElement!.classList.remove('menu__open')
-                if (route.isActiveRoute(window.location.hash.substr(1))) {
-                    this.goToRoute(route.getHtmlName())
-                    route.evalFn()
-                    href?.parentElement!.classList.add('menu__open')
-                }
-            }
+            let name = window.location.hash.substr(1).replace('#', '')
+            let route = this.routes.get(name)
+            this.goToRoute(route?.getHtmlName()!)
+            route?.evalFn()
+            let href = document.querySelector(`[href="#${this.curPage}"]`)
+            href?.parentElement!.classList.remove('menu__open')
+            href = document.querySelector(`[href="#${route?.getName()}"]`)
+            href?.parentElement!.classList.add('menu__open')
+            this.curPage = route?.getName()!
         } else {
-            // Это бы оптимизировать
-            for (var i = 0, length = this.routes.length; i < length; i++) {
-                var route = this.routes[i]
-                let href = document.querySelector(`[href="#${route.getName()}"]`)
-                href?.parentElement!.classList.remove('menu__open')
-                if (route.getIsDefault()) {
-                    this.goToRoute(route.getHtmlName())
-                    route.evalFn()
-                    href?.parentElement!.classList.add('menu__open')
-                }
-            }
+            let route = this.routes.get('todo')
+            this.goToRoute(route?.getHtmlName()!)
+            route?.evalFn()
+            let href = document.querySelector(`[href="#${route?.getName()}"]`)
+            href?.parentElement!.classList.add('menu__open')
+            this.curPage = route?.getName()!
         }
     }
 
     public goToRoute(getHtmlName: string) {
-        ;(function (scope) {
+        ;(function (scope: Router) {
             var url = '../spa/views/' + getHtmlName,
                 xhttp = new XMLHttpRequest()
             xhttp.onreadystatechange = function () {

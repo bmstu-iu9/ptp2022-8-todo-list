@@ -1,12 +1,13 @@
-
-(function () {
+;(function () {
     function init() {
-        var router = new Router([
-            new Route('todo', 'todo.html',onTodoLoad, true),            
-            new Route('shop', 'shop.html', () => {}),
-            new Route('profile', 'profile_page.html', () => {}),
-            new Route('inventory', 'inventory.html', onInventoryLoad)
-        ]);
+        var router = new Router(
+            new Map<string, Route>([
+                ['todo', new Route('todo', 'todo.html', onTodoLoad, true)],
+                ['shop', new Route('shop', 'shop.html', () => {})],
+                ['profile', new Route('profile', 'profile_page.html', () => {})],
+                ['inventory', new Route('inventory', 'inventory.html', onInventoryLoad)],
+            ])
+        )
     }
-    init();
-}());
+    init()
+})()

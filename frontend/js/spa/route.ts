@@ -18,10 +18,6 @@ class Route {
         }
     }
 
-    public isActiveRoute(hashedPath: string): boolean {
-        return hashedPath.replace('#', '') === this.name
-    }
-
     public getHtmlName(): string {
         return this.htmlName
     }
