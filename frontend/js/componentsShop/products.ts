@@ -77,7 +77,7 @@ function alreadyBought(state: string): boolean {
 function buildingBuyButton(id: number, state: string): string {
     if (alreadyBought(state) === true) {
         return `
-            <button type="button" class="for__click btn btn-success idItem=${id}" data-bs-toggle="modal"
+            <button type="button" class="for__click btn btn-success disabled idItem=${id}" data-bs-toggle="modal"
                                 data-bs-target="#selling${id}" id="buttonBuy${id}">Куплено</button>
         `;
     }
@@ -103,6 +103,65 @@ sendRequest('GET', server + '/users/' + user).then((data) => {
 
 })
 
+// при нажатии на кнопку купить в модальном окне получается покупка
+
+const itemsCostShop = new Map<number, Item>();
+sendRequest('GET', server + '/items').then((data) => {
+    for (let i = 0; i < data.length; i++) {
+        const item: Item = data[i];
+        itemsCostShop.set(item.price, item);
+
+    }
+})
+
+document.addEventListener('click', (e) => {
+    const targetBuy = <HTMLElement>e.target;
+
+    if (hasParentClass(targetBuy, 'buyButton')) {
+        const costAndString: string = targetBuy.innerHTML;
+        const cost: number = parseInt(costAndString.replace(/\D+/g,""));
+        const itemBuy: Item = itemsCostShop.get(cost)!;
+
+        // получаем баланс
+        // получили предмет
+
+        const balanceShopForBuy: HTMLInputElement = <HTMLInputElement>document.getElementById('balance');
+        const balanceShopForBuyAndString: string = balanceShopForBuy.innerHTML;
+        let balanceBuy: number = parseInt(balanceShopForBuyAndString.replace(/\D+/g,""));
+
+        // меняем состояние
+        console.log(balanceBuy);
+        if (balanceBuy >= cost && itemBuy.state == 'store') {
+            balanceBuy -= cost;
+            itemBuy.state = 'inventoried';
+            // TODO: отправить на сервер новый баланс
+            // TODO: добавить на сервер в инвентарь предмет
+            console.log(balanceBuy);
+            console.log(itemBuy);
+        }
+        else if (balanceBuy >= cost && (itemBuy.state == 'inventoried' || itemBuy.state == 'equipped')) {
+            const footerBuy = <HTMLInputElement>document.getElementById('shopModalFooter');
+            if (<HTMLInputElement>document.getElementById('duplicateBuyShop') == undefined) {
+                footerBuy.innerHTML += `
+                <p id="duplicateBuyShop" class="text-warning text-center">
+                   Предмет уже куплен!
+                </p>
+                `;
+            }
+        }
+        else {
+            const footerBuy = <HTMLInputElement>document.getElementById('shopModalFooter');
+            if (<HTMLInputElement>document.getElementById('duplicateBuyShop') == undefined) {
+                footerBuy.innerHTML += `
+                <p id="duplicateBuyShop" class="text-danger">
+                   Недостаточно денег для покупки!
+                </p>
+                `;
+            }
+        }
+
+    }
+})
 
 // Получаю предметы пользователя (пока просто предметы)
 

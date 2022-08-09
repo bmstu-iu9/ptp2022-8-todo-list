@@ -11,7 +11,7 @@ type Item = {
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const itemsInventory = new Map<number, Item>();
+const itemsShop = new Map<number, Item>();
 
 type Rarity = 'common' | 'rare' | 'epic' | 'legendary';
 
@@ -46,7 +46,7 @@ const modalShop = new bootstrap.Modal(<HTMLFormElement>document.getElementById('
 sendRequest('GET', server + '/items').then((data) => {
     for (let i = 0; i < data.length; i++) {
         const item: Item = data[i];
-        itemsInventory.set(item.id, item);
+        itemsShop.set(item.id, item);
 
     }
 })
@@ -64,13 +64,11 @@ document.addEventListener('click', (e) => {
     const strId = findID(target, regexp);
     const id = parseInt(strId?.substring(7));
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const item = itemsInventory.get(id)!;
-    console.log(itemsInventory);
+    const item = itemsShop.get(id)!;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     if (hasParentClass(target, 'for__click')) {
         // просмотр описания карты
-
         const windowForm = <HTMLElement>document.getElementsByClassName('shop__form')[0];
         const buf = (<HTMLElement>document.getElementsByClassName(`idItem=${id}`)[0]).getBoundingClientRect();
 
@@ -78,7 +76,7 @@ document.addEventListener('click', (e) => {
         windowForm.style.top = `${buf.y}px`;
         windowForm.style.left = `calc(${buf.x}px - 1vw - 1.4rem)`;
         windowForm.style.width = `calc(${buf.right - buf.x}px + 2vw + 2.8rem)`;
-        windowForm.style.borderColor = `${getRarityColor('common')}`;
+        windowForm.style.borderColor = `${getRarityColor(item.color)}`;
         modalShop.show();
 
         const titleModal = <HTMLInputElement>document.getElementById('ShopModalTitle');
@@ -95,7 +93,7 @@ document.addEventListener('click', (e) => {
 
         const footer = <HTMLInputElement>document.getElementById('shopModalFooter');
         footer.innerHTML = `
-            <button type="button" class="btn btn-primary btn-lg">
+            <button type="button" class="buyButton btn btn-primary btn-lg">
                 Купить за ${item.price} todoкоинов?
             </button>
         `;
