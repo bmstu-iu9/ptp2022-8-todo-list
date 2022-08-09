@@ -18,7 +18,7 @@ func AuthCheck(next httprouter.Handle) httprouter.Handle {
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
-		isTokenValid := validateAccessToken(accessToken)
+		isTokenValid := ValidateAccessToken(accessToken)
 		if !isTokenValid {
 			w.WriteHeader(http.StatusUnauthorized)
 			return

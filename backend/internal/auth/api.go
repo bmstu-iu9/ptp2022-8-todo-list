@@ -26,19 +26,18 @@ type resource struct {
 func (res *resource) handleLog(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
 	data := LoginUserRequest{}
 	err := json.NewDecoder(r.Body).Decode(&data)
-	user, tokens, err := res.service.Login(data.Email, data.Password)
+	userData, err := res.service.Login(data)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return err
 	}
 	http.SetCookie(w, &http.Cookie{
 		Name:     "refreshToken",
-		Value:    tokens.RefreshToken,
+		Value:    userData.Tokens.RefreshToken,
 		Expires:  time.Now().Add(30 * 24 * time.Hour),
 		HttpOnly: true,
 	})
-	err = json.NewEncoder(w).Encode(user)
-	err = json.NewEncoder(w).Encode(tokens)
+	err = json.NewEncoder(w).Encode(userData)
 	if err != nil {
 		return err
 	}
@@ -83,19 +82,18 @@ func (res *resource) handleRefresh(w http.ResponseWriter, r *http.Request, p htt
 		return err
 	}
 	refreshToken := cookie.Value
-	user, tokens, err := res.service.Refresh(refreshToken)
+	userData, err := res.service.Refresh(refreshToken)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		return err
 	}
 	http.SetCookie(w, &http.Cookie{
 		Name:     "refreshToken",
-		Value:    tokens.RefreshToken,
+		Value:    userData.Tokens.RefreshToken,
 		Expires:  time.Now().Add(30 * 24 * time.Hour),
 		HttpOnly: true,
 	})
-	err = json.NewEncoder(w).Encode(user)
-	err = json.NewEncoder(w).Encode(tokens)
+	err = json.NewEncoder(w).Encode(userData)
 	if err != nil {
 		return err
 	}

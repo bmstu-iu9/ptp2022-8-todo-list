@@ -13,10 +13,9 @@ const JWT_ACCESS_SECRET = "secret-key"
 const JWT_REFRESH_SECRET = "refresh-key"
 
 type Service interface {
-	SaveRefreshToken(userId int, refreshToken string) error
-	Login(email entity.Email, password entity.Password) (entity.UserDto, Token, error)
+	Login(input LoginUserRequest) (UserData, error)
 	Logout(refreshToken string) error
-	Refresh(refreshToken string) (entity.UserDto, Token, error)
+	Refresh(refreshToken string) (UserData, error)
 }
 
 type service struct {
@@ -41,58 +40,62 @@ type LoginUserRequest struct {
 	Email    entity.Email    `json:"email"`
 	Password entity.Password `json:"password"`
 }
+type UserData struct {
+	User   entity.UserDto
+	Tokens Token
+}
 
 type Claims struct {
 	Email entity.Email
 	jwt.RegisteredClaims
 }
 
-func (s service) Login(email entity.Email, password entity.Password) (entity.UserDto, Token, error) {
-	entityUser, err := s.repo.GetUser(email, -1)
+func (s service) Login(input LoginUserRequest) (UserData, error) {
+	entityUser, err := s.repo.GetUser(input.Email, -1)
 	if err != nil {
-		return entity.UserDto{}, Token{}, errors.New("user not found")
+		return UserData{}, errors.New("user not found")
 	}
-	isPassEquals := entityUser.Password == *entity.NewPassword(fmt.Sprintf("%x", md5.Sum([]byte(password))))
+	isPassEquals := entityUser.Password == *entity.NewPassword(fmt.Sprintf("%x", md5.Sum([]byte(input.Password))))
 	if !isPassEquals {
-		return entity.UserDto{}, Token{}, errors.New("incorrect password")
+		return UserData{}, errors.New("incorrect password")
 	}
 	user := entity.NewUserDto(entityUser)
-	tokens, err := GenerateTokens(user.Email)
+	tokens, err := generateTokens(user.Email)
 	if err != nil {
-		return entity.UserDto{}, Token{}, err
+		return UserData{}, err
 	}
-	err = s.SaveRefreshToken(int(user.Id), tokens.RefreshToken)
-	return user, tokens, err
+	err = s.saveRefreshToken(int(user.Id), tokens.RefreshToken)
+	return UserData{user, tokens}, err
 }
 
 func (s service) Logout(refreshToken string) error {
 	return s.repo.DeleteToken(refreshToken)
 }
 
-func (s service) Refresh(refreshToken string) (entity.UserDto, Token, error) {
+func (s service) Refresh(refreshToken string) (UserData, error) {
 	if refreshToken == "" {
-		return entity.UserDto{}, Token{}, errors.New("no token")
+		return UserData{}, errors.New("no token")
 	}
-	isTokenValid := validateRefreshToken(refreshToken)
-	tokenFromDb, err := s.repo.GetToken(refreshToken)
+	isTokenValid := ValidateRefreshToken(refreshToken)
+	tokenFromDb, err := s.repo.GetToken(refreshToken, -1)
 	if !isTokenValid || err != nil {
-		return entity.UserDto{}, Token{}, errors.New("wrong token")
+		return UserData{}, errors.New("wrong token")
 	}
 	entityUser, err := s.repo.GetUser("", tokenFromDb.userId)
 	if err != nil {
-		return entity.UserDto{}, Token{}, err
+		return UserData{}, err
 	}
 	user := entity.NewUserDto(entityUser)
-	tokens, err := GenerateTokens(user.Email)
+	tokens, err := generateTokens(user.Email)
 	if err != nil {
-		return entity.UserDto{}, Token{}, err
+		return UserData{}, err
 	}
-	err = s.SaveRefreshToken(int(user.Id), tokens.RefreshToken)
-	return user, tokens, err
+	err = s.saveRefreshToken(int(user.Id), tokens.RefreshToken)
+	return UserData{user, tokens}, err
 }
 
-func (s service) SaveRefreshToken(userId int, refreshToken string) error {
-	_, err := s.repo.GetToken(refreshToken)
+func (s service) saveRefreshToken(userId int, refreshToken string) error {
+	_, err := s.repo.GetToken("", userId)
 	if err == nil {
 		err = s.repo.UpdateToken(userId, refreshToken)
 		if err != nil {
@@ -107,7 +110,7 @@ func (s service) SaveRefreshToken(userId int, refreshToken string) error {
 	return nil
 }
 
-func GenerateTokens(email entity.Email) (Token, error) {
+func generateTokens(email entity.Email) (Token, error) {
 	claims := &Claims{
 		Email: email,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -128,7 +131,7 @@ func GenerateTokens(email entity.Email) (Token, error) {
 	return Token{AccessToken: accessTokenString, RefreshToken: refreshTokenString}, nil
 }
 
-func validateAccessToken(accessToken string) bool {
+func ValidateAccessToken(accessToken string) bool {
 	claims := &Claims{}
 	token, err := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (interface{}, error) {
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
@@ -143,7 +146,7 @@ func validateAccessToken(accessToken string) bool {
 	return token != nil
 }
 
-func validateRefreshToken(refreshToken string) bool {
+func ValidateRefreshToken(refreshToken string) bool {
 	claims := &Claims{}
 	token, err := jwt.ParseWithClaims(refreshToken, claims, func(token *jwt.Token) (interface{}, error) {
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
