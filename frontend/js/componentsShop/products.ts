@@ -36,7 +36,7 @@ class Products {
                 <div class="col idItem=${id}">
                     <div class="card h-100">
                         <img src="http://grechkogv.ru:3000/assets/${imageSrc}" class="card-img-top" alt="...">
-                        <div class="card-body" style="background: ${color(rarity)}">
+                        <div class="card-body" style="background: ${getRarityColor(rarity)}">
                             <h5 class="card-title">${name}</h5>
                                 <p class="card-text">${description}</p>
                         </div>
@@ -61,14 +61,6 @@ class Products {
 const productsPage = new Products();
 
 let CATALOG_SHOP = [];
-
-function color(rarity: string): string {
-    if (rarity === "common") return "#C8C8C8";
-    else if (rarity === 'rare') return "#FFB74D";
-    else if (rarity === 'epic') return "#26A69A";
-    else if (rarity === 'legendary') return "#F06292";
-    return "linear-gradient(#40E0D0, #FF8C00, #FF0080)";
-}
 
 function alreadyBought(state: string): boolean {
     return state === 'inventoried' || state === 'equipped';
@@ -98,8 +90,6 @@ function buildingBuyButton(id: number, state: string): string {
 // для примера возьмем первого
 const user = 0;
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 sendRequest('GET', server + '/users/' + user).then((data) => {
     const balance: number = data.balance;
     const balanceShop = <HTMLInputElement>document.getElementById('balance');
@@ -138,8 +128,8 @@ document.addEventListener('click', (e) => {
         if (balanceBuy >= cost && itemBuy.state == 'store') {
             balanceBuy -= cost;
             itemBuy.state = 'inventoried';
-            // TODO: отправить на сервер новый баланс
-            // TODO: добавить на сервер в инвентарь предмет
+            sendRequest('PATCH', server + '/users/' + user, JSON.stringify({ balance: balanceBuy }))
+            sendRequest('PATCH', server + `/items/${itemBuy.id}`, JSON.stringify({ state: itemBuy.state }))
             console.log(balanceBuy);
             console.log(itemBuy);
         }

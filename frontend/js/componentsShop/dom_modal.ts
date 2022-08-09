@@ -1,48 +1,13 @@
-type Item = {
-    id: number;
-    name: string;
-    imageSrc: string;
-    description: string;
-    price: number;
-    category: Category;
-    rarity: Rarity;
-    state: ItemState;
-}
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 const itemsShop = new Map<number, Item>();
-
-type Rarity = 'common' | 'rare' | 'epic' | 'legendary';
-
-function getRarityColor(rarity: Rarity): string {
-    switch (rarity) {
-        case 'common':
-            return '#C8C8C8';
-        case 'rare':
-            return '#0b9ccf';
-        case 'epic':
-            return '#d461f7';
-        case 'legendary':
-            return '#ff9c00';
-        default:
-            return 'linear-gradient(#40E0D0, #91e047, #fff456, #fff456, #ffa856, #e64f4f)';
-    }
-}
-
-type ItemState = 'store' | 'equipped' | 'inventoried';
-type Category = 'helmet' | 'chest' | 'leggins' | 'boots' | 'weapon' | 'pet' | 'skin';
 
 // Создание динамического модального окна
 
 // модальная форма просмотра описания карты
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+
 const modalShop = new bootstrap.Modal(<HTMLFormElement>document.getElementById('shopModal'));
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+
 sendRequest('GET', server + '/items').then((data) => {
     for (let i = 0; i < data.length; i++) {
         const item: Item = data[i];
@@ -59,14 +24,11 @@ document.addEventListener('click', (e) => {
     const target = <HTMLElement>e.target;
     // получение из хранилища предмета, на карту которого кликнули
     const regexp = /idItem=\d+/;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+
     const strId = findID(target, regexp);
     const id = parseInt(strId?.substring(7));
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const item = itemsShop.get(id)!;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+
     if (hasParentClass(target, 'for__click')) {
         // просмотр описания карты
         const windowForm = <HTMLElement>document.getElementsByClassName('shop__form')[0];
@@ -74,11 +36,9 @@ document.addEventListener('click', (e) => {
 
         // делать по центру одинаково
         windowForm.style.width = `calc(${buf.right - buf.x}*1.2px + 3vw + 3.8rem)`;
-        windowForm.style.borderColor = `${getRarityColor(item.color)}`;
         modalShop.show();
 
         const titleModal = <HTMLInputElement>document.getElementById('ShopModalTitle');
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         titleModal.innerHTML = item.name!
 
         const description = <HTMLInputElement>document.getElementById('shopModalBody');
