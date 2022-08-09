@@ -351,8 +351,8 @@ document.addEventListener('click', (e) => {
         if (openUl('sort__form__category', 'show', 'sort__search', 'sort__list-category'))
             target.setAttribute("placeholder", "Категории")
     } else if (!(target.matches('.dropbtn') ||
-        document.getElementsByClassName('sort__list-category')[0].contains(target)) &&
-        (<HTMLDivElement>document.getElementById('sort__form__category')).classList.contains('show')) {
+        document.getElementsByClassName('sort__list-category')[0]?.contains(target)) &&
+        (<HTMLDivElement>document.getElementById('sort__form__category'))?.classList.contains('show')) {
         //сворачивание списка лейблов в сортировке задач по лейблам
         closeUl('dropbtn', 'sort__form__category', 'sort__list-category', 'sort__search', 'show')
     } else if (target.classList.contains('dropbtn1')) {
@@ -361,8 +361,8 @@ document.addEventListener('click', (e) => {
         if (openUl('form__category', 'show1', 'add-task__search', 'list-category'))
             target.setAttribute("placeholder", "Выбрать категорию")
     } else if (!(target.matches('.dropbtn1') ||
-        document.getElementById('form__category')!.contains(target)) &&
-        (<HTMLDivElement>document.getElementById('form__category')).classList.contains('show1')) {
+        document.getElementById('form__category')?.contains(target)) &&
+        (<HTMLDivElement>document.getElementById('form__category'))?.classList.contains('show1')) {
         // сворачивание списка лейблов в создании задачи
         closeUl('dropbtn1', 'form__category', 'list-category', 'add-task__search', 'show1')
     }
@@ -375,7 +375,7 @@ document.addEventListener('click', (e) => {
     } else if (!target.matches('.dropbtn2') &&
         document.getElementsByClassName('edit__list-category').length != 0 &&
         !document.getElementById('form-edit__category')!.contains(target) &&
-        (<HTMLDivElement>document.getElementById('form-edit__category')).classList.contains('show1')) {
+        (<HTMLDivElement>document.getElementById('form-edit__category'))?.classList.contains('show1')) {
         // сворачивание списка лейблов в редактировании задачи
         closeUl('dropbtn2', 'form-edit__category', 'edit__list-category', 'edit__search', 'show1')
     }
