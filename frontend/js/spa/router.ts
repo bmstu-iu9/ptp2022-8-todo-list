@@ -41,9 +41,12 @@ class Router {
             // Это бы оптимизировать
             for (var i = 0, length = this.routes.length; i < length; i++) {
                 var route = this.routes[i]
+                let href = document.querySelector(`[href="#${route.getName()}"]`)
+                href?.parentElement!.classList.remove('menu__open')
                 if (route.getIsDefault()) {
                     this.goToRoute(route.getHtmlName())
                     route.evalFn()
+                    href?.parentElement!.classList.add('menu__open')
                 }
             }
         }
