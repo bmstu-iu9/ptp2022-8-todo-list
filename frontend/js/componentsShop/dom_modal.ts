@@ -73,9 +73,7 @@ document.addEventListener('click', (e) => {
         const buf = (<HTMLElement>document.getElementsByClassName(`idItem=${id}`)[0]).getBoundingClientRect();
 
         // делать по центру одинаково
-        windowForm.style.top = `${buf.y}px`;
-        windowForm.style.left = `calc(${buf.x}px - 1vw - 1.4rem)`;
-        windowForm.style.width = `calc(${buf.right - buf.x}px + 2vw + 2.8rem)`;
+        windowForm.style.width = `calc(${buf.right - buf.x}*1.2px + 3vw + 3.8rem)`;
         windowForm.style.borderColor = `${getRarityColor(item.color)}`;
         modalShop.show();
 

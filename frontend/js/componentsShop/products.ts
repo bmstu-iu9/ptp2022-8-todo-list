@@ -78,13 +78,17 @@ function buildingBuyButton(id: number, state: string): string {
     if (alreadyBought(state) === true) {
         return `
             <button type="button" class="for__click btn btn-success disabled idItem=${id}" data-bs-toggle="modal"
-                                data-bs-target="#selling${id}" id="buttonBuy${id}">Куплено</button>
+                                data-bs-target="#selling${id}" id="buttonBuy${id}"
+                                style="border-radius: 0 0 3px 3px;">
+                                Куплено</button>
         `;
     }
     else {
         return `
             <button type="button" class="for__click btn btn-primary idItem=${id}" data-bs-toggle="modal"
-                                data-bs-target="#selling${id}">Купить</button>
+                                data-bs-target="#selling${id}"
+                                style="border-radius: 0 0 3px 3px;">
+                                Купить</button>
         `;
     }
 }
