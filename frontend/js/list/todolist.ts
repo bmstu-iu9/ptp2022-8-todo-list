@@ -445,14 +445,6 @@ function generateExample(): void {
 
 // Отдельные обработчики событий
 
-const btn = <HTMLButtonElement>document.querySelector('#btn')
-
-btn.addEventListener('click', function () {
-    modal.show()
-    let colorInput = <HTMLInputElement>document.getElementById('color__category')
-    colorInput.value = '#' + Math.random().toString(16).slice(-6)
-})
-
 // Работа с локальным хранилищем
 
 function saveAll() {
