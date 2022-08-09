@@ -1,5 +1,5 @@
 // модальная форма просмотра описания карты
-const modalInventory = new bootstrap.Modal(<HTMLFormElement>document.getElementById('inventoryModal'))
+let modalInventory: any
 // хранилище предметов
 var itemsInventory = new Map<number, Item>()
 // хранилище айди надетых предметов по категориям(если предмет какой-то категории не надет, то значение -1)
@@ -13,25 +13,29 @@ let Equipped = {
     skin: -1,
 }
 
-// получение предметов с сервера
-sendRequest('GET', server + '/items').then((data) => {
-    for (let i = 0; i < data.length; i++) {
-        let item: Item = data[i]
-        if (item.state !== 'store') {
-            toInventoryHTMLBlock(item)
-            itemsInventory.set(item.id, item)
-            if (item.state === 'equipped') {
-                equipped(item)
+function onInventoryLoad() {
+    modalInventory = new bootstrap.Modal(<HTMLFormElement>document.getElementById('inventoryModal'))
+    // получение предметов с сервера
+    sendRequest('GET', server + '/items').then((data) => {
+        for (let i = 0; i < data.length; i++) {
+            let item: Item = data[i]
+            if (item.state !== 'store') {
+                toInventoryHTMLBlock(item)
+                itemsInventory.set(item.id, item)
+                if (item.state === 'equipped') {
+                    equipped(item)
+                }
             }
         }
-    }
-    if (Equipped.skin !== -1) {
-        let userImg = document.getElementById('inventory__user-img')
-        let id = Equipped.skin
-        let item = itemsInventory.get(id)!
-        //userImg!.setAttribute('src', `https://wg.grechkogv.ru/assets/${item.imageSrc}`)
-    }
-})
+        if (Equipped.skin !== -1) {
+            let userImg = document.getElementById('inventory__user-img')
+            let id = Equipped.skin
+            let item = itemsInventory.get(id)!
+            //userImg!.setAttribute('src', `https://wg.grechkogv.ru/assets/${item.imageSrc}`)
+        }
+    })
+
+}
 
 // Общая обработка кликов по странице
 document.addEventListener('click', (e) => {

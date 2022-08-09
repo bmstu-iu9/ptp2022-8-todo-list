@@ -7,30 +7,42 @@ var tasks = new Map<number, Task>()
 // Текущее хранилище лейблов
 var labels = new Map<number, Label>()
 // модальная форма ввода задачи
-const modal = new bootstrap.Modal(<HTMLFormElement>document.getElementById('modal'))
+var modal : any
 // модальная форма редактирования задачи
-const modalEditor = new bootstrap.Modal(<HTMLFormElement>document.getElementById('modal__editor'))
+var modalEditor : any
 
-// Получение лейблов с сервера
-sendRequest('GET', server + '/labels').then((data) => {
-    for (let i = 0; i < data.length; i++) {
-        labels.set(lbl_id++, data[i])
-    }
-})
+var btn: HTMLButtonElement
 
-// Получение задач с сервера
-sendRequest('GET', server + '/tasks').then((data) => {
-    for (let i = 0; i < data.length; i++) {
-        let buf = data[i]
-        let newTask = new Task(buf.id, buf.name, buf.description, buf.dueDate, buf.labels, false)
-        newTask.setStatus(buf.status, false)
-        tasks.set(buf.id, newTask)
-        if (newTask.getStatus() === 'active' || newTask.getStatus() === 'completed') {
-            newTask.toHTMLBlock()
+function onTodoLoad() {
+    modal = new bootstrap.Modal(<HTMLFormElement>document.getElementById('modal'))
+    modalEditor = new bootstrap.Modal(<HTMLFormElement>document.getElementById('modal__editor'))
+    btn = <HTMLButtonElement>document.querySelector('#btn')
+
+    btn.addEventListener('click', function () {
+        modal.show()
+    })
+
+        // Получение лейблов с сервера
+    sendRequest('GET', server + '/labels').then((data) => {
+        for (let i = 0; i < data.length; i++) {
+            labels.set(lbl_id++, data[i])
         }
-        glob_id = buf.id + 1
-    }
-})
+    })
+
+    // Получение задач с сервера
+    sendRequest('GET', server + '/tasks').then((data) => {
+        for (let i = 0; i < data.length; i++) {
+            let buf = data[i]
+            let newTask = new Task(buf.id, buf.name, buf.description, buf.dueDate, buf.labels, false)
+            newTask.setStatus(buf.status, false)
+            tasks.set(buf.id, newTask)
+            if (newTask.getStatus() === 'active' || newTask.getStatus() === 'completed') {
+                newTask.toHTMLBlock()
+            }
+            glob_id = buf.id + 1
+        }
+    })
+}
 
 // Общая обработка кликов по странице
 document.addEventListener('click', (e) => {
@@ -300,12 +312,6 @@ function generateExample(): void {
 }
 
 // Отдельные обработчики событий
-
-const btn = <HTMLButtonElement>document.querySelector('#btn')
-
-btn.addEventListener('click', function () {
-    modal.show()
-})
 
 // Работа с локальным хранилищем
 
