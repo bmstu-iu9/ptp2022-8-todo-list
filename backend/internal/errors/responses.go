@@ -69,3 +69,17 @@ func Forbidden(w http.ResponseWriter, logger log.Logger) {
 		return
 	}
 }
+
+func Unauthorized(w http.ResponseWriter, logger log.Logger) {
+	w.WriteHeader(http.StatusUnauthorized)
+	w.Header().Set("Content-Type", "application/json")
+	err := json.NewEncoder(w).Encode(Problem{
+		Title:  "Unauthorized",
+		Status: http.StatusUnauthorized,
+	})
+	if err != nil {
+		logger.Info(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+}

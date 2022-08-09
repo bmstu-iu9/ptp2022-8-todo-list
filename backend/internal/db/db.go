@@ -41,6 +41,9 @@ INSERT INTO users(email, nickname, password)
 VALUES('test@example.com', 'test', 'bd73d8db35a186a62c081da14526866c'),
        ('test2@example.com', 'test2', 'bd73d8db35a186a62c081da14526866c');
 `)
+	if err != nil {
+		return nil, err
+	}
 	_, err = db.Exec(`
 DROP TABLE IF EXISTS tokens;
 CREATE TABLE tokens (
@@ -51,6 +54,5 @@ CREATE TABLE tokens (
 INSERT INTO tokens(user_id, token)
 VALUES(1,'token');
 `)
-
 	return db, err
 }

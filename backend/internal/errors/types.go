@@ -10,4 +10,7 @@ var (
 	ErrBodyDecode    = errors.New("body decode failed")
 	ErrBodyEncode    = errors.New("body encode failed")
 	ErrPathParameter = errors.New("path parameter error")
+	ErrLoginFailed   = errors.New("login failed")
+	ErrLogoutFailed  = errors.New("logout failed")
+	ErrUnauthorized  = errors.New("user is unauthorized")
 )

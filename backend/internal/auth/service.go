@@ -32,8 +32,8 @@ type Token struct {
 }
 
 type DbToken struct {
-	userId       int    `json:"user_id"`
-	refreshToken string `json:"refresh_token"`
+	userId       int
+	refreshToken string
 }
 
 type LoginUserRequest struct {

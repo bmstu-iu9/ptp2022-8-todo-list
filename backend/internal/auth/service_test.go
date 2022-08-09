@@ -29,7 +29,7 @@ type LoginTestCase struct {
 
 func TestAuthService(t *testing.T) {
 	tokens, _ := generateTokens("slava@example.com")
-	s := service{mockRepository{
+	s := service{&mockRepository{
 		users: []entity.User{
 			{
 				Id:       0,
@@ -199,7 +199,7 @@ func (m mockRepository) UpdateToken(userId int, newRefreshToken string) error {
 	return errors.New("smth wrong")
 }
 
-func (m mockRepository) CreateToken(userId int, refreshToken string) error {
+func (m *mockRepository) CreateToken(userId int, refreshToken string) error {
 	m.tokens = append(m.tokens, DbToken{
 		userId:       userId,
 		refreshToken: refreshToken,

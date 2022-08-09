@@ -55,13 +55,13 @@ func TestCRUD(t *testing.T) {
 		{
 			Name:  "get OK",
 			Input: GetTestCase{0},
-			Want:  entity.UserDto{0, "slava@example.com", "slavaruswarrior"},
+			Want:  entity.UserDto{Email: "slava@example.com", Nickname: "slavaruswarrior"},
 			IsOK:  true,
 		},
 		{
 			Name:  "get OK",
 			Input: GetTestCase{5},
-			Want:  entity.UserDto{5, "geogreck@example.com", "geogreck"},
+			Want:  entity.UserDto{Id: 5, Email: "geogreck@example.com", Nickname: "geogreck"},
 			IsOK:  true,
 		},
 		{
@@ -95,7 +95,7 @@ func TestCRUD(t *testing.T) {
 		{
 			Name:  "create validate",
 			Input: GetTestCase{6},
-			Want:  entity.UserDto{6, "stewkk@example.com", "stewkk"},
+			Want:  entity.UserDto{Id: 6, Email: "stewkk@example.com", Nickname: "stewkk"},
 			IsOK:  true,
 		},
 		{
@@ -119,7 +119,7 @@ func TestCRUD(t *testing.T) {
 		{
 			Name:  "delete OK",
 			Input: DeleteTestCase{5},
-			Want:  entity.UserDto{5, "geogreck@example.com", "geogreck"},
+			Want:  entity.UserDto{Id: 5, Email: "geogreck@example.com", Nickname: "geogreck"},
 			IsOK:  true,
 		},
 		{

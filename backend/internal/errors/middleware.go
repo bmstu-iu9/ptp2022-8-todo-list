@@ -34,10 +34,12 @@ func errorResponse(w http.ResponseWriter, err error, logger log.Logger) {
 	case errors.Is(err, ErrNotFound):
 		NotFound(w, logger)
 	case errors.Is(err, ErrValidation) ||
-		errors.Is(err, ErrBodyDecode):
+		errors.Is(err, ErrBodyDecode) || errors.Is(err, ErrLoginFailed) || errors.Is(err, ErrLogoutFailed):
 		BadRequest(w, logger)
 	case errors.Is(err, ErrWrongPassword):
 		Forbidden(w, logger)
+	case errors.Is(err, ErrUnauthorized):
+		Unauthorized(w, logger)
 	default:
 		UnexpectedError(w, logger)
 	}
