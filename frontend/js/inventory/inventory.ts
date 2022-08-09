@@ -37,6 +37,10 @@ function onInventoryLoad() {
 
 }
 
+try {
+    onInventoryLoad()
+} catch (error) {}
+
 // Общая обработка кликов по странице
 document.addEventListener('click', (e) => {
     const target = <HTMLElement>e.target

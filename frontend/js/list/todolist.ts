@@ -9,22 +9,26 @@ var labels = new Map<number, Label>()
 // Хранилище айди лейблов для сортировки
 var sortLabels = new Map<number, boolean>()
 // модальная форма ввода задачи
-var modal : any
+var modal: any
 // модальная форма редактирования задачи
-var modalEditor : any
+var modalEditor: any
 
 var btn: HTMLButtonElement
 
 function onTodoLoad() {
+    glob_id = 0
+    lbl_id = 0
     modal = new bootstrap.Modal(<HTMLFormElement>document.getElementById('modal'))
     modalEditor = new bootstrap.Modal(<HTMLFormElement>document.getElementById('modal__editor'))
     btn = <HTMLButtonElement>document.querySelector('#btn')
 
     btn.addEventListener('click', function () {
         modal.show()
+        let colorInput = <HTMLInputElement>document.getElementById('color__category')
+        colorInput.value = '#' + Math.random().toString(16).slice(-6)
     })
 
-        // Получение лейблов с сервера
+    // Получение лейблов с сервера
     sendRequest('GET', server + '/labels').then((data) => {
         for (let i = 0; i < data.length; i++) {
             labels.set(lbl_id++, data[i])
@@ -38,13 +42,18 @@ function onTodoLoad() {
             let newTask = new Task(buf.id, buf.name, buf.description, buf.dueDate, buf.labels, false)
             newTask.setStatus(buf.status, false)
             tasks.set(buf.id, newTask)
-            if (newTask.getStatus() === 'active' || newTask.getStatus() === 'completed') {
+            if (newTask.getStatus() === 'active') {
                 newTask.toHTMLBlock()
             }
             glob_id = buf.id + 1
         }
     })
+    
 }
+
+try {
+    onTodoLoad()
+} catch (error) {}
 
 // Общая обработка кликов по странице
 document.addEventListener('click', (e) => {
@@ -170,8 +179,7 @@ document.addEventListener('click', (e) => {
             if (hours || minutes) {
                 timeBoxInfo.value = buf?.getDueDate().toTimeString()!.substring(0, 5)!
             }
-        }
-        else {
+        } else {
             dateBoxInfo.value = ''
             timeBoxInfo.value = ''
         }
@@ -179,7 +187,7 @@ document.addEventListener('click', (e) => {
         fileInfo.value = ''
         let taskLabels = <Array<Label>>buf!.getLabels()
         let container = document.getElementsByClassName('chosen__categories')[1]
-        taskLabels.length === 0 ? container.innerHTML = 'Категории отсутствуют' : container.innerHTML = ''
+        taskLabels.length === 0 ? (container.innerHTML = 'Категории отсутствуют') : (container.innerHTML = '')
         for (let i = 0; i < taskLabels.length; i++) {
             let lbl = taskLabels[i]
             container.innerHTML =
@@ -214,7 +222,7 @@ document.addEventListener('click', (e) => {
         let taskLabels = container.children
         let btnCloseLbl = document.getElementsByClassName('btn-close-lbl-edit')
         for (let i = 0; i < btnCloseLbl.length; i++) {
-            (<HTMLElement>btnCloseLbl[i]).style.display = 'block'
+            ;(<HTMLElement>btnCloseLbl[i]).style.display = 'block'
         }
         for (let i = 0; i < taskLabels.length; i++) {
             let lbl = taskLabels[i]
@@ -291,7 +299,6 @@ document.addEventListener('click', (e) => {
         makeLabel(colorInput!.value, textInput.value, 'list-category', 0)
         textInput.value = ''
         colorInput.value = '#' + Math.random().toString(16).slice(-6)
-
     } else if (hasParentClass(target, 'edit__add-lbl')) {
         // создание лейбла в форме редактирования задачи
         let textInput = <HTMLInputElement>document.getElementById('edit__name__category')
@@ -316,7 +323,7 @@ document.addEventListener('click', (e) => {
         let list = <HTMLUListElement>document.getElementById('todolist')
         list.innerHTML = ''
         tasks.forEach((task) => {
-            if ((task.getStatus() === status || status === 'all')) {
+            if (task.getStatus() === status || status === 'all') {
                 if (sortLabels.size === 0) {
                     task.toHTMLBlock()
                 } else {
@@ -337,9 +344,8 @@ document.addEventListener('click', (e) => {
         list.innerHTML = ''
         let flt = <HTMLSelectElement>document.getElementsByClassName('stage')[0]
         let status = flt.selectedOptions[0].value
-        tasks.forEach(task => {
-            if (task.getStatus() === status || status === 'all')
-                task.toHTMLBlock()
+        tasks.forEach((task) => {
+            if (task.getStatus() === status || status === 'all') task.toHTMLBlock()
         })
         let elem = <HTMLDivElement>document.getElementById('sort__form__category')
         elem.classList.remove('show')
@@ -347,35 +353,37 @@ document.addEventListener('click', (e) => {
         ul.innerHTML = ''
     } else if (target.classList.contains('dropbtn')) {
         //выпадающий список лейблов в сортировке
-        target.setAttribute("placeholder", "Поиск")
+        target.setAttribute('placeholder', 'Поиск')
         if (openUl('sort__form__category', 'show', 'sort__search', 'sort__list-category'))
-            target.setAttribute("placeholder", "Категории")
-    } else if (!(target.matches('.dropbtn') ||
-        document.getElementsByClassName('sort__list-category')[0]?.contains(target)) &&
-        (<HTMLDivElement>document.getElementById('sort__form__category'))?.classList.contains('show')) {
+            target.setAttribute('placeholder', 'Категории')
+    } else if (
+        !(target.matches('.dropbtn') || document.getElementsByClassName('sort__list-category')[0]?.contains(target)) &&
+        (<HTMLDivElement>document.getElementById('sort__form__category'))?.classList.contains('show')
+    ) {
         //сворачивание списка лейблов в сортировке задач по лейблам
         closeUl('dropbtn', 'sort__form__category', 'sort__list-category', 'sort__search', 'show')
     } else if (target.classList.contains('dropbtn1')) {
         // выпадающий список лейблов в создании задачи
-        target.setAttribute("placeholder", "Поиск")
+        target.setAttribute('placeholder', 'Поиск')
         if (openUl('form__category', 'show1', 'add-task__search', 'list-category'))
-            target.setAttribute("placeholder", "Выбрать категорию")
-    } else if (!(target.matches('.dropbtn1') ||
-        document.getElementById('form__category')?.contains(target)) &&
-        (<HTMLDivElement>document.getElementById('form__category'))?.classList.contains('show1')) {
+            target.setAttribute('placeholder', 'Выбрать категорию')
+    } else if (
+        !(target.matches('.dropbtn1') || document.getElementById('form__category')?.contains(target)) &&
+        (<HTMLDivElement>document.getElementById('form__category'))?.classList.contains('show1')
+    ) {
         // сворачивание списка лейблов в создании задачи
         closeUl('dropbtn1', 'form__category', 'list-category', 'add-task__search', 'show1')
-    }
-    else if (target.classList.contains('dropbtn2')) {
+    } else if (target.classList.contains('dropbtn2')) {
         // выпадающий список лейблов в редактировании задачи
-        target.setAttribute("placeholder", "Поиск")
+        target.setAttribute('placeholder', 'Поиск')
         if (openUl('form-edit__category', 'show1', 'edit__search', 'edit__list-category'))
-            target.setAttribute("placeholder", "Выбрать категорию")
-
-    } else if (!target.matches('.dropbtn2') &&
+            target.setAttribute('placeholder', 'Выбрать категорию')
+    } else if (
+        !target.matches('.dropbtn2') &&
         document.getElementsByClassName('edit__list-category').length != 0 &&
         !document.getElementById('form-edit__category')!.contains(target) &&
-        (<HTMLDivElement>document.getElementById('form-edit__category'))?.classList.contains('show1')) {
+        (<HTMLDivElement>document.getElementById('form-edit__category'))?.classList.contains('show1')
+    ) {
         // сворачивание списка лейблов в редактировании задачи
         closeUl('dropbtn2', 'form-edit__category', 'edit__list-category', 'edit__search', 'show1')
     }
@@ -392,7 +400,7 @@ document.addEventListener('change', (e) => {
         let ul = <HTMLUListElement>document.getElementById('todolist')
         ul.innerHTML = ''
         tasks.forEach((task) => {
-            if ((task.getStatus() === status || status === 'all')) {
+            if (task.getStatus() === status || status === 'all') {
                 if (sortLabels.size === 0) {
                     task.toHTMLBlock()
                 } else {
