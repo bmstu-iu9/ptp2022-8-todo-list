@@ -5,6 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"github.com/julienschmidt/httprouter"
 	. "gopkg.in/check.v1"
 )
@@ -12,6 +13,7 @@ import (
 type PingTestSuite struct{
 	mux *httprouter.Router
 	writer *httptest.ResponseRecorder
+	logger log.Logger
 }
 
 func init() {
@@ -22,7 +24,8 @@ func Test(t *testing.T) { TestingT(t) }
 
 func (s *PingTestSuite) SetUpSuite(c *C) {
 	s.mux = httprouter.New()
-	RegisterHandlers(s.mux)
+	s.logger = log.New()
+	RegisterHandlers(s.mux, s.logger)
 	s.writer = httptest.NewRecorder()
 }
 

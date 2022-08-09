@@ -7,22 +7,21 @@ build:
 
 .PHONY: run
 run: build
-	@docker run --rm -it -p 127.0.0.1:8080:8080 backend
+	@docker compose -f ../docker-compose.yml up -d api
 
 .PHONY: containers
 containers:
 	@docker build .
 
-.PHONY: unit-test
-unit-test:
+.PHONY: unit-test-run
+unit-test-run:
 	@docker build . --target unit-test --network host
 
-.PHONY: unit-test-coverage
-unit-test-coverage:
+.PHONY: unit-test
+unit-test: unit-test-run
 	@docker build . --target unit-test-coverage \
-	--output coverage/ \
+	--output ./ \
 	--network host
-	cat coverage/cover.out
 
 .PHONY: lint
 lint:
