@@ -4,6 +4,7 @@
 
     @media screen and (max-width: 768px) {
         width: 90%;
+        padding-top: 66px;
     }
 
     @media screen and (min-width: 769px) {
@@ -14,10 +15,10 @@
 
     margin: calc(8vw - 10px) auto;
 
-    .todo_input {
+    .todo__input {
         position: relative;
 
-        .todo_text {
+        .todo__text {
             border: 1px solid gray;
 
             @media screen and (max-width: 768px) {
@@ -105,6 +106,9 @@
         .dropdown-menu {
             width: calc(50% - 24px);
             border-width: 0;
+            @media screen and (max-width: 380px) {
+                width: 41vw;
+            }
 
             @media screen and (min-width: 769px) {
                 font-size: 20px;
@@ -116,30 +120,48 @@
 
             .dropbtn {
                 @media screen and (max-width: 380px) {
-                    width: calc(41.5vw);
+                    width: 41vw;
                 }
             }
 
-            .list-unstyled {
-
-                @media screen and (min-width: 769px) {
-                    font-size: 20px;
-                    max-height: 115px;
-                }
-
-                a {
-                    display: block;
-                }
-
+            .sort__list-category-contener {
+                width: 100%;
+                position: absolute;
                 display: none;
-                max-height: 100px;
-                overflow-x: hidden;
-                overflow-y: auto;
 
+                .sort__list-category {
+
+                    @media screen and (min-width: 769px) {
+                        font-size: 20px;
+                        max-height: 115px;
+                    }
+
+                    a {
+                        display: block;
+                    }
+
+                    display: block;
+                    max-height: 100px;
+                    overflow-x: hidden;
+                    overflow-y: auto;
+                    list-style: none;
+                    background-color: rgb(255, 255, 255);
+                    border: 0.5px solid rgb(190, 190, 190);
+                    border-top: none;
+                    border-bottom: none;
+                    padding: 0;
+
+                }
+
+                .sort__btn-all{
+                    border-top-right-radius: 0;
+                    border-top-left-radius: 0;
+                    border: 0.5px solid rgb(190, 190, 190);
+                }
             }
 
             .show {
-                padding: 3px 0;
+                padding: 3px 0 0;
                 border: 1px solid rgb(206, 212, 218);
                 border-bottom-left-radius: 6px;
                 border-bottom-right-radius: 6px;
@@ -166,7 +188,7 @@
                 color: gray;
             }
 
-            .name__openModal{
+            .name__openModal {
                 text-decoration: none;
                 color: black;
             }
@@ -188,13 +210,16 @@
             }
 
             .todo__category {
-                margin-left: 15px;
+                margin-bottom: .5rem;
+                margin-left: 10px;
                 padding: 2px 4px;
                 border-radius: 4px;
+                border: 0.5px solid rgb(190, 190, 190);
             }
 
-            .todo__edit {
+            .todo__archive {
 
+                color: #ad8762;
                 margin-top: -30px;
                 margin-right: 5px;
 
@@ -211,120 +236,121 @@
     }
 
     //.window__form {
-        .form__title {
-            color: #0d6efd;
+    .form__title {
+        color: #0d6efd;
+    }
+
+    .chosen__categories {
+
+        .category {
+            margin-top: .5rem;
+            position: relative;
+            padding: 6px;
+            padding-right: 26px;
+            margin-right: 10px;
+            border-radius: 4px;
+            border: 0.5px solid rgb(190, 190, 190);
+
+            button {
+                height: 6px;
+                width: 6px;
+                position: absolute;
+                top: calc(50% - 6px);
+                right: 8px;
+            }
         }
 
-        .chosen__categories {
-            
-            .category {
-                position: relative;
-                padding: 6px;
-                padding-right: 26px;
-                margin-right: 10px;
-                margin-top: 10px;
-                border-radius: 4px;
+        .category__edit {
+            padding-right: 6px;
+        }
+    }
 
-                button {
-                    height: 6px;
-                    width: 6px;
-                    position: absolute;
-                    top: calc(50% - 6px);
-                    right: 8px;
+    .list-category-contener {
+        width: calc(100% - 2rem);
+        position: absolute;
+        display: none;
+
+        .list-category {
+            list-style: none;
+            display: block;
+            background-color: rgb(255, 255, 255);
+            border: 0.5px solid rgb(190, 190, 190);
+            border-top: none;
+            border-bottom: none;
+
+            a {
+                display: block;
+            }
+
+            max-height: 100px;
+            overflow-x: hidden;
+            overflow-y: auto;
+
+        }
+
+
+        .add__category {
+            display: block;
+            background-color: rgb(255, 255, 255);
+            border: 0.5px solid rgb(190, 190, 190);
+            border-top: none;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+            margin-top: 0px;
+            padding: 8px 1em 4px;
+            height: auto;
+
+            .name__category {
+                width: calc(100% - 80px);
+
+                input {
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
                 }
             }
 
-            .category__edit{
-                padding-right: 6px;
+            .color__category {
+                width: 38px;
+                padding: 0;
+
+                input {
+                    border: 0.5px solid rgb(206, 212, 218);
+                    border-radius: 0;
+                    border-right: none;
+                }
             }
-        }
 
-        .list-category-contener {
-            position: absolute;
-            display: none;
-
-            .list-category {
-                list-style: none;
-                display: block;
-                background-color: rgb(255, 255, 255);
-                border: 0.5px solid rgb(190, 190, 190);
-                border-top: none;
-                border-bottom: none;
+            .add {
+                width: 38px;
 
                 a {
-                    display: block;
-                }
+                    border-left: none;
+                    border: 0.5px solid rgb(206, 212, 218);
+                    border-top-right-radius: 6px;
+                    border-bottom-right-radius: 6px;
 
-                max-height: 100px;
-                overflow-x: hidden;
-                overflow-y: auto;
+                }
 
             }
-
-
-            .add__category {
-                display: block;
-                background-color: rgb(255, 255, 255);
-                border: 0.5px solid rgb(190, 190, 190);
-                border-top: none;
-                border-bottom-left-radius: 6px;
-                border-bottom-right-radius: 6px;
-                margin-top: 0px;
-                padding: 8px 1em 4px;
-                height: auto;
-
-                .name__category {
-                    width: calc(100% - 80px);
-
-                    input {
-                        border-top-right-radius: 0;
-                        border-bottom-right-radius: 0;
-                    }
-                }
-
-                .color__category {
-                    width: 38px;
-                    padding: 0;
-
-                    input {
-                        border: 0.5px solid rgb(206, 212, 218);
-                        border-radius: 0;
-                        border-right: none;
-                    }
-                }
-
-                .add {
-                    width: 38px;
-
-                    a {
-                        border-left: none;
-                        border: 0.5px solid rgb(206, 212, 218);
-                        border-top-right-radius: 6px;
-                        border-bottom-right-radius: 6px;
-
-                    }
-
-                }
-            }
-
-            .add__category__botton {
-                height: 22px;
-                background-color: rgb(255, 255, 255);
-                border: 0.5px solid rgb(206, 212, 218);
-                border-top: none;
-                border-radius: 6px;
-                margin-top: -7px;
-            }
-
-
         }
 
-        .show1 {
-            z-index: 1;
-            display: block;
+        .add__category__botton {
+            height: 22px;
+            background-color: rgb(255, 255, 255);
+            border: 0.5px solid rgb(206, 212, 218);
+            border-top: none;
+            border-radius: 6px;
+            margin-top: -7px;
         }
+
+
+    }
+
+    .show1 {
+        z-index: 1;
+        display: block;
+    }
 
     //}
-
 
 }
