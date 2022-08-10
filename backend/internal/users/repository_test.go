@@ -51,8 +51,8 @@ func TestRepo(t *testing.T) {
 
 		test.IsNil(t, err)
 		test.DeepEqual(t, want, got)
-		if user.Id != 2 {
-			t.Fatalf("expected user.Id: 2, got: %#v", got)
+		if user.Id != 3 {
+			t.Fatalf("expected user.Id: 3, got: %#v", got)
 		}
 	})
 

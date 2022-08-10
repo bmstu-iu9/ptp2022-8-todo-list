@@ -1,28 +1,26 @@
 package auth
 
 import (
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"strings"
 )
 
-func AuthCheck(next httprouter.Handle) httprouter.Handle {
-	return func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func AuthCheck(next errors.Handler) errors.Handler {
+	return func(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
-			w.WriteHeader(http.StatusUnauthorized)
-			return
+			return errors.ErrUnauthorized
 		}
 		accessToken := strings.Split(authHeader, " ")[1]
 		if accessToken == "" {
-			w.WriteHeader(http.StatusUnauthorized)
-			return
+			return errors.ErrUnauthorized
 		}
 		isTokenValid := ValidateAccessToken(accessToken)
 		if !isTokenValid {
-			w.WriteHeader(http.StatusUnauthorized)
-			return
+			return errors.ErrUnauthorized
 		}
-		next(w, r, p)
+		return next(w, r, p)
 	}
 }

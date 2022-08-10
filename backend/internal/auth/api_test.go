@@ -24,7 +24,7 @@ var (
 func init() {
 	mux = router.New()
 	logger = log.New()
-	tokens, _ = generateTokens("slava@example.com")
+	tokens, _ = GenerateTokens("slava@example.com")
 	s = service{&mockRepository{
 		users: []entity.User{
 			{

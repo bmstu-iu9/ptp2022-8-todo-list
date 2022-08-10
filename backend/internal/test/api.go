@@ -33,6 +33,9 @@ func Endpoint(t *testing.T, testCases []ApiTestCase, mux *httprouter.Router) {
 				http.SetCookie(writer, &tc.Cookie)
 				request.Header = http.Header{"Cookie": writer.Result().Header["Set-Cookie"]}
 			}
+			if tc.Header != nil {
+				request.Header = tc.Header
+			}
 			mux.ServeHTTP(writer, request)
 
 			gotCode := writer.Code

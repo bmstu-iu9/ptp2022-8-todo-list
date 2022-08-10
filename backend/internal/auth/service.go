@@ -64,7 +64,7 @@ func (s service) Login(input LoginUserRequest) (UserData, error) {
 		return UserData{}, errors.New("incorrect password")
 	}
 	user := entity.NewUserDto(entityUser)
-	tokens, err := generateTokens(user.Email)
+	tokens, err := GenerateTokens(user.Email)
 	if err != nil {
 		return UserData{}, err
 	}
@@ -92,7 +92,7 @@ func (s service) Refresh(refreshToken string) (UserData, error) {
 		return UserData{}, err
 	}
 	user := entity.NewUserDto(entityUser)
-	tokens, err := generateTokens(user.Email)
+	tokens, err := GenerateTokens(user.Email)
 	if err != nil {
 		return UserData{}, err
 	}
@@ -117,8 +117,8 @@ func (s service) saveRefreshToken(userId int, refreshToken string) error {
 	return nil
 }
 
-// generateTokens generates a new refresh and access tokens
-func generateTokens(email entity.Email) (Token, error) {
+// GenerateTokens generates a new refresh and access tokens
+func GenerateTokens(email entity.Email) (Token, error) {
 	claims := &Claims{
 		Email: email,
 		RegisteredClaims: jwt.RegisteredClaims{

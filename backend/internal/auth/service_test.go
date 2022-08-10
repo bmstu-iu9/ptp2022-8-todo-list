@@ -28,7 +28,7 @@ type LoginTestCase struct {
 }
 
 func TestAuthService(t *testing.T) {
-	tokens, _ := generateTokens("slava@example.com")
+	tokens, _ := GenerateTokens("slava@example.com")
 	s := service{&mockRepository{
 		users: []entity.User{
 			{
@@ -132,7 +132,7 @@ type ValidTestCase struct {
 }
 
 func TestAccessTokenValidate(t *testing.T) {
-	tokens, _ := generateTokens("slava@example.com")
+	tokens, _ := GenerateTokens("slava@example.com")
 	accessTests := []ValidTestCase{
 		{
 			Name: "OK access", IsValid: true,
@@ -154,7 +154,7 @@ func TestAccessTokenValidate(t *testing.T) {
 }
 
 func TestRefreshTokenValidate(t *testing.T) {
-	tokens, _ := generateTokens("slava@example.com")
+	tokens, _ := GenerateTokens("slava@example.com")
 	refreshTests := []ValidTestCase{
 		{
 			Name: "OK refresh", IsValid: true,
