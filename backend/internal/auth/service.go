@@ -13,8 +13,11 @@ const JWT_ACCESS_SECRET = "secret-key"
 const JWT_REFRESH_SECRET = "refresh-key"
 
 type Service interface {
+	// Login authorizes the user.
 	Login(input LoginUserRequest) (UserData, error)
+	// Logout deletes data about the authorized user.
 	Logout(refreshToken string) error
+	// Refresh updates access and refresh tokens by checking old refresh token.
 	Refresh(refreshToken string) (UserData, error)
 }
 
@@ -50,6 +53,7 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
+// Login authorizes the user.
 func (s service) Login(input LoginUserRequest) (UserData, error) {
 	entityUser, err := s.repo.GetUser(input.Email, -1)
 	if err != nil {
@@ -68,10 +72,12 @@ func (s service) Login(input LoginUserRequest) (UserData, error) {
 	return UserData{user, tokens}, err
 }
 
+// Logout deletes data about the authorized user.
 func (s service) Logout(refreshToken string) error {
 	return s.repo.DeleteToken(refreshToken)
 }
 
+// Refresh updates access and refresh tokens by checking old refresh token.
 func (s service) Refresh(refreshToken string) (UserData, error) {
 	if refreshToken == "" {
 		return UserData{}, errors.New("no token")
@@ -94,6 +100,7 @@ func (s service) Refresh(refreshToken string) (UserData, error) {
 	return UserData{user, tokens}, err
 }
 
+// saveRefreshToken saves a new refresh token in db.
 func (s service) saveRefreshToken(userId int, refreshToken string) error {
 	_, err := s.repo.GetToken("", userId)
 	if err == nil {
@@ -110,11 +117,12 @@ func (s service) saveRefreshToken(userId int, refreshToken string) error {
 	return nil
 }
 
+// generateTokens generates a new refresh and access tokens
 func generateTokens(email entity.Email) (Token, error) {
 	claims := &Claims{
 		Email: email,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: &jwt.NumericDate{time.Now().Add(5 * time.Minute)},
+			ExpiresAt: &jwt.NumericDate{Time: time.Now().Add(5 * time.Minute)},
 		},
 	}
 	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -122,7 +130,7 @@ func generateTokens(email entity.Email) (Token, error) {
 	if err != nil {
 		return Token{}, err
 	}
-	claims.ExpiresAt = &jwt.NumericDate{time.Now().Add(30 * 24 * time.Hour)}
+	claims.ExpiresAt = &jwt.NumericDate{Time: time.Now().Add(30 * 24 * time.Hour)}
 	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	refreshTokenString, err := refreshToken.SignedString([]byte(JWT_REFRESH_SECRET))
 	if err != nil {
@@ -131,6 +139,7 @@ func generateTokens(email entity.Email) (Token, error) {
 	return Token{AccessToken: accessTokenString, RefreshToken: refreshTokenString}, nil
 }
 
+// ValidateAccessToken checks is the access token valid.
 func ValidateAccessToken(accessToken string) bool {
 	claims := &Claims{}
 	token, err := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (interface{}, error) {
@@ -146,6 +155,7 @@ func ValidateAccessToken(accessToken string) bool {
 	return token != nil
 }
 
+// ValidateRefreshToken checks is the refresh token valid.
 func ValidateRefreshToken(refreshToken string) bool {
 	claims := &Claims{}
 	token, err := jwt.ParseWithClaims(refreshToken, claims, func(token *jwt.Token) (interface{}, error) {

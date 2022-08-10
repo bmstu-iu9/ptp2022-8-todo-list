@@ -50,10 +50,7 @@ func (res *resource) handleLog(w http.ResponseWriter, r *http.Request, p httprou
 func (res *resource) handleLogOut(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
 	cookie, err := r.Cookie("refreshToken")
 	if err != nil {
-		if err == http.ErrNoCookie {
-			return fmt.Errorf("%w: %v", errors.ErrUnauthorized, err)
-		}
-		return fmt.Errorf("%w: %v", errors.ErrLogoutFailed, err)
+		return fmt.Errorf("%w: %v", errors.ErrUnauthorized, err)
 	}
 	refreshToken := cookie.Value
 	err = res.service.Logout(refreshToken)
@@ -73,10 +70,7 @@ func (res *resource) handleLogOut(w http.ResponseWriter, r *http.Request, p http
 func (res *resource) handleRefresh(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
 	cookie, err := r.Cookie("refreshToken")
 	if err != nil {
-		if err == http.ErrNoCookie {
-			return fmt.Errorf("%w: %v", errors.ErrUnauthorized, err)
-		}
-		return fmt.Errorf("%w: %v", errors.ErrLogoutFailed, err)
+		return fmt.Errorf("%w: %v", errors.ErrUnauthorized, err)
 	}
 	refreshToken := cookie.Value
 	userData, err := res.service.Refresh(refreshToken)
