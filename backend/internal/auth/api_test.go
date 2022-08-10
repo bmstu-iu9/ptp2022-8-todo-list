@@ -24,7 +24,7 @@ var (
 func init() {
 	mux = router.New()
 	logger = log.New()
-	tokens, _ = GenerateTokens("slava@example.com")
+	tokens, _ = GenerateTokens("slava@example.com", 0)
 	s = service{&mockRepository{
 		users: []entity.User{
 			{
@@ -32,12 +32,6 @@ func init() {
 				Email:    "slava@example.com",
 				Nickname: "slavaruswarrior",
 				Password: "3dfff1ca8a9696f67616a2b8abd1bce3", //wasdqwertytest
-			},
-			{
-				Id:       5,
-				Email:    "geogreck@example.com",
-				Nickname: "geogreck",
-				Password: "test123test",
 			},
 		},
 		tokens: []DbToken{

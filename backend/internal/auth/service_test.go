@@ -28,7 +28,7 @@ type LoginTestCase struct {
 }
 
 func TestAuthService(t *testing.T) {
-	tokens, _ := GenerateTokens("slava@example.com")
+	tokens, _ := GenerateTokens("slava@example.com", 0)
 	s := service{&mockRepository{
 		users: []entity.User{
 			{
@@ -36,12 +36,6 @@ func TestAuthService(t *testing.T) {
 				Email:    "slava@example.com",
 				Nickname: "slavaruswarrior",
 				Password: "3dfff1ca8a9696f67616a2b8abd1bce3", //wasdqwertytest
-			},
-			{
-				Id:       5,
-				Email:    "geogreck@example.com",
-				Nickname: "geogreck",
-				Password: "test123test",
 			},
 		},
 		tokens: []DbToken{
@@ -129,14 +123,15 @@ type ValidTestCase struct {
 	Name    string
 	IsValid bool
 	token   string
+	userId  int
 }
 
 func TestAccessTokenValidate(t *testing.T) {
-	tokens, _ := GenerateTokens("slava@example.com")
+	tokens, _ := GenerateTokens("slava@example.com", 0)
 	accessTests := []ValidTestCase{
 		{
 			Name: "OK access", IsValid: true,
-			token: tokens.AccessToken,
+			token: tokens.AccessToken, userId: 0,
 		},
 		{
 			Name: "FAIL access", IsValid: false,
@@ -145,7 +140,7 @@ func TestAccessTokenValidate(t *testing.T) {
 	}
 	for _, tc := range accessTests {
 		t.Run(tc.Name, func(t *testing.T) {
-			got := ValidateAccessToken(tc.token)
+			got := ValidateAccessToken(tc.token, tc.userId)
 			if got != tc.IsValid {
 				t.Fatalf("expected validation result: %#v, got: %#v", tc.IsValid, got)
 			}
@@ -154,7 +149,7 @@ func TestAccessTokenValidate(t *testing.T) {
 }
 
 func TestRefreshTokenValidate(t *testing.T) {
-	tokens, _ := GenerateTokens("slava@example.com")
+	tokens, _ := GenerateTokens("slava@example.com", 0)
 	refreshTests := []ValidTestCase{
 		{
 			Name: "OK refresh", IsValid: true,

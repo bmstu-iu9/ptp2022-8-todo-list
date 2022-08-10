@@ -1,9 +1,11 @@
 package auth
 
 import (
+	"fmt"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -17,9 +19,10 @@ func AuthCheck(next errors.Handler) errors.Handler {
 		if accessToken == "" {
 			return errors.ErrUnauthorized
 		}
-		isTokenValid := ValidateAccessToken(accessToken)
+		id, _ := strconv.Atoi(p.ByName("id"))
+		isTokenValid := ValidateAccessToken(accessToken, id)
 		if !isTokenValid {
-			return errors.ErrUnauthorized
+			return fmt.Errorf("%w: %v", errors.ErrUnauthorized, "invalid access token")
 		}
 		return next(w, r, p)
 	}

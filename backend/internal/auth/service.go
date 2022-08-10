@@ -49,7 +49,8 @@ type UserData struct {
 }
 
 type Claims struct {
-	Email entity.Email
+	Email  entity.Email
+	UserId int
 	jwt.RegisteredClaims
 }
 
@@ -64,7 +65,7 @@ func (s service) Login(input LoginUserRequest) (UserData, error) {
 		return UserData{}, errors.New("incorrect password")
 	}
 	user := entity.NewUserDto(entityUser)
-	tokens, err := GenerateTokens(user.Email)
+	tokens, err := GenerateTokens(user.Email, int(user.Id))
 	if err != nil {
 		return UserData{}, err
 	}
@@ -92,7 +93,7 @@ func (s service) Refresh(refreshToken string) (UserData, error) {
 		return UserData{}, err
 	}
 	user := entity.NewUserDto(entityUser)
-	tokens, err := GenerateTokens(user.Email)
+	tokens, err := GenerateTokens(user.Email, int(user.Id))
 	if err != nil {
 		return UserData{}, err
 	}
@@ -118,9 +119,10 @@ func (s service) saveRefreshToken(userId int, refreshToken string) error {
 }
 
 // GenerateTokens generates a new refresh and access tokens
-func GenerateTokens(email entity.Email) (Token, error) {
+func GenerateTokens(email entity.Email, userId int) (Token, error) {
 	claims := &Claims{
-		Email: email,
+		UserId: userId,
+		Email:  email,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: &jwt.NumericDate{Time: time.Now().Add(5 * time.Minute)},
 		},
@@ -140,19 +142,19 @@ func GenerateTokens(email entity.Email) (Token, error) {
 }
 
 // ValidateAccessToken checks is the access token valid.
-func ValidateAccessToken(accessToken string) bool {
+func ValidateAccessToken(accessToken string, userId int) bool {
 	claims := &Claims{}
 	token, err := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (interface{}, error) {
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
 		if !ok {
-			return nil, errors.New("invalid token")
+			return nil, errors.New("invalid access token")
 		}
 		return []byte(JWT_ACCESS_SECRET), nil
 	})
 	if err != nil {
 		return false
 	}
-	return token != nil
+	return token != nil && token.Claims.(*Claims).UserId == userId
 }
 
 // ValidateRefreshToken checks is the refresh token valid.
