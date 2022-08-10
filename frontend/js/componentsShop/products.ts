@@ -6,8 +6,7 @@ class Products {
         const namingBlock: string[] = ['Одежда', 'Аксессуары', 'Питомцы', 'Облик'];
         let previousCategory = 'helmet';
 
-        CATALOG_SHOP.forEach(({id, name, description, imageSrc, category, rarity, state}) => {
-
+        catalogShop.forEach(({id, name, description, imageSrc, category, rarity, state}) => {
             if (category != previousCategory && category != 'helmet') {
                 if (category != 'chest' && category != 'leggins') {
                     htmlCatalog += `
@@ -41,26 +40,19 @@ class Products {
                                 <p class="card-text">${description}</p>
                         </div>
                             ${buildingBuyButton(id, state)}
-
-                        <!- модальное окно --->
                         
                     </div>
                 </div>
             `;
         });
-
-        const html = `
-                ${htmlCatalog}
-        `;
-
-        const ROOT_PRODUCTS = document.getElementById('products');
-        ROOT_PRODUCTS.innerHTML = html;
+        const rootProducts = document.getElementById('products');
+        rootProducts.innerHTML = htmlCatalog;
     }
 }
 
 const productsPage = new Products();
 
-let CATALOG_SHOP = [];
+let catalogShop = [];
 
 function alreadyBought(state: string): boolean {
     return state === 'inventoried' || state === 'equipped';
@@ -69,15 +61,14 @@ function alreadyBought(state: string): boolean {
 function buildingBuyButton(id: number, state: string): string {
     if (alreadyBought(state) === true) {
         return `
-            <button type="button" class="for__click btn btn-success  idItem=${id}" data-bs-toggle="modal"
+            <button type="button" class="for__click btn btn-success  idItem=${id}"
                                 data-bs-target="#selling${id}" id="buttonBuy${id}"
                                 style="border-radius: 0 0 3px 3px;">
                                 Куплено</button>
         `;
-    }
-    else {
+    } else {
         return `
-            <button type="button" class="for__click btn btn-primary idItem=${id}" data-bs-toggle="modal"
+            <button type="button" class="for__click btn btn-primary idItem=${id}"
                                 data-bs-target="#selling${id}"
                                 style="border-radius: 0 0 3px 3px;">
                                 Купить</button>
@@ -99,49 +90,36 @@ sendRequest('GET', server + '/users/' + user).then((data) => {
 
 // при нажатии на кнопку купить в модальном окне получается покупка
 
-const itemsCostShop = new Map<number, Item>();
-sendRequest('GET', server + '/items').then((data) => {
-    for (let i = 0; i < data.length; i++) {
-        const item: Item = data[i];
-        itemsCostShop.set(item.price, item);
-
-    }
-})
-
 document.addEventListener('click', (e) => {
     const targetBuy = <HTMLElement>e.target;
-
     if (hasParentClass(targetBuy, 'buyButton')) {
+        // получаем предмет
         const costAndString: string = targetBuy.innerHTML;
-        const cost: number = parseInt(costAndString.replace(/\D+/g,""));
-        const itemBuy: Item = itemsCostShop.get(cost)!;
-
+        const cost: number = parseInt(costAndString.replace(/\D+/g, ""));
+        const elementId: number = parseInt(targetBuy.id.replace(/\D+/g, ""));
+        const itemBuy: Item = itemsShop.get(elementId)!;
         // получаем баланс
-        // получили предмет
-
         const balanceShopForBuy: HTMLInputElement = <HTMLInputElement>document.getElementById('balance');
         const balanceShopForBuyAndString: string = balanceShopForBuy.innerHTML;
-        let balanceBuy: number = parseInt(balanceShopForBuyAndString.replace(/\D+/g,""));
+        let balanceBuy: number = parseInt(balanceShopForBuyAndString.replace(/\D+/g, ""));
 
         // меняем состояние
         if (balanceBuy >= cost && itemBuy.state == 'store') {
             const footerBuy = <HTMLInputElement>document.getElementById('shopModalFooter');
             balanceBuy -= cost;
             itemBuy.state = 'inventoried';
-            sendRequest('PATCH', server + '/users/' + user, JSON.stringify({ balance: balanceBuy }))
-            sendRequest('PATCH', server + `/items/${itemBuy.id}`, JSON.stringify({ state: itemBuy.state }))
+            sendRequest('PATCH', server + '/users/' + user, JSON.stringify({balance: balanceBuy}));
+            sendRequest('PATCH', server + `/items/${itemBuy.id}`, JSON.stringify({state: itemBuy.state}));
             footerBuy.innerHTML = `
                 <button type="button" class="buyButton btn btn-success btn-lg disabled">
                     Предмет куплен
                 </button>
-                `;
+            `;
 
             // меняю кнопку в самом магазине
-
             const buyFullCardInShop = <HTMLElement>document.getElementsByClassName('idItem=' + itemBuy.id)[0];
             const buyCardInShop = <HTMLElement>buyFullCardInShop.getElementsByClassName('card')[0];
             const buyButtonInShop = <HTMLElement>buyCardInShop.getElementsByClassName('for__click')[0];
-
             buyCardInShop.removeChild(buyButtonInShop);
             buyCardInShop.innerHTML += `
                 <button type="button" class="for__click btn btn-success  idItem=${itemBuy.id}" data-bs-toggle="modal"
@@ -149,39 +127,45 @@ document.addEventListener('click', (e) => {
                     style="border-radius: 0 0 3px 3px;">
                     Куплено</button>
             `;
-        }
-        else if (balanceBuy >= cost && (itemBuy.state == 'inventoried' || itemBuy.state == 'equipped')) {
-            const footerBuy = <HTMLInputElement>document.getElementById('shopModalFooter');
-            if (<HTMLInputElement>document.getElementById('duplicateBuyShop') == undefined) {
-                footerBuy.innerHTML += `
-                <p id="duplicateBuyShop" class="text-warning text-center">
-                   Предмет уже куплен!
-                </p>
-                `;
-            }
-        }
-        else {
-            const footerBuy = <HTMLInputElement>document.getElementById('shopModalFooter');
-            if (<HTMLInputElement>document.getElementById('duplicateBuyShop') == undefined) {
-                footerBuy.innerHTML += `
-                <p id="duplicateBuyShop" class="text-danger">
-                   Недостаточно денег для покупки!
-                </p>
-                `;
-            }
-        }
 
+            // меняю баланс в самом магазине
+            const balanceBuyForShop = <HTMLInputElement>document.getElementById('balance');
+            balanceBuyForShop.innerHTML = `
+                <a id="balance" class="nav-link fw-bold py-1 px-0 mx-md-3 mx-auto my-auto disabled">
+                            Ваш баланс: ${balanceBuy} коинов</a>
+            `;
+
+        } else if (balanceBuy >= cost && (itemBuy.state == 'inventoried' || itemBuy.state == 'equipped')) {
+            const footerBuy = <HTMLInputElement>document.getElementById('shopModalFooter');
+            if (<HTMLInputElement>document.getElementById('duplicateBuyShop') == undefined) {
+                footerBuy.innerHTML += `
+                    <p id="duplicateBuyShop" class="text-warning text-center">
+                        Предмет уже куплен!
+                    </p>
+                `;
+            }
+        } else {
+            const footerBuy = <HTMLInputElement>document.getElementById('shopModalFooter');
+            if (<HTMLInputElement>document.getElementById('duplicateBuyShop') == undefined) {
+                footerBuy.innerHTML += `
+                    <p id="duplicateBuyShop" class="text-danger">
+                        Недостаточно денег для покупки!
+                    </p>
+                `;
+            }
+        }
     }
-})
+});
 
 // Получаю предметы пользователя (пока просто предметы)
 
 fetch('https://json.grechkogv.ru/items')
     .then(res => res.json())
     .then(body => {
-        CATALOG_SHOP = body;
+        catalogShop = body;
         productsPage.render();
     })
     .catch(error => {
         console.log(error);
     })
+

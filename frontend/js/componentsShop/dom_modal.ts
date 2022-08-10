@@ -1,12 +1,7 @@
 const itemsShop = new Map<number, Item>();
 
-// Создание динамического модального окна
-
 // модальная форма просмотра описания карты
-
-
 const modalShop = new bootstrap.Modal(<HTMLFormElement>document.getElementById('shopModal'));
-
 
 sendRequest('GET', server + '/items').then((data) => {
     for (let i = 0; i < data.length; i++) {
@@ -17,14 +12,13 @@ sendRequest('GET', server + '/items').then((data) => {
 })
 
 function emptyDescription(description: string): string {
-     return description !== '' ? description : `Описание отсутствует`;
+    return description !== '' ? description : `Описание отсутствует`;
 }
 
 document.addEventListener('click', (e) => {
     const target = <HTMLElement>e.target;
     // получение из хранилища предмета, на карту которого кликнули
     const regexp = /idItem=\d+/;
-
     const strId = findID(target, regexp);
     const id = parseInt(strId?.substring(7));
     const item = itemsShop.get(id)!;
@@ -39,8 +33,7 @@ document.addEventListener('click', (e) => {
         modalShop.show();
 
         const titleModal = <HTMLInputElement>document.getElementById('ShopModalTitle');
-        titleModal.innerHTML = item.name!
-
+        titleModal.innerHTML = item.name!;
         const description = <HTMLInputElement>document.getElementById('shopModalBody');
         description.innerHTML = `
             <img src="https://wg.grechkogv.ru/assets/${item.imageSrc}"
@@ -49,20 +42,18 @@ document.addEventListener('click', (e) => {
             <p class="card-text">${emptyDescription(item.description)}</p>
             `;
         const footer = <HTMLInputElement>document.getElementById('shopModalFooter');
-        const footerDuplicate = <HTMLInputElement>document.getElementById('buyButtonDuplicateModal');
-        if (item.state == 'store' && footerDuplicate == undefined) {
+        if (item.state == 'store') {
             footer.innerHTML = `
-                <button id="buyButtonDublicateModal" type="button" class="buyButton btn btn-primary btn-lg">
+                <button id="buyButtonDuplicateModal${item.id}" type="button" class="buyButton btn btn-primary btn-lg">
                     Купить за ${item.price} todoкоинов?
                 </button>
                 `;
-        }
-        else if ((item.state == 'inventoried' || item.state == 'equipped') && footerDuplicate == undefined){
-            footer.innerHTML += `
-               <button id="buyButtonDuplicateModal" type="button" class="buyButton btn btn-success btn-lg disabled">
+        } else if (item.state == 'inventoried' || item.state == 'equipped') {
+            footer.innerHTML = `
+               <button id="buyButtonDuplicateModal${item.id}" type="button" class="buyButton btn btn-success btn-lg disabled">
                    Предмет куплен
                </button>
             `;
-            }
         }
+    }
 });
