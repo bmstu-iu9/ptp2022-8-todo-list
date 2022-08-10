@@ -48,13 +48,21 @@ document.addEventListener('click', (e) => {
             <div class="card-body" style="background: ${getRarityColor(item.rarity)}">
             <p class="card-text">${emptyDescription(item.description)}</p>
             `;
-
         const footer = <HTMLInputElement>document.getElementById('shopModalFooter');
-        footer.innerHTML = `
-            <button type="button" class="buyButton btn btn-primary btn-lg">
-                Купить за ${item.price} todoкоинов?
-            </button>
-        `;
-
-    }
+        const footerDuplicate = <HTMLInputElement>document.getElementById('buyButtonDuplicateModal');
+        if (item.state == 'store' && footerDuplicate == undefined) {
+            footer.innerHTML = `
+                <button id="buyButtonDublicateModal" type="button" class="buyButton btn btn-primary btn-lg">
+                    Купить за ${item.price} todoкоинов?
+                </button>
+                `;
+        }
+        else if ((item.state == 'inventoried' || item.state == 'equipped') && footerDuplicate == undefined){
+            footer.innerHTML += `
+               <button id="buyButtonDuplicateModal" type="button" class="buyButton btn btn-success btn-lg disabled">
+                   Предмет куплен
+               </button>
+            `;
+            }
+        }
 });

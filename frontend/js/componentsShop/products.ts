@@ -69,7 +69,7 @@ function alreadyBought(state: string): boolean {
 function buildingBuyButton(id: number, state: string): string {
     if (alreadyBought(state) === true) {
         return `
-            <button type="button" class="for__click btn btn-success disabled idItem=${id}" data-bs-toggle="modal"
+            <button type="button" class="for__click btn btn-success  idItem=${id}" data-bs-toggle="modal"
                                 data-bs-target="#selling${id}" id="buttonBuy${id}"
                                 style="border-radius: 0 0 3px 3px;">
                                 Куплено</button>
@@ -124,14 +124,31 @@ document.addEventListener('click', (e) => {
         let balanceBuy: number = parseInt(balanceShopForBuyAndString.replace(/\D+/g,""));
 
         // меняем состояние
-        console.log(balanceBuy);
         if (balanceBuy >= cost && itemBuy.state == 'store') {
+            const footerBuy = <HTMLInputElement>document.getElementById('shopModalFooter');
             balanceBuy -= cost;
             itemBuy.state = 'inventoried';
             sendRequest('PATCH', server + '/users/' + user, JSON.stringify({ balance: balanceBuy }))
             sendRequest('PATCH', server + `/items/${itemBuy.id}`, JSON.stringify({ state: itemBuy.state }))
-            console.log(balanceBuy);
-            console.log(itemBuy);
+            footerBuy.innerHTML = `
+                <button type="button" class="buyButton btn btn-success btn-lg disabled">
+                    Предмет куплен
+                </button>
+                `;
+
+            // меняю кнопку в самом магазине
+
+            const buyFullCardInShop = <HTMLElement>document.getElementsByClassName('idItem=' + itemBuy.id)[0];
+            const buyCardInShop = <HTMLElement>buyFullCardInShop.getElementsByClassName('card')[0];
+            const buyButtonInShop = <HTMLElement>buyCardInShop.getElementsByClassName('for__click')[0];
+
+            buyCardInShop.removeChild(buyButtonInShop);
+            buyCardInShop.innerHTML += `
+                <button type="button" class="for__click btn btn-success  idItem=${itemBuy.id}" data-bs-toggle="modal"
+                    data-bs-target="#selling${itemBuy.id}" id="buttonBuy${itemBuy.id}"
+                    style="border-radius: 0 0 3px 3px;">
+                    Куплено</button>
+            `;
         }
         else if (balanceBuy >= cost && (itemBuy.state == 'inventoried' || itemBuy.state == 'equipped')) {
             const footerBuy = <HTMLInputElement>document.getElementById('shopModalFooter');
