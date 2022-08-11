@@ -7,7 +7,7 @@ build:
 
 .PHONY: run
 run: build
-	@docker compose -f ../docker-compose.yml up -d api
+	@docker compose -f ../docker-compose.yml up -d --build api
 
 .PHONY: containers
 containers:
