@@ -33,8 +33,6 @@ func main() {
 		mux,
 		tasks.NewService(tasks.NewRepository(db)))
 
-	mux.GET("/pings", func (w http.ResponseWriter, r *http.Request, p httprouter.Params) {w.WriteHeader(418)})
-
 	address := fmt.Sprintf("%v:%v",
 			config.Get("HTTP_HOST"), config.Get("HTTP_PORT"))
 	server := http.Server{

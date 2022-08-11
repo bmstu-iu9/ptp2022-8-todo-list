@@ -3,6 +3,8 @@ package tasks
 import (
 	"database/sql"
 
+	_ "github.com/lib/pq"
+
 	. "github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 )
 
@@ -23,11 +25,7 @@ func NewRepository(db *sql.DB) Repository {
 }
 
 func (r repository) Get(user_id int64) ([]Task, error) {
-	q := `
-SELECT id, user_id, name, description
-FROM tasks
-WHERE user_id = ?
-	;`
+	q := "SELECT id, user_id, name, description FROM tasks WHERE user_id = $1;"
 
 	rows, err := r.db.Query(q, user_id)
 	if err != nil {

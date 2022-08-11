@@ -11,7 +11,7 @@ import (
 func RegisterHandlers(mux *httprouter.Router, service Service) {
 	res := resource{service}
 
-	mux.GET("/user/:id/tasks", res.handleGet)
+	mux.GET("/users/:id/tasks", res.handleGet)
 }
 
 type resource struct {
@@ -26,6 +26,7 @@ func (res *resource) handleGet(w http.ResponseWriter, r *http.Request, p httprou
 	}
 
 	tasks, err := res.service.Get(int64(id))
+	
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		return
