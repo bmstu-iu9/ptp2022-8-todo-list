@@ -6,12 +6,12 @@ import (
 
 type CreateTaskRequest struct {
 	Name 		string 	`json:"name"`
-	Description *string `json:"description"`
+	Description string `json:"description,omitempty"`
 }
 
 type UpdateTaskRequest struct {
-	Name 		*string `json:"name"`
-	Description *string `json:"description"`
+	Name 		string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
 }
 
 type Service interface {
@@ -23,10 +23,14 @@ type Service interface {
 }
 
 type service struct {
-	r *repository
+	r Repository
 }
 
-func (s *service) Get(user_id int64) ([]Task, error) {
+func NewService(r Repository) Service {
+	return service{r}
+}
+
+func (s service) Get(user_id int64) ([]Task, error) {
 	tasks, err := s.r.Get(user_id)
 
 	if err != nil {
@@ -45,7 +49,7 @@ func (s *service) Get(user_id int64) ([]Task, error) {
 	return ret, err
 }
 
-func (s *service) GetById(user_id int64, task_id int64) (Task, error) {
+func (s service) GetById(user_id int64, task_id int64) (Task, error) {
 	task, err := s.r.GetById(user_id, task_id)
 	
 	if err != nil {
@@ -66,7 +70,7 @@ func (t *CreateTaskRequest) Validate() error {
 	return nil
 }
 
-func (s *service) Create(user_id int64, task_data CreateTaskRequest) error {
+func (s service) Create(user_id int64, task_data CreateTaskRequest) error {
 	err := task_data.Validate()
 
 	if err != nil {
@@ -89,7 +93,7 @@ func (t *UpdateTaskRequest) Validate() error {
 	return nil
 }
 
-func (s *service) Update(user_id int64, task_id int64, task_data UpdateTaskRequest) error {
+func (s service) Update(user_id int64, task_id int64, task_data UpdateTaskRequest) error {
 	err := task_data.Validate()
 
 	if err != nil {
@@ -104,12 +108,12 @@ func (s *service) Update(user_id int64, task_id int64, task_data UpdateTaskReque
 
 	var u bool = false
 
-	if task_data.Name != nil {
+	if task_data.Name != "" {
 		u = true
-		task.Name = *task_data.Name
+		task.Name = task_data.Name
 	}
 
-	if task_data.Description != nil {
+	if task_data.Description != "" {
 		u = true
 		task.Description = task_data.Description
 	}
@@ -121,7 +125,7 @@ func (s *service) Update(user_id int64, task_id int64, task_data UpdateTaskReque
 	return err
 }
 
-func (s *service) Delete(user_id int64, task_id int64) error {
+func (s service) Delete(user_id int64, task_id int64) error {
 	err := s.r.Delete(user_id, task_id)
 	return err
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/db"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/ping"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/tasks"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/users"
 	"github.com/julienschmidt/httprouter"
 )
@@ -28,6 +29,11 @@ func main() {
 		mux,
 		users.NewService(users.NewRepository(db, logger)),
 		logger)
+	tasks.RegisterHandlers(
+		mux,
+		tasks.NewService(tasks.NewRepository(db)))
+
+	mux.GET("/pings", func (w http.ResponseWriter, r *http.Request, p httprouter.Params) {w.WriteHeader(418)})
 
 	address := fmt.Sprintf("%v:%v",
 			config.Get("HTTP_HOST"), config.Get("HTTP_PORT"))
