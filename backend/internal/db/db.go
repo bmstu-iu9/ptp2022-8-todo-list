@@ -51,10 +51,10 @@ CREATE TABLE tasks (
 	user_id int REFERENCES users,
 	name varchar(255) NOT NULL,
 	description text,
-	created_on timestamp NOT NULL,
-	due_date timestamp NOT NULL,
-	schtirlich_humorescue text NOT NULL,
-	cur_status status NOT NULL
+	created_on timestamp,
+	due_date timestamp,
+	schtirlich_humorescue text,
+	cur_status status
 );
 INSERT INTO tasks(user_id, name, description, created_on, due_date, schtirlich_humorescue, cur_status)
 VALUES (

@@ -17,9 +17,9 @@ func RegisterHandlers(mux *httprouter.Router, service Service, logger log.Logger
 	res := resource{service, logger}
 
 	mux.POST("/users", accesslog.Log(res.handlePost, logger))
-	mux.GET("/users/:id", accesslog.Log(res.handleGet, logger))
-	mux.DELETE("/users/:id", accesslog.Log(res.handleDelete, logger))
-	mux.PATCH("/users/:id", accesslog.Log(res.handlePatch, logger))
+	mux.GET("/users/:user_id", accesslog.Log(res.handleGet, logger))
+	mux.DELETE("/users/:user_id", accesslog.Log(res.handleDelete, logger))
+	mux.PATCH("/users/:user_id", accesslog.Log(res.handlePatch, logger))
 }
 
 type resource struct {
@@ -113,6 +113,6 @@ func (res *resource) handleDelete(w http.ResponseWriter, r *http.Request, p http
 }
 
 func getId(p httprouter.Params) (int64, error) {
-	id, err := strconv.Atoi(p.ByName("id"))
+	id, err := strconv.Atoi(p.ByName("user_id"))
 	return int64(id), err
 }

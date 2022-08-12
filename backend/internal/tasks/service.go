@@ -1,7 +1,7 @@
 package tasks
 
 import (
-	. "github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 )
 
 type CreateTaskRequest struct {
@@ -15,11 +15,11 @@ type UpdateTaskRequest struct {
 }
 
 type Service interface {
-	Get(user_id int64) ([]Task, error)
-	GetById(user_id int64, task_id int64) (Task, error)
-	Create(user_id int64, task_data CreateTaskRequest) error
-	Update(user_id int64, task_id int64, task_data UpdateTaskRequest) error
-	Delete(user_id int64, task_id int64) error
+	Get(user_id int64) ([]entity.Task, error)
+	GetById(user_id int64, task_id int64) (entity.Task, error)
+	Create(user_id int64, task_data CreateTaskRequest) (entity.Task, error)
+	Update(user_id, task_id int64, task_data UpdateTaskRequest) error
+	Delete(user_id, task_id int64) error
 }
 
 type service struct {
@@ -30,16 +30,16 @@ func NewService(r Repository) Service {
 	return service{r}
 }
 
-func (s service) Get(user_id int64) ([]Task, error) {
+func (s service) Get(user_id int64) ([]entity.Task, error) {
 	tasks, err := s.r.Get(user_id)
 
 	if err != nil {
 		return nil, err
 	}
 
-	ret := make([]Task, len(tasks))
+	ret := make([]entity.Task, len(tasks))
 	for i, t := range tasks {
-		ret[i] = Task{
+		ret[i] = entity.Task{
 			Id: t.Id,
 			Name: t.Name,
 			Description: t.Description,
@@ -49,14 +49,14 @@ func (s service) Get(user_id int64) ([]Task, error) {
 	return ret, err
 }
 
-func (s service) GetById(user_id int64, task_id int64) (Task, error) {
+func (s service) GetById(user_id int64, task_id int64) (entity.Task, error) {
 	task, err := s.r.GetById(user_id, task_id)
 	
 	if err != nil {
-		return Task{}, err
+		return entity.Task{}, err
 	}
 
-	ret := Task{
+	ret := entity.Task{
 		Id: task.Id,
 		Name: task.Name,
 		Description: task.Description,
@@ -70,14 +70,14 @@ func (t *CreateTaskRequest) Validate() error {
 	return nil
 }
 
-func (s service) Create(user_id int64, task_data CreateTaskRequest) error {
+func (s service) Create(user_id int64, task_data CreateTaskRequest) (entity.Task, error) {
 	err := task_data.Validate()
 
 	if err != nil {
-		return err
+		return entity.Task{}, err
 	}
 
-	task := &Task{
+	task := &entity.Task{
 		UserId: user_id,
 		Name: task_data.Name,
 		Description: task_data.Description,
@@ -85,7 +85,7 @@ func (s service) Create(user_id int64, task_data CreateTaskRequest) error {
 
 	err = s.r.Create(task)
 
-	return err
+	return *task, err
 }
 
 func (t *UpdateTaskRequest) Validate() error {
@@ -93,7 +93,7 @@ func (t *UpdateTaskRequest) Validate() error {
 	return nil
 }
 
-func (s service) Update(user_id int64, task_id int64, task_data UpdateTaskRequest) error {
+func (s service) Update(user_id, task_id int64, task_data UpdateTaskRequest) error {
 	err := task_data.Validate()
 
 	if err != nil {
@@ -106,26 +106,20 @@ func (s service) Update(user_id int64, task_id int64, task_data UpdateTaskReques
 		return err
 	}
 
-	var u bool = false
-
 	if task_data.Name != "" {
-		u = true
 		task.Name = task_data.Name
 	}
 
 	if task_data.Description != "" {
-		u = true
 		task.Description = task_data.Description
 	}
 
-	if u {
-		err = s.r.Update(&task)
-	}
+	err = s.r.Update(&task)
 
 	return err
 }
 
-func (s service) Delete(user_id int64, task_id int64) error {
-	err := s.r.Delete(user_id, task_id)
+func (s service) Delete(user_id, task_id int64) error {
+	err := s.r.Delete(task_id)
 	return err
 }
