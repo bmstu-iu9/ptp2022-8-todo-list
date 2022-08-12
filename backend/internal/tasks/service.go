@@ -5,7 +5,7 @@ import (
 )
 
 type CreateTaskRequest struct {
-	Name 		string 	`json:"name"`
+	Name 		string `json:"name"`
 	Description string `json:"description,omitempty"`
 }
 
@@ -37,16 +37,7 @@ func (s service) Get(user_id int64) ([]entity.Task, error) {
 		return nil, err
 	}
 
-	ret := make([]entity.Task, len(tasks))
-	for i, t := range tasks {
-		ret[i] = entity.Task{
-			Id: t.Id,
-			Name: t.Name,
-			Description: t.Description,
-		}
-	}
-
-	return ret, err
+	return tasks, err
 }
 
 func (s service) GetById(user_id int64, task_id int64) (entity.Task, error) {
@@ -56,13 +47,7 @@ func (s service) GetById(user_id int64, task_id int64) (entity.Task, error) {
 		return entity.Task{}, err
 	}
 
-	ret := entity.Task{
-		Id: task.Id,
-		Name: task.Name,
-		Description: task.Description,
-	}
-
-	return ret, err
+	return task, err
 }
 
 func (t *CreateTaskRequest) Validate() error {

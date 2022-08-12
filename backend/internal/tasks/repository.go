@@ -52,16 +52,15 @@ func (r repository) Get(user_id int64) ([]entity.Task, error) {
 func (r repository) GetById(user_id int64, task_id int64) (entity.Task, error) {
 	q := "SELECT id, user_id, name, description FROM tasks WHERE user_id = $1 AND id = $2"
 
-	row := r.db.QueryRow(q, user_id, task_id)
 	t := entity.Task{}
-	err := row.Scan(&t.Id, &t.UserId, &t.Name, &t.Description)
+	err := r.db.QueryRow(q, user_id, task_id).Scan(&t.Id, &t.UserId, &t.Name, &t.Description)
 
 	return t, err
 }
 
 func (r repository) Create(task_data *entity.Task) error {
 	q := "INSERT INTO tasks(user_id, name, description) VALUES ($1, $2, $3) RETURNING id;"
-	err := r.db.QueryRow(q, task_data.UserId, task_data.Name, task_data.Description).Scan(task_data.Id)
+	err := r.db.QueryRow(q, task_data.UserId, task_data.Name, task_data.Description).Scan(&task_data.Id)
 	return err
 }
 
