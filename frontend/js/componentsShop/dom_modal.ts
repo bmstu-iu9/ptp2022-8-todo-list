@@ -1,16 +1,3 @@
-const itemsShop = new Map<number, Item>();
-
-// модальная форма просмотра описания карты
-const modalShop = new bootstrap.Modal(<HTMLFormElement>document.getElementById('shopModal'));
-
-sendRequest('GET', server + '/items').then((data) => {
-    for (let i = 0; i < data.length; i++) {
-        const item: Item = data[i];
-        itemsShop.set(item.id, item);
-
-    }
-})
-
 function emptyDescription(description: string): string {
     return description !== '' ? description : `Описание отсутствует`;
 }
