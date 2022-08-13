@@ -10,7 +10,7 @@ import (
 
 type Repository interface {
 	Get(user_id int64) ([]entity.Task, error)
-	GetById(user_id int64, task_id int64) (entity.Task, error)
+	GetById(task_id int64) (entity.Task, error)
 	Create(task_data *entity.Task) error
 	Update(task_data *entity.Task) error
 	Delete(task_id int64) error
@@ -49,11 +49,11 @@ func (r repository) Get(user_id int64) ([]entity.Task, error) {
 	return tasks, nil
 }
 
-func (r repository) GetById(user_id int64, task_id int64) (entity.Task, error) {
-	q := "SELECT id, user_id, name, description FROM tasks WHERE user_id = $1 AND id = $2"
+func (r repository) GetById(task_id int64) (entity.Task, error) {
+	q := "SELECT id, user_id, name, description FROM tasks WHERE id = $1"
 
 	t := entity.Task{}
-	err := r.db.QueryRow(q, user_id, task_id).Scan(&t.Id, &t.UserId, &t.Name, &t.Description)
+	err := r.db.QueryRow(q, task_id).Scan(&t.Id, &t.UserId, &t.Name, &t.Description)
 
 	return t, err
 }

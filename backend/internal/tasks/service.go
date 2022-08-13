@@ -5,21 +5,23 @@ import (
 )
 
 type CreateTaskRequest struct {
+	UserId		int64
 	Name 		string `json:"name"`
 	Description string `json:"description,omitempty"`
 }
 
 type UpdateTaskRequest struct {
+	TaskId		int64
 	Name 		string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
 }
 
 type Service interface {
 	Get(user_id int64) ([]entity.Task, error)
-	GetById(user_id int64, task_id int64) (entity.Task, error)
-	Create(user_id int64, task_data CreateTaskRequest) (entity.Task, error)
-	Update(user_id, task_id int64, task_data UpdateTaskRequest) error
-	Delete(user_id, task_id int64) error
+	GetById(task_id int64) (entity.Task, error)
+	Create(task_data *CreateTaskRequest) (entity.Task, error)
+	Update(task_data *UpdateTaskRequest) (entity.Task, error)
+	Delete(task_id int64) (entity.Task, error)
 }
 
 type service struct {
@@ -40,8 +42,8 @@ func (s service) Get(user_id int64) ([]entity.Task, error) {
 	return tasks, err
 }
 
-func (s service) GetById(user_id int64, task_id int64) (entity.Task, error) {
-	task, err := s.r.GetById(user_id, task_id)
+func (s service) GetById(task_id int64) (entity.Task, error) {
+	task, err := s.r.GetById(task_id)
 	
 	if err != nil {
 		return entity.Task{}, err
@@ -55,7 +57,7 @@ func (t *CreateTaskRequest) Validate() error {
 	return nil
 }
 
-func (s service) Create(user_id int64, task_data CreateTaskRequest) (entity.Task, error) {
+func (s service) Create(task_data *CreateTaskRequest) (entity.Task, error) {
 	err := task_data.Validate()
 
 	if err != nil {
@@ -63,7 +65,7 @@ func (s service) Create(user_id int64, task_data CreateTaskRequest) (entity.Task
 	}
 
 	task := &entity.Task{
-		UserId: user_id,
+		UserId: task_data.UserId,
 		Name: task_data.Name,
 		Description: task_data.Description,
 	}
@@ -78,17 +80,17 @@ func (t *UpdateTaskRequest) Validate() error {
 	return nil
 }
 
-func (s service) Update(user_id, task_id int64, task_data UpdateTaskRequest) error {
+func (s service) Update(task_data *UpdateTaskRequest) (entity.Task, error) {
 	err := task_data.Validate()
 
 	if err != nil {
-		return err
+		return entity.Task{}, err
 	}
 
-	task, err := s.r.GetById(user_id, task_id)
+	task, err := s.r.GetById(task_data.TaskId)
 
 	if err != nil {
-		return err
+		return entity.Task{}, err
 	}
 
 	if task_data.Name != "" {
@@ -101,10 +103,16 @@ func (s service) Update(user_id, task_id int64, task_data UpdateTaskRequest) err
 
 	err = s.r.Update(&task)
 
-	return err
+	return task, err
 }
 
-func (s service) Delete(user_id, task_id int64) error {
-	err := s.r.Delete(task_id)
-	return err
+func (s service) Delete(task_id int64) (entity.Task, error) {
+	task, err := s.r.GetById(task_id)
+	if err != nil {
+		return entity.Task{}, err
+	}
+
+	err = s.r.Delete(task_id)
+
+	return task, err
 }

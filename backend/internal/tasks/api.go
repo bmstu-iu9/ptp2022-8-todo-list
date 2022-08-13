@@ -35,6 +35,13 @@ func (res *resource) handleGet(w http.ResponseWriter, r *http.Request, p httprou
 		return
 	}
 
+	// TODO: auth check
+	if id == 0 {
+		res.logger.Debug("Zero user_id")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	tasks, err := res.service.Get(int64(id))
 	
 	if err != nil {
@@ -61,6 +68,13 @@ func (res *resource) handleGetById(w http.ResponseWriter, r *http.Request, p htt
 		return
 	}
 
+	// TODO: auth check
+	if user_id == 0 {
+		res.logger.Debug("Zero user_id")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	task_id, err := strconv.Atoi(p.ByName("task_id"))
 	if err != nil {
 		res.logger.Debug(err)
@@ -68,7 +82,7 @@ func (res *resource) handleGetById(w http.ResponseWriter, r *http.Request, p htt
 		return
 	}
 
-	task, err := res.service.GetById(int64(user_id), int64(task_id))
+	task, err := res.service.GetById(int64(task_id))
 
 	if err != nil {
 		res.logger.Debug(err)
@@ -89,15 +103,6 @@ func (res *resource) handleGetById(w http.ResponseWriter, r *http.Request, p htt
 }
 
 func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	task_req := CreateTaskRequest{}
-	err := json.NewDecoder(r.Body).Decode(&task_req)
-
-	if err != nil {
-		res.logger.Debug(err)
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
 	user_id, err := strconv.Atoi(p.ByName("user_id"))
 
 	if err != nil {
@@ -106,7 +111,23 @@ func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httpro
 		return
 	}
 
-	task, err := res.service.Create(int64(user_id), task_req)
+	// TODO: auth check
+	if user_id == 0 {
+		res.logger.Debug("Zero user_id")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	task_req := CreateTaskRequest{UserId: int64(user_id)}
+	err = json.NewDecoder(r.Body).Decode(&task_req)
+
+	if err != nil {
+		res.logger.Debug(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	task, err := res.service.Create(&task_req)
 
 	if err != nil {
 		res.logger.Debug(err)
@@ -117,5 +138,90 @@ func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httpro
 	w.Header().Set("Location", fmt.Sprintf("%v/users/%v/tasks/%v", config.Get("API_SERVER"), strconv.Itoa(user_id), strconv.Itoa(int(task.Id))))
 	w.WriteHeader(http.StatusCreated)
 }
-func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httprouter.Params) {w.WriteHeader(501)}
-func (res *resource) handleDelete(w http.ResponseWriter, r *http.Request, p httprouter.Params) {w.WriteHeader(501)}
+
+func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	user_id, err := strconv.Atoi(p.ByName("user_id"))
+
+	if err != nil {
+		res.logger.Debug(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	//TODO: auth check
+	if user_id == 0 {
+		res.logger.Debug("Zero user_id")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	task_id, err := strconv.Atoi(p.ByName("task_id"))
+
+	if err != nil {
+		res.logger.Debug(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	task_req := UpdateTaskRequest{TaskId: int64(task_id)}
+	err = json.NewDecoder(r.Body).Decode(&task_req)
+
+	if err != nil {
+		res.logger.Debug(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	task, err := res.service.Update(&task_req)
+
+	if err != nil {
+		res.logger.Debug(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = json.NewEncoder(w).Encode(&task)
+
+	if err != nil {
+		res.logger.Debug(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func (res *resource) handleDelete(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	user_id, err := strconv.Atoi(p.ByName("user_id"))
+
+	if err != nil {
+		res.logger.Debug(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	// TODO: auth check
+	if user_id == 0 {
+		res.logger.Debug("Zero user id")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	task_id, err := strconv.Atoi(p.ByName("task_id"))
+
+	if err != nil {
+		res.logger.Debug(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	_, err = res.service.Delete(int64(task_id))
+
+	if err != nil {
+		res.logger.Debug(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
