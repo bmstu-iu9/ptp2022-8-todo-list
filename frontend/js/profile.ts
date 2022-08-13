@@ -7,13 +7,6 @@ type User = {
     level: number,
     health: number,
     experience: number,
-    equipment: {
-        helmut: number | null,
-        chestplate: number | null,
-        leggings: number | null,
-        boots: number | null,
-    }
-
 };
 let userId: number = 3;
 namespace userDataFields {
@@ -33,11 +26,20 @@ namespace changeDataModal {
     export const aboutInfoForm: HTMLFormElement = document.getElementById("aboutInfoInput") as HTMLFormElement;
     export const closeBtn: HTMLElement = document.getElementById("closeDataChangeModalBtn") as HTMLElement;
     export const submitBtn: HTMLElement = document.getElementById("changeDataSubmitBtn") as HTMLElement;
+    export const switchThemeBtn: HTMLElement = document.getElementById("theme-switch-checkbox") as HTMLInputElement;
+    if (localStorage.getItem("theme") == "light") {
+        switchThemeBtn.checked = true;
+    } else {
+        switchThemeBtn.cheked = false;
+    }
+    switchThemeBtn.addEventListener("click", () => console.log(switchThemeBtn.checked));
     changeDataBtn.addEventListener("click", () => {
         nicknameForm.value = userDataFields.nickname.innerHTML.slice(1);
         nameForm.value = userDataFields.name.innerHTML;
         surnameForm.value = userDataFields.surname.innerHTML;
         aboutInfoForm.value = userDataFields.aboutInfo.innerHTML;
+    
+        
     });
     
     submitBtn.addEventListener("click", () => {
@@ -46,7 +48,16 @@ namespace changeDataModal {
             name: nameForm.value,
             surname: surnameForm.value,
             aboutInfo: aboutInfoForm.value,}))
-            .then(r => updateHTML(r))
+            .then(r => {
+                updateHTML(r);
+                if ((switchThemeBtn.checked == true) && (localStorage.getItem("theme") == "dark")) {
+                    localStorage.setItem("theme", "light");
+                    switchProfileTheme();
+                } else if ((switchThemeBtn.checked == false) && (localStorage.getItem("theme") == "light")) {
+                    localStorage.setItem("theme", "dark");
+                    switchProfileTheme();
+                }
+            })
             .catch(e => {
                 throw e;
             })
@@ -125,7 +136,26 @@ function updateHTML(user: User): void {
 }
 
 
+function switchElementTheme(el: HTMLElement): void {
+    el.classList.toggle("text-white");
+    el.classList.toggle("bg-dark");
+    el.classList.toggle("border-light")
+}
 
+function switchProfileTheme() {
+    document.body.classList.toggle("bg-dark");
+    document.querySelectorAll(".container").forEach(container => switchElementTheme(container));
+    document.querySelectorAll(".card").forEach(card => switchElementTheme(card));
+    document.querySelectorAll(".list-group-item").forEach(li => switchElementTheme(li));
+}
+
+
+
+window.addEventListener("load", () => {
+    if (localStorage.getItem("theme") == "dark") {
+        switchProfileTheme();
+    }
+})
 sendRequest("GET", server + "/users/3")
         .then(r => {
             renderHero("mainProfileCard", r.Items)
