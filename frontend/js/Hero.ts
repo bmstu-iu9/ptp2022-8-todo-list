@@ -38,7 +38,11 @@ function getEquipment(items: Item[]): Equipment {
 function createEquipHtml(item: Item): HTMLElement {
     let html = document.createElement("img");
     html.setAttribute("class", "img-fluid");
-    html.setAttribute("src", item.imageForHero);
+    if (item.category == "pet") {
+        html.setAttribute("src", "https://wg.grechkogv.ru/assets/" + item.imageSrc);
+    } else {
+        html.setAttribute("src", item.imageForHero);
+    }
     html.setAttribute("id", item.category);
     return html;
 }
@@ -71,7 +75,7 @@ function getHeroHtml(e: Equipment): HTMLElement {
     avatar.setAttribute("src", "https://static.wikia.nocookie.net/minecraft_ru_gamepedia/images/3/33/Стив_JE2_BE1.png");
     avatar.setAttribute("alt", "avatar");
     for (let key of Object.keys(e)) {
-        if (e[key]) {
+        if (e[key] && (key != "pet")) {
             result.appendChild(createEquipHtml(e[key]));
         }
     }
@@ -79,8 +83,9 @@ function getHeroHtml(e: Equipment): HTMLElement {
     return result;
 }
 
-function renderHero(parentElementId: string, items: Item[]): void {
-    let equipment: Equipment = getEquipment(items);
+
+
+function renderHero(parentElementId: string, equipment: Equipment): void {
     const parentElement: HTMLElement = document.getElementById(parentElementId) as HTMLElement;
     if (parentElement != null) {
         parentElement.prepend(getHeroHtml(equipment));    

@@ -149,28 +149,24 @@ function switchProfileTheme() {
     document.querySelectorAll(".list-group-item").forEach(li => switchElementTheme(li));
 }
 
-
-
 window.addEventListener("load", () => {
     if (localStorage.getItem("theme") == "dark") {
         switchProfileTheme();
     }
 })
-sendRequest("GET", server + "/users/3")
-        .then(r => {
-            renderHero("mainProfileCard", r.Items)
-        })
-        .catch(e => {
-            throw e;
-        })
 
 sendRequest("GET", server + `/users/${userId}`)
     .then(r => {
         updateHTML(r);
+        let e: Equipment = getEquipment(r.Items);
+        renderHero("user-img-card", e);
+        let petCard: HTMLElement = document.getElementById("pet-container");
+            if (e.pet) {
+                petCard.appendChild(createEquipHtml(e.pet));
+            }
+        
+
     })
     .catch(e => {
     throw e
     });
-
-
-
