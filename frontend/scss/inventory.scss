@@ -1,81 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=BIZ+UDGothic&family=Kosugi+Maru&family=Montserrat:ital,wght@0,400;0,500;1,500&family=Roboto:wght@700&display=swap");
+
 $card__border-color: rgb(69, 72, 77);
-$card__border-w: .16rem;
+$card__border-w: 0.16rem;
 
 .body {
+  position: relative;
 
-    position: relative;
+  @media screen and (max-width: 768px) {
+    padding: 40px 35px 0;
+  }
+  @media screen and (max-height: 574.9px) {
+    padding: 0 35px 0;
+  }
 
-    @media screen and (max-width: 768px) {
-        padding: 40px 35px 0;
-    }
+  .h2 {
+    font-size: calc(0.8vw + 0.9rem);
+  }
 
-    .h2 {
-        font-size: calc(.8vw + .9rem);
-    }
+  .inventory {
+    margin: auto;
 
-    .inventory {
-        
-        margin: auto;
+    @media all and (orientation: landscape) {
+      display: grid;
+      grid-template-columns: auto 1fr;
 
-        @media all and (orientation:landscape) {
-            display: grid;
-            grid-template-columns: auto 1fr;
-
-            .inventory__user {
-                img {
-                    height: calc(95vh - 9vw - 1.3rem);
-                }
-            }
+      .inventory__user {
+        img {
+          height: calc(95vh - 9vw - 1.3rem);
         }
-
-        .inventory__box {
-
-            padding: calc(1vw + .4rem);
-            border-radius: .5rem;
-
-            .inventory__user {
-                border-radius: .5rem;
-            }
-
-            .inventory__items {
-                height: calc(95vh - 9vw - 1.3rem);
-                max-height: calc(95vh - 9vw - 1.3rem);
-                overflow-x: hidden;
-                overflow-y: auto;
-                border-radius: .5rem;
-
-                .inventory__item {
-                    border: .2rem solid rgb(58, 61, 65);
-                    border-radius: .5rem;
-
-                    .inventory__box-img {
-                        border: $card__border-w solid $card__border-color;
-                        border-bottom: none;
-                        border-top-left-radius: .2rem;
-                        border-top-right-radius: .2rem;
-                    }
-
-                    .inventory__box-title {
-                        border-radius: 0;
-                        border: $card__border-w solid $card__border-color;
-                        border-top: none;
-                        border-bottom: none;
-                        padding: auto 0;
-
-                        p {
-                            font-size: calc(.2vw + .8rem);
-                        }
-                    }
-
-                    .inventory__item-btn {
-                        border-top-left-radius: 0;
-                        border-top-right-radius: 0;
-                        border: $card__border-w solid $card__border-color;
-                        border-top: none;
-
-                    }
-                }
-            }
-        }
+      }
     }
+
+    .inventory__box {
+      padding: calc(1vw + 0.4rem);
+      border-radius: 0.5rem;
+      .h2 {
+        font-size: calc(0.4vw + 0.4vh + 0.9rem);
+      }
+
+      .inventory__user {
+        border-radius: 0.5rem;
+      }
+
+      .inventory__items {
+        height: calc(95vh - 9vw - 1.3rem);
+        max-height: calc(95vh - 9vw - 1.3rem);
+        overflow-x: hidden;
+        overflow-y: auto;
+        border-radius: 0.5rem;
+
+        .inventory__item {
+          border: 0.2rem solid rgb(58, 61, 65);
+          border-radius: 0.5rem;
+
+          .inventory__box-img {
+            border: $card__border-w solid $card__border-color;
+            border-bottom: none;
+            border-top-left-radius: 0.2rem;
+            border-top-right-radius: 0.2rem;
+          }
+
+          .inventory__box-title {
+            border-radius: 0;
+            border: $card__border-w solid $card__border-color;
+            border-top: none;
+            border-bottom: none;
+            padding: auto 0;
+
+            p {
+              font-family: "BIZ UDGothic", sans-serif;
+              font-family: "Kosugi Maru", sans-serif;
+              font-family: "Montserrat", sans-serif;
+              font-family: "Roboto", sans-serif;
+              font-size: calc(0.2vw + 0.8rem);
+            }
+          }
+
+          .inventory__item-btn {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border: $card__border-w solid $card__border-color;
+            border-top: none;
+          }
+        }
+      }
+    }
+  }
+
+  .inventory__form {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 0.5rem solid;
+    border-radius: 0.5rem;
+  }
 }

@@ -2,18 +2,20 @@
     display: inline-block;
     position: relative;
     #helmet {
-   
         position: absolute;
         z-index: 1;
     }
-    #chestplate {
+    #chest {
    
         z-index: 2;
         position: absolute;
     }
-    #leggings {
-       
+    #leggins {
         z-index: 1;
+        position: absolute;
+    }
+    #weapon {
+        z-index: 3;
         position: absolute;
     }
     #boots {

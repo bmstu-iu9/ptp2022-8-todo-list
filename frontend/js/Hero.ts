@@ -1,20 +1,31 @@
+type Equipment = {
+    helmet: Item;
+    leggins: Item;
+    chest: Item;
+    weapon: Item;
+    boots: Item;
+    pet: Item;
+}
+
 function getEquipment(items: Item[]): Equipment {
     let equipment: Equipment = {}
     items.forEach(el => {
-        if (el.ItemState === "equipped") {
-            switch (el.Category) {
+        if (el.state === "equipped") {
+            switch (el.category) {
                 case ("helmet"):
                     equipment.helmet = el;
                     break;
-                case ("chestplate"): 
-                    equipment.chestplate = el;
+                case ("chest"): 
+                    equipment.chest = el;
                     break;
-                case ("leggings"):
-                    equipment.leggings = el;
+                case ("leggins"):
+                    equipment.leggins = el;
                     break;
                 case ("boots"):
                     equipment.boots = el;
                     break;
+                case ("weapon"):
+                    equipment.weapon = el;
                 case ("pet"):
                     equipment.pet = el;
                     break;
@@ -27,19 +38,20 @@ function getEquipment(items: Item[]): Equipment {
 function createEquipHtml(item: Item): HTMLElement {
     let html = document.createElement("img");
     html.setAttribute("class", "img-fluid");
-    html.setAttribute("src", item.ImageForHero);
-    html.setAttribute("id", item.Category);
+    html.setAttribute("src", item.imageForHero);
+    html.setAttribute("id", item.category);
     return html;
 }
   
 
-function setEquipmentImg(id: number, category: "string"): void{
-    let equip: HTMLElement = document.getElementById(category)!;
+function setEquipmentImg(item: Item): void {
+    console.log(item);
+    let equip: HTMLElement = document.getElementById(item.category)!;
     if (equip != null) {
-        equip.setAttribute("src", itemsInventory[id].ImageForHero);
+        equip.setAttribute("src", item.imageForHero);
     } else {
-        let hero: HTMLElement = document.getElementById("hero")!;
-        hero.appendChild(createEquipHtml(itemsInventory[id]));
+        let hero: HTMLElement = document.querySelector(".hero") as HTMLElement;
+        hero.prepend(createEquipHtml(item));
     }
 }
 
@@ -68,10 +80,9 @@ function getHeroHtml(e: Equipment): HTMLElement {
 }
 
 function renderHero(parentElementId: string, items: Item[]): void {
-            let equipment: Equipment = getEquipment(items);
-            const parentElement: HTMLElement = document.getElementById(parentElementId) as HTMLElement;
-            if (parentElement != null) {
-                parentElement.prepend(getHeroHtml(equipment));    
-            }
- 
+    let equipment: Equipment = getEquipment(items);
+    const parentElement: HTMLElement = document.getElementById(parentElementId) as HTMLElement;
+    if (parentElement != null) {
+        parentElement.prepend(getHeroHtml(equipment));    
+    }
 }
