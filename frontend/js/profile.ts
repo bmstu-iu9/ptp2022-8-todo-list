@@ -32,36 +32,54 @@ namespace changeDataModal {
     } else {
         switchThemeBtn.cheked = false;
     }
-    switchThemeBtn.addEventListener("click", () => console.log(switchThemeBtn.checked));
     changeDataBtn.addEventListener("click", () => {
         nicknameForm.value = userDataFields.nickname.innerHTML.slice(1);
         nameForm.value = userDataFields.name.innerHTML;
         surnameForm.value = userDataFields.surname.innerHTML;
-        aboutInfoForm.value = userDataFields.aboutInfo.innerHTML;
-    
-        
+        aboutInfoForm.value = userDataFields.aboutInfo.innerHTML;  
     });
     
+
+    function getDataChanges(): {
+        nickname: string | null,
+        surname: string | null,
+        name: string | null,
+        aboutInfo: string | null
+    } {
+        let changes = {};
+        if (nicknameForm.value != userDataFields.nickname.innerHTML.slice(1)) {
+            changes.nickname = nicknameForm.value;
+        }
+        if (surnameForm.value != userDataFields.surname.innerHTML) {
+            changes.surname = surnameForm.value;
+        }
+        if (nameForm.value != userDataFields.name.innerHTML) {
+            changes.name = nameForm.value;
+        }
+        if (aboutInfoForm.value != userDataFields.aboutInfo.innerHTML) {
+            changes.aboutInfo = aboutInfoForm.value;
+        }
+        return changes;
+    }
     submitBtn.addEventListener("click", () => {
-        sendRequest("PATCH", server + `/users/${userId}`, JSON.stringify({
-            nickname: nicknameForm.value,
-            name: nameForm.value,
-            surname: surnameForm.value,
-            aboutInfo: aboutInfoForm.value,}))
-            .then(r => {
-                updateHTML(r);
-                if ((switchThemeBtn.checked == true) && (localStorage.getItem("theme") == "dark")) {
-                    localStorage.setItem("theme", "light");
-                    switchProfileTheme();
-                } else if ((switchThemeBtn.checked == false) && (localStorage.getItem("theme") == "light")) {
-                    localStorage.setItem("theme", "dark");
-                    switchProfileTheme();
-                }
-            })
-            .catch(e => {
-                throw e;
-            })
-        });
+        let changes = getDataChanges();
+        if (Object.keys(changes).length > 0) {
+            sendRequest("PATCH", server + `/users/${userId}`, JSON.stringify(changes))
+                .then(r => {
+                    updateHTML(r);
+                })
+                .catch(e => {
+                    throw e;
+                })
+            };
+        if ((switchThemeBtn.checked == true) && (localStorage.getItem("theme") == "dark")) {
+            localStorage.setItem("theme", "light");
+            switchProfileTheme();
+        } else if ((switchThemeBtn.checked == false) && (localStorage.getItem("theme") == "light")) {
+            localStorage.setItem("theme", "dark");
+            switchProfileTheme();
+        }
+    })
 };
 
 namespace changePasswordModal {
@@ -128,11 +146,11 @@ namespace changePasswordModal {
 
 
 function updateHTML(user: User): void {
-    userDataFields.name.innerHTML = user.name ?? "Неизвестно";
-    userDataFields.surname.innerHTML = user.surname ?? "Неизвестно";
+    userDataFields.name.innerHTML = user.name ?? "Не указано";
+    userDataFields.surname.innerHTML = user.surname ?? "Не укзана";
     userDataFields.email.innerHTML = user.email ?? "Неизвестно";
     userDataFields.nickname.innerHTML = "@" + user.nickname ?? "@Неизвестно";
-    userDataFields.aboutInfo.innerHTML = user.aboutInfo ?? "Неизвестно";
+    userDataFields.aboutInfo.innerHTML = user.aboutInfo ?? "Не указана";
 }
 
 
@@ -164,8 +182,6 @@ sendRequest("GET", server + `/users/${userId}`)
             if (e.pet) {
                 petCard.appendChild(createEquipHtml(e.pet));
             }
-        
-
     })
     .catch(e => {
     throw e
