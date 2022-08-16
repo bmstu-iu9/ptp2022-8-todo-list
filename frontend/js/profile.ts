@@ -162,6 +162,7 @@ function switchElementTheme(el: HTMLElement): void {
 
 function switchProfileTheme() {
     document.body.classList.toggle("bg-dark");
+    document.querySelectorAll("section").forEach(section => switchElementTheme(section));
     document.querySelectorAll(".container").forEach(container => switchElementTheme(container));
     document.querySelectorAll(".card").forEach(card => switchElementTheme(card));
     document.querySelectorAll(".list-group-item").forEach(li => switchElementTheme(li));
