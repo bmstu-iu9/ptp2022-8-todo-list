@@ -5,15 +5,20 @@ import (
 )
 
 type CreateTaskRequest struct {
-	UserId		int64
-	Name 		string `json:"name"`
-	Description string `json:"description,omitempty"`
+	UserId					int64				`json:"-"`
+	Name 					string 				`json:"name"`
+	Description 			string 				`json:"description,omitempty"`
+	CreatedOn				string				`json:"createdOn"`
+	DueDate					string				`json:"dueDate"`
+	SchtirlichHumorescue 	string 				`json:"schtirlichHumorescue"`
+	Labels					[]entity.TaskLabel	`json:"labels"`
+	Status					string				`json:"status"`
 }
 
 type UpdateTaskRequest struct {
-	TaskId		int64
-	Name 		string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
+	TaskId		int64	`json:"-"`
+	Name 		string 	`json:"name,omitempty"`
+	Description string 	`json:"description,omitempty"`
 }
 
 type Service interface {
@@ -68,6 +73,11 @@ func (s service) Create(task_data *CreateTaskRequest) (entity.Task, error) {
 		UserId: task_data.UserId,
 		Name: task_data.Name,
 		Description: task_data.Description,
+		CreatedOn: task_data.CreatedOn,
+		DueDate: task_data.DueDate,
+		SchtirlichHumorescue: task_data.SchtirlichHumorescue,
+		Labels: task_data.Labels,
+		Status: task_data.Status,
 	}
 
 	err = s.r.Create(task)
