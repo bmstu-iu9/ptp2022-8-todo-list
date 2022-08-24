@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "npx parcel ./frontend/index.html -p 8000",
         "build": "npx parcel build --dist-dir ./frontend/dist",
-        "lint": "npx eslint ./frontend/js/*.js && npx tsc -t es6 --noEmit frontend/js/*.ts",
+        "lint": "npx eslint ./frontend/**/*.js --ignore-path ./frontend/.eslintignore && npx tsc -t es6 --noEmit frontend/**/*.ts",
         "deploy": "npx parcel build --dist-dir ./frontend/dist --no-cache && cd frontend/deploy && node parse.js && node start.js"
     },
     "repository": {
