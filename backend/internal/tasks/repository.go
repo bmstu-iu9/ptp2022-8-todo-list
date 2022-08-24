@@ -6,6 +6,7 @@ import (
 	_ "github.com/lib/pq"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 )
 
 type Repository interface {
@@ -87,6 +88,8 @@ func (r repository) GetById(task_id int64) (entity.Task, error) {
 	}
 
 	task.Labels, err = r.GetLabels(task_id)
+	// logger := log.New()
+	// logger.Debug("Labels from db: ", task.Labels)
 
 	return task, err
 }
@@ -153,7 +156,10 @@ func (r repository) Update(task_data *entity.Task) error {
 		return err
 	}
 
+	logger := log.New()
+
 	for _, label := range task_data.Labels {
+		logger.Debug("Label update", label)
 		if label.Id != 0 {
 			q = "DELETE FROM task_labels WHERE id = $1"
 			_, err = r.db.Exec(q, label.Id)

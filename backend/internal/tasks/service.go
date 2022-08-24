@@ -16,9 +16,12 @@ type CreateTaskRequest struct {
 }
 
 type UpdateTaskRequest struct {
-	TaskId		int64	`json:"-"`
-	Name 		string 	`json:"name,omitempty"`
-	Description string 	`json:"description,omitempty"`
+	TaskId		int64				`json:"-"`
+	Name 		string 				`json:"name,omitempty"`
+	Description string 				`json:"description,omitempty"`
+	DueDate		string				`json:"dueDate,omitempty"`
+	Labels		[]entity.TaskLabel	`json:"labels,omitempty"`
+	Status		string				`json:"status,omitempty"`
 }
 
 type Service interface {
@@ -80,6 +83,9 @@ func (s service) Create(task_data *CreateTaskRequest) (entity.Task, error) {
 		Status: task_data.Status,
 	}
 
+	// logger := log.New()
+	// logger.Debug("Labels proccessed: ", task.Labels)
+
 	err = s.r.Create(task)
 
 	return *task, err
@@ -103,13 +109,13 @@ func (s service) Update(task_data *UpdateTaskRequest) (entity.Task, error) {
 		return entity.Task{}, err
 	}
 
-	if task_data.Name != "" {
-		task.Name = task_data.Name
-	}
+	or := func (ss ...string) (string) { for _, s := range ss { if s != "" { return s } }; return ""; }
 
-	if task_data.Description != "" {
-		task.Description = task_data.Description
-	}
+	task.Name = or(task_data.Name, task.Name)
+	task.Description = or(task_data.Description, task.Description)
+	task.DueDate = or(task_data.DueDate, task.DueDate)
+	task.Labels = task_data.Labels
+	task.Status = or(task_data.Status, task.Status)
 
 	err = s.r.Update(&task)
 

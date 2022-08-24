@@ -19,7 +19,7 @@ type Task struct {
 }  // TODO: complete task struct definition
 
 type TaskLabel struct {
-	Id		int64	`json:"-"`
+	Id		int64	`json:"id"`
 	TaskId 	int64	`json:"-"`
 	Name 	string 	`json:"text"`
 	Color 	string	`json:"color"`

@@ -57,7 +57,7 @@ func (res *resource) handleGet(w http.ResponseWriter, r *http.Request, p httprou
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
+	// w.WriteHeader(http.StatusOK)
 }
 
 func (res *resource) handleGetById(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
@@ -99,7 +99,7 @@ func (res *resource) handleGetById(w http.ResponseWriter, r *http.Request, p htt
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
+	// w.WriteHeader(http.StatusOK)
 }
 
 func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
@@ -120,6 +120,7 @@ func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httpro
 
 	task_req := CreateTaskRequest{UserId: int64(user_id)}
 	err = json.NewDecoder(r.Body).Decode(&task_req)
+	// res.logger.Debug("Labels received: ", task_req.Labels)
 
 	if err != nil {
 		res.logger.Debug(err)
@@ -166,6 +167,9 @@ func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httpr
 	task_req := UpdateTaskRequest{TaskId: int64(task_id)}
 	err = json.NewDecoder(r.Body).Decode(&task_req)
 
+	logger := log.New()
+	logger.Debug("Labels to update: ", task_req.Labels)
+
 	if err != nil {
 		res.logger.Debug(err)
 		w.WriteHeader(http.StatusBadRequest)
@@ -188,7 +192,7 @@ func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httpr
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
+	// w.WriteHeader(http.StatusOK)
 }
 
 func (res *resource) handleDelete(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
