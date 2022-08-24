@@ -68,7 +68,12 @@ Kапитан: **Александр Старовойтов**
 - `scss`
 - `typescript`
 - `parcel`
+- `bootstrap`
 - `nodeJS` для разработки и создания `production` версии
+
+Для хостинга `static` файлов фронтенда написан самодельный `0-dependencies` сервер на `NodeJS`. Сервер умеет поставлять различные страницы по одному адресу в зависимости от значения `ENV_MODE`, для всех страниц реализованы красивые адреса без `.html` в ссылке. Так же реализовано полноценное логирование запросов на сервер вместе с кодом ответа. 
+
+    > TODO: Написать про client-server side рендеринг
 
 ### Бэкенд
 
@@ -76,7 +81,7 @@ RESTful API на Go.
 
 ### Запуск с помощью Yarn
 
-Потребуется `NodeJS`(желательно версии 12.x) и `npm`:
+Потребуется `NodeJS`(желательно версии 12.x) и `yarn`:
 
 В корне проекта:
 
@@ -104,7 +109,7 @@ RESTful API на Go.
 | `make frontend` | Запускает frontend с realtime обновлениями                                               |
 | `make lint`     | Запускает линтер для frontend                                                            |
 | `make deploy`   | Запускает `production` версию frontend                                                   |
-
+| `make frontend-prod` | Запускает `prod` frontend с подменой стартовой страницы |
 Frontend доступен на [localhost:8000](http://localhost:8000), а api на [localhost:8080](http://localhost:8080).
 
 В папке `backend/`:
