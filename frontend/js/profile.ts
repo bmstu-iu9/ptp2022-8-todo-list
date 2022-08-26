@@ -5,16 +5,18 @@ type User = {
     surname: string,
     aboutInfo: string,
     level: number,
+    balance: number,
     health: number,
     experience: number,
 };
-let userId: number = 3;
+let userId: number = 2;
 namespace userDataFields {
     export const nickname: HTMLElement = document.getElementById("nicknameField") as HTMLElement;
     export const name: HTMLElement = document.getElementById("nameField") as HTMLElement;
     export const surname: HTMLElement = document.getElementById("surnameField") as HTMLElement;
     export const email: HTMLElement = document.getElementById("emailField") as HTMLElement;
     export const aboutInfo: HTMLElement = document.getElementById("aboutInfoField") as HTMLElement;
+    export const balance: HTMLElement = document.getElementById("balance")
 };
 
 namespace changeDataModal {
@@ -147,6 +149,7 @@ namespace changePasswordModal {
 
 function updateHTML(user: User): void {
     userDataFields.name.innerHTML = user.name ?? "Не указано";
+    userDataFields.balance.innerHTML = <string>user.balance ?? "0";
     userDataFields.surname.innerHTML = user.surname ?? "Не укзана";
     userDataFields.email.innerHTML = user.email ?? "Неизвестно";
     userDataFields.nickname.innerHTML = "@" + user.nickname ?? "@Неизвестно";
