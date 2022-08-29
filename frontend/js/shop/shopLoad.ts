@@ -21,7 +21,7 @@ function onShopLoad() {
     // получаю предметы с сервера
     sendRequest('GET', server + '/items').then((data) => {
         catalogShop = data;
-        productsPage.render();
+        renderShop();
     });
 
     // заполняю карту itemsShop предметами
