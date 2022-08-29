@@ -18,10 +18,10 @@ let pathsReroute = new Map([
     ['', ''],
 ])
 if (process.env['ENV_MODE'] === 'PROD') {
-    console.log('PROD MODE, index.html set to start_page.html.')
+    console.log('\x1b[30m','PROD MODE, index.html set to start_page.html.')
     pathsReroute.set('/', '/html/start_page.html')
 } else {
-    console.log('DEV MODE, index.html not modified.')
+    console.log('\x1b[30m','DEV MODE, index.html not modified.')
 }
 
 /**
@@ -180,7 +180,7 @@ export default function startServer(spec) {
     })
 
     server.listen(port, function () {
-        console.log('server listening on port: ' + port)
+        console.log('Server listening on port: ' + port)
     })
     return server
 }
