@@ -49,19 +49,22 @@ function createEquipHtml(item: Item): HTMLElement {
   
 
 function setEquipmentImg(item: Item): void {
-    console.log(item);
-    let equip: HTMLElement = document.getElementById(item.category)!;
-    if (equip != null) {
-        equip.setAttribute("src", item.imageForHero);
-    } else {
-        let hero: HTMLElement = document.querySelector(".hero") as HTMLElement;
-        hero.prepend(createEquipHtml(item));
+    if (item.category != "pet") {
+        let equip: HTMLElement = document.getElementById(item.category)!;
+        if (equip != null) {
+            equip.setAttribute("src", item.imageForHero);
+        } else {
+            let hero: HTMLElement = document.querySelector(".hero") as HTMLElement;
+            hero.prepend(createEquipHtml(item));
+        }    
     }
-}
+  }
 
 
 function removeEquipmentImg(category: Category) {
-    document.getElementById(category)?.remove();
+    if (category != "pet") {
+        document.getElementById(category)?.remove();
+    }
 }
 
 
