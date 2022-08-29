@@ -34,7 +34,7 @@ function renderShop() {
         htmlCatalog += `
                 <div class="col idItem=${item.id}">
                     <div class="card h-100">
-                        <img src="http://grechkogv.ru:3000/assets/${item.imageSrc}" class="card-img-top" alt="...">
+                        <img src="https://wg.grechkogv.ru/assets/${item.imageSrc}" class="card-img-top" alt="...">
                         <div class="card-body" style="background: ${getRarityColor(item.rarity)}">
                             <h5 class="card-title">${item.name}</h5>
                                 <p class="card-text">${item.description}</p>
