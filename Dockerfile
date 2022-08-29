@@ -15,7 +15,7 @@ FROM base AS lint
 ADD .prettierrc /code
 CMD ["npm", "run", "lint"]
 
-FROM base AS default
+FROM base AS dev
 CMD ["npm", "run", "dev"]
 EXPOSE 8000
 
