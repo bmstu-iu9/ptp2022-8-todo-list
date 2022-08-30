@@ -10,6 +10,11 @@ if (!fs.existsSync(workdir + 'spa/views/')) {
     fs.mkdirSync(workdir + 'spa/views/', { recursive: true })
 }
 
+/**
+ * Read from file and parse specific file
+ * @param {string} filename 
+ * @returns {Promise}
+ */
 var readAndParse = (filename) => {
     return Promise.resolve(
         fs.readFile(workdir + 'html/' + filename, function (err, data) {
@@ -25,6 +30,12 @@ var readAndParse = (filename) => {
         }),
     )
 }
+
+/**
+ * Parses all pages for SPA
+ * @async
+ * @returns {Promise<void>}
+ */
 
 export default async function preparePages() {
     return /** @type {Promise<void>} */(new Promise((resolve, reject) => {
