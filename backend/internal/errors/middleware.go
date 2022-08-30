@@ -1,6 +1,7 @@
 package errors
 
 import (
+	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -29,16 +30,93 @@ func Handle(handler Handler, logger log.Logger) httprouter.Handle {
 	}
 }
 
+var errorResponses = []struct {
+	err  error
+	code int
+	body Problem
+}{
+	{
+		err:  ErrNotFound,
+		code: http.StatusNotFound,
+		body: Problem{
+			Title:  "Not found",
+			Status: http.StatusNotFound,
+		},
+	},
+	{
+		err:  ErrDb,
+		code: http.StatusInternalServerError,
+		body: Problem{
+			Title:  "Internal server error",
+			Status: http.StatusInternalServerError,
+			Detail: "Database error",
+		},
+	},
+	{
+		err:  ErrBodyDecode,
+		code: http.StatusBadRequest,
+		body: Problem{
+			Title:  "Bad request",
+			Status: http.StatusBadRequest,
+			Detail: "Bad request body",
+		},
+	},
+	{
+		err:  ErrBodyEncode,
+		code: http.StatusInternalServerError,
+		body: Problem{
+			Title:  "Internal server error",
+			Status: http.StatusInternalServerError,
+		},
+	},
+	{
+		err:  ErrPathParameter,
+		code: http.StatusBadRequest,
+		body: Problem{
+			Title:  "Bad request",
+			Status: http.StatusBadRequest,
+			Detail: "Bad path parameter",
+		},
+	},
+	{
+		err:  ErrValidation,
+		code: http.StatusBadRequest,
+		body: Problem{
+			Title:  "Bad request",
+			Status: http.StatusBadRequest,
+			Detail: "Request body parameters validation failed",
+		},
+	},
+	{
+		err:  ErrAuth,
+		code: http.StatusForbidden,
+		body: Problem{
+			Title:  "Forbidden",
+			Status: http.StatusForbidden,
+			Detail: "Wrong login or password",
+		},
+	},
+	{
+		err:  ErrNotAllowed,
+		code: http.StatusMethodNotAllowed,
+		body: Problem{
+			Title:  "Method not allowed",
+			Status: http.StatusMethodNotAllowed,
+		},
+	},
+}
+
 func errorResponse(w http.ResponseWriter, err error, logger log.Logger) {
-	switch {
-	case errors.Is(err, ErrNotFound):
-		NotFound(w, logger)
-	case errors.Is(err, ErrValidation) ||
-		errors.Is(err, ErrBodyDecode):
-		BadRequest(w, logger)
-	case errors.Is(err, ErrWrongPassword):
-		Forbidden(w, logger)
-	default:
-		UnexpectedError(w, logger)
+	for _, errorResponse := range errorResponses {
+		if errors.Is(err, errorResponse.err) {
+			w.WriteHeader(errorResponse.code)
+			w.Header().Set("Content-Type", "application/problem+json")
+			err := json.NewEncoder(w).Encode(errorResponse.body)
+			if err != nil {
+				logger.Info(err)
+				w.WriteHeader(http.StatusInternalServerError)
+			}
+			return
+		}
 	}
 }

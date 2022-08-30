@@ -20,7 +20,7 @@ var (
 )
 
 func init() {
-	mux = router.New()
+	mux = router.New(logger)
 	logger = log.New()
 	service := NewService(&mockRepository{
 		id: 2,
@@ -44,9 +44,8 @@ func TestApi(t *testing.T) {
 		return buf.String()
 	}
 
-	badRequest := toJson(errors.Problem{Title: "Bad request", Status: http.StatusBadRequest})
 	notFound := toJson(errors.Problem{Title: "Not found", Status: http.StatusNotFound})
-	forbidden := toJson(errors.Problem{Title: "Forbidden", Status: http.StatusForbidden})
+	forbidden := toJson(errors.Problem{Title: "Forbidden", Status: http.StatusForbidden, Detail: "Wrong login or password"})
 
 	tests := []test.ApiTestCase{
 		{Name: "create OK", Method: "POST", Url: "/users",
@@ -58,11 +57,11 @@ func TestApi(t *testing.T) {
 			WantCode: http.StatusOK},
 		{Name: "create input error", Method: "POST", Url: "/users",
 			Body: `"email": "slava@example.com", "nickname": "slavarusvarrior", "password": "sDFHgjssndbfns123"`,
-			WantBody: badRequest,
+			WantBody: toJson(errors.Problem{Title: "Bad request", Status: http.StatusBadRequest, Detail: "Bad request body"}),
 			WantCode: http.StatusBadRequest},
 		{Name: "create input error", Method: "POST", Url: "/users",
 			Body: `{"email": "slava@example.com", "password": "sDFHgjssndbfns123"}`,
-			WantBody: badRequest,
+			WantBody: toJson(errors.Problem{Title: "Bad request", Status: http.StatusBadRequest, Detail: "Request body parameters validation failed"}),
 			WantCode: http.StatusBadRequest},
 		{Name: "get OK", Method: "GET", Url: "/users/1",
 			WantCode: http.StatusOK, WantBody: toJson(User{Id: 1, Email: "geogreck@example.com", Nickname: "geogreck"})},
@@ -86,7 +85,7 @@ func TestApi(t *testing.T) {
 			WantCode: http.StatusOK, WantBody: toJson(User{Id: 1, Email: "test@example.com", Nickname: "geogreck"})},
 		{Name: "modify input error", Method: "PATCH", Url: "/users/1",
 			Body:     `{"email": "testexample.com", "currentPassword": "Test123Test"}`,
-			WantBody: badRequest,
+			WantBody: toJson(errors.Problem{Title: "Bad request", Status: http.StatusBadRequest, Detail: "Request body parameters validation failed"}),
 			WantCode: http.StatusBadRequest},
 		{Name: "delete OK", Method: "DELETE", Url: "/users/1",
 			WantCode: http.StatusNoContent},
