@@ -6,6 +6,17 @@ import http from 'http'
 
 const cache = {}
 
+const fontColors = new Map([
+    ['black', '\x1b[30m'],
+    ['red', '\x1b[31m'],
+    ['green', '\x1b[32m'],
+    ['yellow', '\x1b[33m'],
+    ['blue', '\x1b[34m'],
+    ['magenta', '\x1b[35m'],
+    ['cyan','\x1b[36m'],
+    ['white', '\x1b[37m'],
+])
+
 let reroutePaths = new Map([
     ['/html/spa.html', '/app'],
     ['/html/login.html', '/login'],
@@ -18,10 +29,10 @@ let pathsReroute = new Map([
     ['', ''],
 ])
 if (process.env['ENV_MODE'] === 'PROD') {
-    console.log('\x1b[30m','PROD MODE, index.html set to start_page.html.')
+    console.log(fontColors.get('black'),'PROD MODE, index.html set to start_page.html.')
     pathsReroute.set('/', '/html/start_page.html')
 } else {
-    console.log('\x1b[30m','DEV MODE, index.html not modified.')
+    console.log(fontColors.get('black'),'DEV MODE, index.html not modified.')
 }
 
 /**
@@ -143,14 +154,14 @@ export default function startServer(spec) {
             filePath = path + req.url.substring(1)
             serveStatic(res, cache, filePath).then((code) => {
                 console.log(
-                    '\x1b[32m',
+                    fontColors.get('green'),
                     'GET:',
-                    '\x1b[34m',
+                    fontColors.get('blue'),
                     path,
                     ' ',
                     req.url,
                     ' ',
-                    code === '404' ? '\x1b[31m' : '\x1b[32m',
+                    code === '404' ? fontColors.get('red') : fontColors.get('green'),
                     code,
                 )
             })
@@ -158,19 +169,19 @@ export default function startServer(spec) {
         if (reroutePaths.has(req.url)) {
             let reroute = reroutePaths.get(req.url)
             send302(res, reroute)
-            console.log('\x1b[32m', 'GET:', '\x1b[34m', req.url, ' ', '\x1b[33m', '302 -->', reroutePaths.get(req.url))
+            console.log(fontColors.get('green'), 'GET:', fontColors.get('blue'), req.url, ' ', fontColors.get('yellow'), '302 -->', reroutePaths.get(req.url))
         } else if (pathsReroute.has(req.url)) {
             filePath = path + pathsReroute.get(req.url)
             serveStatic(res, cache, filePath).then((code) => {
                 console.log(
-                    '\x1b[32m',
+                    fontColors.get('green'),
                     'GET:',
-                    '\x1b[34m',
+                    fontColors.get('blue'),
                     path,
                     ' ',
                     pathsReroute.get(req.url),
                     ' ',
-                    code === '404' ? '\x1b[31m' : '\x1b[32m',
+                    code === '404' ? fontColors.get('red') : fontColors.get('green'),
                     code,
                 )
             })

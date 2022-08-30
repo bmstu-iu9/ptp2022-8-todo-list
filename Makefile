@@ -1,8 +1,12 @@
-all: dev
+all: prod
 
 .PHONY: dev
 dev:
 	@docker compose -f docker-compose.dev.yml up --build
+
+.PHONY: prod
+prod:
+	@docker compose up --build
 
 .PHONY: frontend
 frontend:

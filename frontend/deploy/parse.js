@@ -1,8 +1,6 @@
 // @ts-check
 
-import { rejects } from 'assert'
 import fs from 'fs'
-import { resolve } from 'path'
 
 var workdir = '../dist/'
 var regexp = new RegExp(/<div class="body.+">.+<\/div>/)

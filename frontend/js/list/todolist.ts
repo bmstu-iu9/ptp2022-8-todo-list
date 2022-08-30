@@ -39,6 +39,7 @@ function onTodoLoad() {
     sendRequest('GET', server + '/tasks').then((data) => {
         for (let i = 0; i < data.length; i++) {
             let buf = data[i]
+            // Саше не понравилось, нужно переделать
             let newTask = new Task(buf.id, buf.name, buf.description, buf.dueDate, buf.labels, false)
             newTask.setStatus(buf.status, false)
             tasks.set(buf.id, newTask)

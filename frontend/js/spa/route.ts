@@ -2,7 +2,7 @@ class Route {
     private name: string
     private htmlName: string
     private isDefault: boolean
-    private fn: Function
+    private onLoadFn: Function
 
     constructor(name: string, htmlName: string, fn: Function, isDefault = false) {
         try {
@@ -11,7 +11,7 @@ class Route {
             }
             this.name = name
             this.htmlName = htmlName
-            this.fn = fn
+            this.onLoadFn = fn
             this.isDefault = isDefault
         } catch (e) {
             console.error(e)
@@ -32,12 +32,19 @@ class Route {
 
     public evalFn() {
         let count = 0
+        let isSuccessfull = true
         let timer = setInterval(() => {
-            this.fn()
+            try {
+                this.onLoadFn()
+            } catch (error) {
+                console.error(error)
+                isSuccessfull = false
+            }
             count++
-            if (document.getElementById('modal') || document.getElementById('inventoryModal') || count > 10) {
+            if (isSuccessfull || count > 10) {
                 clearInterval(timer)
             }
-        }, 100)
+            isSuccessfull = true
+        }, 50)
     }
 }
