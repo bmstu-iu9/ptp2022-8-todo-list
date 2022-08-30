@@ -3,14 +3,16 @@ class Route {
     private htmlName: string
     private isDefault: boolean
     private onLoadFn: Function
+    private title: string
 
-    constructor(name: string, htmlName: string, fn: Function, isDefault = false) {
+    constructor(name: string, htmlName: string, title: string, fn: Function, isDefault = false) {
         try {
             if (!name || !htmlName) {
                 throw 'error: name and htmlName params are mandatories'
             }
             this.name = name
             this.htmlName = htmlName
+            this.title = title
             this.onLoadFn = fn
             this.isDefault = isDefault
         } catch (e) {
@@ -46,5 +48,9 @@ class Route {
             }
             isSuccessfull = true
         }, 50)
+    }
+
+    public getTitle(): string {
+        return this.title
     }
 }

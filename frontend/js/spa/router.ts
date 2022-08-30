@@ -54,7 +54,7 @@ class Router {
             xhttp.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
                     scope.rootElem.innerHTML = this.responseText
-                    document.title = route.getName()
+                    document.title = route.getTitle()
                 } else {
                     scope.rootElem.innerHTML = `<div class="body text-center fs-1 fw-bold" style="margin: 0; position: absolute; top: 35%;">
                                                         Ошибка 404<br>

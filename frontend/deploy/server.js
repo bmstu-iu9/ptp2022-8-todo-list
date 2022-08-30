@@ -3,7 +3,7 @@
 import fs from 'fs'
 import path from 'path'
 import http from 'http'
-import fontColors from './fontColors'
+import fontColors from './fontColors.js'
 
 const cache = {}
 
