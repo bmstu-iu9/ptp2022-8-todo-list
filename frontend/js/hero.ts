@@ -8,7 +8,13 @@ type Equipment = {
 }
 
 function getEquipment(items: Item[]): Equipment {
-    let equipment: Equipment = {}
+    let equipment: Equipment = {
+        helmet: null,
+        leggins: null,
+        chest: null,
+        weapon: null,
+        boots: null,
+        pet: null}
     items.forEach(el => {
         if (el.state === "equipped") {
             switch (el.category) {

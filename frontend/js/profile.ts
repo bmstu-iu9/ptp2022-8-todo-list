@@ -28,11 +28,11 @@ namespace changeDataModal {
     export const aboutInfoForm: HTMLFormElement = document.getElementById("aboutInfoInput") as HTMLFormElement;
     export const closeBtn: HTMLElement = document.getElementById("closeDataChangeModalBtn") as HTMLElement;
     export const submitBtn: HTMLElement = document.getElementById("changeDataSubmitBtn") as HTMLElement;
-    export const switchThemeBtn: HTMLElement = document.getElementById("theme-switch-checkbox") as HTMLInputElement;
+    export const switchThemeBtn: HTMLInputElement = document.getElementById("theme-switch-checkbox") as HTMLInputElement;
     if (localStorage.getItem("theme") == "light") {
         switchThemeBtn.checked = true;
     } else {
-        switchThemeBtn.cheked = false;
+        switchThemeBtn.checked = false;
     }
     changeDataBtn.addEventListener("click", () => {
         nicknameForm.value = userDataFields.nickname.innerHTML.slice(1);
@@ -43,12 +43,12 @@ namespace changeDataModal {
     
 
     function getDataChanges(): {
-        nickname: string | null,
-        surname: string | null,
-        name: string | null,
-        aboutInfo: string | null
+        [key: string]: string
     } {
-        let changes = {};
+        let changes: {
+            [key: string]: string,
+            
+        } = {}
         if (nicknameForm.value != userDataFields.nickname.innerHTML.slice(1)) {
             changes.nickname = nicknameForm.value;
         }
@@ -91,7 +91,7 @@ namespace changePasswordModal {
     const submitBtn: HTMLFormElement = document.getElementById("changePasswordSubmitBtn") as HTMLFormElement;
     const validationSpan: HTMLElement = document.getElementById("validationResult") as HTMLElement;
     const closeBtn: HTMLElement = document.getElementById("closeChangePasswordModalBtn") as HTMLElement;
-    const oldPasswordForm: HTMLElement = document.getElementById("oldPasswordInput") as HTMLElement;
+    const oldPasswordForm: HTMLFormElement = document.getElementById("oldPasswordInput") as HTMLFormElement;
 
     function clearPasswordForm(): void {
         oldPasswordForm.value = "";
@@ -149,7 +149,7 @@ namespace changePasswordModal {
 
 function updateHTML(user: User): void {
     userDataFields.name.innerHTML = user.name ?? "Не указано";
-    userDataFields.balance.innerHTML = <string>user.balance ?? "0";
+    userDataFields.balance.innerHTML = String(user.balance) ?? "0";
     userDataFields.surname.innerHTML = user.surname ?? "Не укзана";
     userDataFields.email.innerHTML = user.email ?? "Неизвестно";
     userDataFields.nickname.innerHTML = "@" + user.nickname ?? "@Неизвестно";
@@ -157,7 +157,7 @@ function updateHTML(user: User): void {
 }
 
 
-function switchElementTheme(el: HTMLElement): void {
+function switchElementTheme(el: HTMLElement | Element): void {
     el.classList.toggle("text-white");
     el.classList.toggle("bg-dark");
     el.classList.toggle("border-light")

@@ -15,7 +15,14 @@ let Equipped = {
 // получение предметов с сервера
 sendRequest('GET', server + '/users/3').then((d) => {
     let data: Item[] = d.Items;
-    let equipment: Equipment = {};
+    let equipment: Equipment = {
+        helmet: null,
+        leggins: null,
+        chest: null,
+        weapon: null,
+        boots: null,
+        pet: null, 
+    };
     for (let i = 0; i < data.length; i++) {   
         let item: Item = data[i]
         if (item.state !== 'store') {
