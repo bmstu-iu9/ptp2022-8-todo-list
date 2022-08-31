@@ -1,5 +1,5 @@
 // модальная форма просмотра описания карты
-const modalInventory = new bootstrap.Modal(<HTMLFormElement>document.getElementById('inventoryModal'))
+let modalInventory: any
 // хранилище предметов
 var itemsInventory = new Map<number, Item>()
 // хранилище айди надетых предметов по категориям(если предмет какой-то категории не надет, то значение -1)
@@ -13,25 +13,31 @@ let Equipped = {
     skin: -1,
 }
 
-// получение предметов с сервера
-sendRequest('GET', server + '/items').then((data) => {
-    for (let i = 0; i < data.length; i++) {
-        let item: Item = data[i]
-        if (item.state !== 'store') {
-            toInventoryHTMLBlock(item)
-            itemsInventory.set(item.id, item)
-            if (item.state === 'equipped') {
-                equipped(item)
+function onInventoryLoad() {
+    modalInventory = new bootstrap.Modal(<HTMLFormElement>document.getElementById('inventoryModal'))
+    // получение предметов с сервера
+    sendRequest('GET', server + '/items').then((data) => {
+        data.forEach((item) => {
+            if (item.state !== 'store') {
+                toInventoryHTMLBlock(item)
+                itemsInventory.set(item.id, item)
+                if (item.state === 'equipped') {
+                    equipped(item)
+                }
             }
+        })
+        if (Equipped.skin !== -1) {
+            let userImg = document.getElementById('inventory__user-img')
+            let id = Equipped.skin
+            let item = itemsInventory.get(id)!
+            //userImg!.setAttribute('src', `https://wg.grechkogv.ru/assets/${item.imageSrc}`)
         }
-    }
-    if (Equipped.skin !== -1) {
-        let userImg = document.getElementById('inventory__user-img')
-        let id = Equipped.skin
-        let item = itemsInventory.get(id)!
-        //userImg!.setAttribute('src', `https://wg.grechkogv.ru/assets/${item.imageSrc}`)
-    }
-})
+    })
+}
+
+try {
+    onInventoryLoad()
+} catch (error) {}
 
 // Общая обработка кликов по странице
 document.addEventListener('click', (e) => {
@@ -71,7 +77,6 @@ document.addEventListener('click', (e) => {
             putOn(item)
         }
     }
-
 })
 // создание карты предмета в HTML
 function createInventoryHTMLBlock(item: Item) {
@@ -94,7 +99,6 @@ function createInventoryHTMLBlock(item: Item) {
         </div>
     </div>`
     return str
-
 }
 // добавление HTML-блока карты на страницу
 function toInventoryHTMLBlock(item: Item) {
@@ -133,7 +137,7 @@ function equipped(item: Item) {
     }
 }
 
-// удаление предмета нужной категории из хранилища айди надетых предметов 
+// удаление предмета нужной категории из хранилища айди надетых предметов
 function unEquipped(item: Item) {
     switch (item.category) {
         case 'helmet':
@@ -170,9 +174,8 @@ function putOn(item: Item) {
     itemsInventory.set(item.id, item)
     equipItemHTML(item)
     equipped(item)
-
 }
-// функция снятия 
+// функция снятия
 function takeOff(item: Item) {
     item.state = 'inventoried'
     sendRequest('PATCH', server + `/items/${item.id}`, JSON.stringify({ state: item.state }))
@@ -198,7 +201,6 @@ function idEquipped(item: Item): number {
         default:
             return Equipped.skin
     }
-
 }
 // отрисовка состояния предмета в HTML
 function equipItemHTML(item: Item, unEquip: boolean = false) {

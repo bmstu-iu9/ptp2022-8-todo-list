@@ -19,7 +19,7 @@ services:
       target: deploy
     container_name: frontend
     environment:
-      - ENV_MODE=PROD
+      - ENV_MODE=DEV
     volumes:
       - ./frontend:/code/frontend
     ports:

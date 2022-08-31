@@ -31,3 +31,4 @@ backend/**
 *.go
 *.mod
 **/CNAME
+**/dist/**
