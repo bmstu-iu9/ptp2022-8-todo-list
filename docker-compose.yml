@@ -16,11 +16,14 @@ services:
   frontend:
     build:
       context: .
+      target: deploy
     container_name: frontend
+    environment:
+      - ENV_MODE=PROD
     volumes:
       - ./frontend:/code/frontend
     ports:
-      - 8000:8000
+      - 8000:3000
     deploy:
       restart_policy:
         condition: on-failure
