@@ -9,7 +9,7 @@ type User = {
     health: number,
     experience: number,
 };
-let userId: number = 2;
+let userId: number = 3;
 namespace userDataFields {
     export const nickname: HTMLElement = document.getElementById("nicknameField") as HTMLElement;
     export const name: HTMLElement = document.getElementById("nameField") as HTMLElement;
@@ -171,13 +171,11 @@ function switchProfileTheme() {
     document.querySelectorAll(".list-group-item").forEach(li => switchElementTheme(li));
 }
 
-window.addEventListener("load", () => {
+function profileOnLoad(): void {
     if (localStorage.getItem("theme") == "dark") {
         switchProfileTheme();
     }
-})
-
-sendRequest("GET", server + `/users/${userId}`)
+    sendRequest("GET", server + `/users/${userId}`)
     .then(r => {
         updateHTML(r);
         let e: Equipment = getEquipment(r.Items);
@@ -190,3 +188,6 @@ sendRequest("GET", server + `/users/${userId}`)
     .catch(e => {
     throw e
     });
+}
+
+profileOnLoad();
