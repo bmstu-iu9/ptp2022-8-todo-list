@@ -43,7 +43,7 @@ class Route {
                 isSuccessfull = false
             }
             count++
-            if (isSuccessfull || count > 10) {
+            if (isSuccessfull || count > 100) {
                 clearInterval(timer)
             }
             isSuccessfull = true

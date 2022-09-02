@@ -17,7 +17,7 @@ let Equipped = {
 function onInventoryLoad() {
     modalInventory = new bootstrap.Modal(<HTMLFormElement>document.getElementById('inventoryModal'))
     // получение предметов с сервера
-    sendRequest('GET', server + '/items').then((data) => {
+    sendRequest('GET', server + '/items/').then((data) => {
         let equipment: Equipment = {
             helmet: null,
             leggins: null,
@@ -26,6 +26,7 @@ function onInventoryLoad() {
             boots: null,
             pet: null, 
         }
+        //data = data.Items
         data.forEach((item) => {
             if (item.state !== 'store') {
                 toInventoryHTMLBlock(item)
@@ -36,6 +37,7 @@ function onInventoryLoad() {
                 }
             }
         })
+        console.log(equipment)
         document.getElementById("inventory__user")?.appendChild(getHeroHtml(equipment));
         // Сейчас есть проблемы с отображением скинов
         //if (Equipped.skin !== -1) {

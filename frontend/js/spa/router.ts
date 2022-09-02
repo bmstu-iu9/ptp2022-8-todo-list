@@ -55,10 +55,15 @@ class Router {
                 if (this.readyState === 4 && this.status === 200) {
                     scope.rootElem.innerHTML = this.responseText
                     document.title = route.getTitle()
-                } else {
+                } else if (this.readyState === 4 && this.status === 404) {
                     scope.rootElem.innerHTML = `<div class="body text-center fs-1 fw-bold" style="margin: 0; position: absolute; top: 35%;">
                                                         Ошибка 404<br>
                                                         <p class="fs-3 fw-normal">Страница не найдена</p>
+                                                </div>`
+                } else {
+                    scope.rootElem.innerHTML = `<div class="body text-center fs-1 fw-bold" style="margin: 0; position: absolute; top: 35%;">
+                                                        Загрузка<br>
+                                                        <p class="fs-3 fw-normal">Пожалуйста, подождите</p>
                                                 </div>`
                 }
             }
