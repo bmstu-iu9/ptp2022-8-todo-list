@@ -1,10 +1,9 @@
 package users
 
 import (
-	"errors"
-	"regexp"
-
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/validation"
 )
 
 // Service encapsulates usecase logic for users.
@@ -18,71 +17,90 @@ type Service interface {
 // User represents the data about an API user.
 type User struct {
 	Id       int64    `json:"id"`
-	Email    string `json:"email"`
-	Nickname string `json:"nickname"`
+	Email    Email    `json:"email"`
+	Nickname Nickname `json:"nickname"`
+}
+
+type (
+	// Email represents email.
+	Email    entity.Email
+	// Nickname represents user's nickname.
+	Nickname entity.Nickname
+	// Password represents plaintext password.
+	Password entity.Password
+)
+
+func newEmail(str string) *Email {
+	return (*Email)(&str)
+}
+
+func newPassword(str string) *Password {
+	return (*Password)(&str)
+}
+
+func newNickname(str string) *Nickname {
+	return (*Nickname)(&str)
+}
+
+func (field *Email) validate() bool {
+	if field == nil {
+		return true
+	}
+	return validation.ValidateField(string(*field), 1, 200, `^[^\s@]+@[^\s@]+\.[^\s@]+$`)
+}
+
+func (field *Nickname) validate() bool {
+	if field == nil {
+		return true
+	}
+	return validation.ValidateField(string(*field), 4, 20, `^([a-z\d]+-)*[a-z\d]+$`)
+}
+
+func (field *Password) validate() bool {
+	if field == nil {
+		return true
+	}
+	return validation.ValidateField(string(*field), 8, 100, `^[A-Za-z0-9]\w{8,}$`)
 }
 
 func newUser(entity *entity.User) User {
 	return User{
 		Id:       entity.Id,
-		Email:    entity.Email,
-		Nickname: entity.Nickname,
+		Email:    Email(entity.Email),
+		Nickname: Nickname(entity.Nickname),
 	}
 }
 
 // NewUser represents the data for creating new User.
 type CreateUserRequest struct {
-	Email    string `json:"email"`
-	Nickname string `json:"nickname"`
-	Password string `json:"password"`
+	Email    Email    `json:"email"`
+	Nickname Nickname `json:"nickname"`
+	Password Password `json:"password"`
 }
 
-func validateField(field string, minLen, maxLen int, regex string) bool {
-	if matched, _ := regexp.MatchString(regex, field); !matched ||
-		len(field) < minLen || len(field) > maxLen {
-		return false
-	}
-	return true
-}
-
-// Validate validates the CreateUserRequest fields.
-func (req *CreateUserRequest) Validate() error {
-	switch {
-	case !validateField(req.Email, 1, 200, `^[^\s@]+@[^\s@]+\.[^\s@]+$`):
-		return errors.New("Wrong email")
-	case !validateField(req.Nickname, 4, 20, `^([a-z\d]+-)*[a-z\d]+$`):
-		return errors.New("Wrong nickname")
-	case !validateField(req.Password, 8, 100, `^[A-Za-z0-9]\w{8,}$`):
-		return errors.New("Wrong password")
-	default:
+// validate validates the CreateUserRequest fields.
+func (req *CreateUserRequest) validate() error {
+	if req.Email.validate() && req.Nickname.validate() && req.Password.validate() {
 		return nil
 	}
+	return errors.ErrValidation
 }
 
 // UpdateUserRequest represents the data for modifing User.
 // Fields Email, Nickname and NewPassword are optional.
 type UpdateUserRequest struct {
-	Email           *string `json:"email"`
-	Nickname        *string `json:"nickname"`
-	NewPassword     *string `json:"newPassword"`
-	CurrentPassword string  `json:"currentPassword"`
+	Email           *Email    `json:"email"`
+	Nickname        *Nickname `json:"nickname"`
+	NewPassword     *Password `json:"newPassword"`
+	CurrentPassword Password  `json:"currentPassword"`
 }
 
-// Validate validates the UpdateUserRequest fields.
-func (req *UpdateUserRequest) Validate() error {
-	switch {
-	case req.Email != nil &&
-		!validateField(*req.Email, 1, 200, `^[^\s@]+@[^\s@]+\.[^\s@]+$`):
-		return errors.New("Wrong email")
-	case req.Nickname != nil &&
-		!validateField(*req.Nickname, 4, 20, `^([a-z\d]+-)*[a-z\d]+$`):
-		return errors.New("Wrong nickname")
-	case req.NewPassword != nil &&
-		!validateField(*req.NewPassword, 8, 100, `^[A-Za-z0-9]\w{8,}$`):
-		return errors.New("Wrong password")
-	default:
+// validate validates the UpdateUserRequest fields.
+func (req *UpdateUserRequest) validate() error {
+	if req.Email.validate() && req.Nickname.validate() && req.NewPassword.validate() {
 		return nil
 	}
+	return errors.ErrValidation
 }
 
 type service struct {
@@ -118,15 +136,15 @@ func (s service) Delete(id int64) (User, error) {
 
 // Create creates User from input data.
 func (s service) Create(input *CreateUserRequest) (User, error) {
-	err := input.Validate()
+	err := input.validate()
 	if err != nil {
 		return User{}, err
 	}
 
 	entityUser := &entity.User{
-		Email:    input.Email,
-		Nickname: input.Nickname,
-		Password: input.Password,
+		Email:    entity.Email(input.Email),
+		Nickname: entity.Nickname(input.Nickname),
+		Password: entity.Password(input.Password),
 	}
 	err = s.repo.Create(entityUser)
 	if err != nil {
@@ -137,7 +155,7 @@ func (s service) Create(input *CreateUserRequest) (User, error) {
 
 // Update modifies User with given id.
 func (s service) Update(id int64, input *UpdateUserRequest) (User, error) {
-	err := input.Validate()
+	err := input.validate()
 	if err != nil {
 		return User{}, err
 	}
@@ -147,18 +165,18 @@ func (s service) Update(id int64, input *UpdateUserRequest) (User, error) {
 		return User{}, err
 	}
 
-	if entityUser.Password != input.CurrentPassword {
-		return User{}, errors.New("Wrong password")
+	if Password(entityUser.Password) != input.CurrentPassword {
+		return User{}, errors.ErrAuth
 	}
 
 	if input.Email != nil {
-		entityUser.Email = *input.Email
+		entityUser.Email = entity.Email(*input.Email)
 	}
 	if input.Nickname != nil {
-		entityUser.Nickname = *input.Nickname
+		entityUser.Nickname = entity.Nickname(*input.Nickname)
 	}
 	if input.NewPassword != nil {
-		entityUser.Password = *input.NewPassword
+		entityUser.Password = entity.Password(*input.NewPassword)
 	}
 	err = s.repo.Update(&entityUser)
 	if err != nil {

@@ -9,8 +9,8 @@ import (
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/db"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/ping"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/router"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/users"
-	"github.com/julienschmidt/httprouter"
 )
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 		os.Exit(1)
 	}
 	logger.Debug("DB connection established")
-	mux := httprouter.New()
+	mux := router.New(logger)
 
 	ping.RegisterHandlers(mux, logger)
 	users.RegisterHandlers(
