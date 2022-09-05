@@ -64,11 +64,11 @@ jobs:
             
             - name: Prettier Checking
               if: ${{ always() && (steps.changed-files-js.outputs.added_files || steps.changed-files-js.outputs.modified_files) }}
-              run: yarn prettier --config ./frontend/prettier.config.js --ignore-path ./frontend/.prettierignore  ${{ steps.changed-files-js.outputs.modified_files }} ${{ steps.changed-files-js.outputs.added_files }} --fix
+              run: yarn prettier --config ./frontend/prettier.config.cjs --ignore-path ./frontend/.prettierignore  ${{ steps.changed-files-js.outputs.modified_files }} ${{ steps.changed-files-js.outputs.added_files }} --fix
 
             - name: ESLint Checking
               if: ${{ always() && (steps.changed-files-js.outputs.added_files || steps.changed-files-js.outputs.modified_files) }}
-              run: yarn eslint --config ./frontend/.eslintrc.js --ignore-path ./frontend/.eslintignore ${{ steps.changed-files-js.outputs.modified_files }} ${{ steps.changed-files-js.outputs.added_files }} --fix
+              run: yarn eslint --config ./frontend/.eslintrc.cjs --ignore-path ./frontend/.eslintignore ${{ steps.changed-files-js.outputs.modified_files }} ${{ steps.changed-files-js.outputs.added_files }} --fix
 
             - name: Get specific changed files
               id: changed-files-ts

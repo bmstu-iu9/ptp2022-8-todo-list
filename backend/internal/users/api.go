@@ -8,6 +8,7 @@ import (
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/accesslog"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/config"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"github.com/julienschmidt/httprouter"
 )
@@ -16,103 +17,98 @@ import (
 func RegisterHandlers(mux *httprouter.Router, service Service, logger log.Logger) {
 	res := resource{service, logger}
 
-	mux.POST("/users", accesslog.Log(res.handlePost, logger))
-	mux.GET("/users/:user_id", accesslog.Log(res.handleGet, logger))
-	mux.DELETE("/users/:user_id", accesslog.Log(res.handleDelete, logger))
-	mux.PATCH("/users/:user_id", accesslog.Log(res.handlePatch, logger))
+	mux.POST("/users", accesslog.Log(errors.Handle(res.handlePost, logger), logger))
+	mux.GET("/users/:user_id", accesslog.Log(errors.Handle(res.handleGet, logger), logger))
+	mux.DELETE("/users/:user_id", accesslog.Log(errors.Handle(res.handleDelete, logger), logger))
+	mux.PATCH("/users/:user_id", accesslog.Log(errors.Handle(res.handlePatch, logger), logger))
 }
 
 type resource struct {
 	service Service
-	logger log.Logger
+	logger  log.Logger
 }
 
-func (res *resource) handleGet(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (res *resource) handleGet(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
 	id, err := getId(p)
 	if err != nil {
-		res.logger.Info(err)
-		w.WriteHeader(http.StatusNotFound)
-		return
+		return wrapPath(err)
 	}
 	user, err := res.service.Get(id)
 	if err != nil {
-		res.logger.Info(err)
-		w.WriteHeader(http.StatusNotFound)
-		return
+		return err
 	}
+	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(user)
 	if err != nil {
-		res.logger.Info(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+		return wrapEncode(err)
 	}
-	w.WriteHeader(http.StatusOK)
+	return nil
 }
 
-func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
 	data := CreateUserRequest{}
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
-		res.logger.Info(err)
-		w.WriteHeader(http.StatusBadRequest)
-		return
+		return wrapDecode(err)
 	}
 	user, err := res.service.Create(&data)
 	if err != nil {
-		res.logger.Info(err)
-		w.WriteHeader(http.StatusBadRequest)
-		return
+		return err
 	}
-	w.Header().Set("Location", fmt.Sprintf("%v/users/%v", config.Get("API_SERVER"), strconv.FormatInt(int64(user.Id), 10)))
 	w.WriteHeader(http.StatusCreated)
+	w.Header().Set("Location", fmt.Sprintf("%v/users/%v", config.Get("API_SERVER"), strconv.FormatInt(int64(user.Id), 10)))
+	return nil
 }
 
-func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
 	id, err := getId(p)
 	if err != nil {
-		res.logger.Info(err)
-		w.WriteHeader(http.StatusNotFound)
-		return
+		return wrapPath(err)
 	}
 	data := UpdateUserRequest{}
 	err = json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
-		res.logger.Info(err)
-		w.WriteHeader(http.StatusBadRequest)
-		return
+		return wrapDecode(err)
 	}
 	user, err := res.service.Update(id, &data)
 	if err != nil {
-		res.logger.Info(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	err = json.NewEncoder(w).Encode(user)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+		return err
 	}
 	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(user)
+	if err != nil {
+		return wrapEncode(err)
+	}
+	return nil
 }
 
-func (res *resource) handleDelete(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (res *resource) handleDelete(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
 	id, err := getId(p)
 	if err != nil {
-		res.logger.Info(err)
-		w.WriteHeader(http.StatusBadRequest)
-		return
+		return wrapPath(err)
 	}
 	_, err = res.service.Delete(id)
 	if err != nil {
-		res.logger.Info(err)
-		w.WriteHeader(http.StatusNotFound)
-		return
+		return err
 	}
 	w.WriteHeader(http.StatusNoContent)
+	return nil
 }
 
 func getId(p httprouter.Params) (int64, error) {
 	id, err := strconv.Atoi(p.ByName("user_id"))
 	return int64(id), err
+}
+
+func wrapDecode(err error) error {
+	return fmt.Errorf("%w: %v", errors.ErrBodyDecode, err)
+}
+
+func wrapEncode(err error) error {
+	return fmt.Errorf("%w: %v", errors.ErrBodyEncode, err)
+}
+
+func wrapPath(err error) error {
+	return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
 }
