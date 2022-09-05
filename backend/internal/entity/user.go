@@ -4,10 +4,11 @@ import "errors"
 
 // A User represents single API user.
 type User struct {
-	Id       int64    `json:"id"`
-	Email    Email    `json:"email"`
-	Nickname Nickname `json:"nickname"`
-	Password Password `json:"password"`
+	Id          int64    `json:"id"`
+	Email       Email    `json:"email"`
+	Nickname    Nickname `json:"nickname"`
+	Password    Password `json:"password"`
+	IsActivated bool     `json:"is_activated"`
 }
 
 type (

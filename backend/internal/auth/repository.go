@@ -17,6 +17,8 @@ type Repository interface {
 	DeleteToken(refreshToken string) error
 	// GetUser reads the user from the database.
 	GetUser(email entity.Email, userId int) (entity.User, error)
+	// DeleteDeadUsers deletes non activated accounts from DB
+	DeleteDeadUsers() error
 }
 
 type repository struct {
@@ -38,9 +40,11 @@ func (repo repository) GetUser(email entity.Email, userId int) (entity.User, err
 		err error
 	)
 	if userId == -1 {
-		row, err = repo.db.Query("SELECT * FROM users WHERE email = $1", email)
+		row, err = repo.db.Query("SELECT id,email,nickname,password,is_activated FROM users WHERE email = $1",
+			email)
 	} else {
-		row, err = repo.db.Query("SELECT * FROM users WHERE id = $1", userId)
+		row, err = repo.db.Query("SELECT id,email,nickname,password,is_activated FROM users WHERE id = $1",
+			userId)
 	}
 	if err != nil {
 		return entity.User{}, err
@@ -48,7 +52,7 @@ func (repo repository) GetUser(email entity.Email, userId int) (entity.User, err
 	defer row.Close()
 	user := entity.User{}
 	row.Next()
-	err = row.Scan(&user.Id, &user.Email, &user.Nickname, &user.Password)
+	err = row.Scan(&user.Id, &user.Email, &user.Nickname, &user.Password, &user.IsActivated)
 	return user, err
 }
 
@@ -90,5 +94,10 @@ func (repo repository) DeleteToken(refreshToken string) error {
 // CreateToken creates a new refresh token in db.
 func (repo repository) CreateToken(userId int, refreshToken string) error {
 	_, err := repo.db.Exec("INSERT INTO tokens (user_id, token) VALUES ($1,$2)", userId, refreshToken)
+	return err
+}
+
+func (repo repository) DeleteDeadUsers() error {
+	_, err := repo.db.Exec("DELETE FROM users WHERE is_activated = 'false' AND creation_date > NOW()-INTERVAL '1' DAY")
 	return err
 }

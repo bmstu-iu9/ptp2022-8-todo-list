@@ -39,7 +39,7 @@ func TestRepo(t *testing.T) {
 	}
 
 	t.Run("create", func(t *testing.T) {
-		err = repo.Create(user)
+		err = repo.Create(user, "link")
 
 		test.IsNil(t, err)
 	})

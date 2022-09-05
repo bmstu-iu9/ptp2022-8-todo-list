@@ -57,9 +57,8 @@ func TestApi(t *testing.T) {
 
 	tests := []test.ApiTestCase{
 		{Name: "create OK", Method: "POST", Url: "/users",
-			Body:       `{"email": "slava@example.com", "nickname": "slavarusvarrior", "password": "sDFHgjssndbfns123"}`,
-			WantCode:   http.StatusCreated,
-			WantHeader: http.Header{"Location": {"https://ptp.starovoytovai.ru/api/v1/users/2"}}},
+			Body:     `{"email": "slava@example.com", "nickname": "slavarusvarrior", "password": "sDFHgjssndbfns123"}`,
+			WantCode: http.StatusCreated},
 		{Name: "create verify", Method: "GET", Url: "/users/2",
 			Header:   http.Header{"Authorization": []string{GenerateBearerAccessToken("slava@example.com", 2)}},
 			WantBody: toJson(entity.UserDto{Id: 2, Email: "slava@example.com", Nickname: "slavarusvarrior"}),

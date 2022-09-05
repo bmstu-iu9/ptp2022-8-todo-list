@@ -32,10 +32,11 @@ func TestAuthService(t *testing.T) {
 	s := service{&mockRepository{
 		users: []entity.User{
 			{
-				Id:       0,
-				Email:    "slava@example.com",
-				Nickname: "slavaruswarrior",
-				Password: "3dfff1ca8a9696f67616a2b8abd1bce3", //wasdqwertytest
+				Id:          0,
+				Email:       "slava@example.com",
+				Nickname:    "slavaruswarrior",
+				Password:    "3dfff1ca8a9696f67616a2b8abd1bce3", //wasdqwertytest
+				IsActivated: true,
 			},
 		},
 		tokens: []DbToken{
@@ -173,6 +174,10 @@ func TestRefreshTokenValidate(t *testing.T) {
 type mockRepository struct {
 	users  []entity.User
 	tokens []DbToken
+}
+
+func (m mockRepository) DeleteDeadUsers() error {
+	return nil
 }
 
 func (m mockRepository) GetToken(refreshToken string, userId int) (DbToken, error) {

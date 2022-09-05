@@ -282,7 +282,15 @@ type mockRepository struct {
 	id    int64
 }
 
-func (repo *mockRepository) Create(user *entity.User) error {
+func (repo *mockRepository) CheckActivationLink(activationLink string) error {
+	return nil
+}
+
+func (repo *mockRepository) UpdateActivationStatus(activationLink string) error {
+	return nil
+}
+
+func (repo *mockRepository) Create(user *entity.User, activationLink string) error {
 	user.Id = repo.id
 	repo.id++
 	repo.items = append(repo.items, *user)

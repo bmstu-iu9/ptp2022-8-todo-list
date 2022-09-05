@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/auth"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/config"
 	"net/http"
 	"strconv"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/accesslog"
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/config"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"github.com/julienschmidt/httprouter"
@@ -19,6 +19,7 @@ func RegisterHandlers(mux *httprouter.Router, service Service, logger log.Logger
 	res := resource{service, logger}
 
 	mux.POST("/users", accesslog.Log(errors.Handle(res.handlePost, logger), logger))
+	mux.GET("/activate/:link", accesslog.Log(errors.Handle(res.handleActivate, logger), logger))
 	mux.GET("/users/:id", accesslog.Log(errors.Handle(auth.AuthCheck(res.handleGet), logger), logger))
 	mux.DELETE("/users/:id", accesslog.Log(errors.Handle(auth.AuthCheck(res.handleDelete), logger), logger))
 	mux.PATCH("/users/:id", accesslog.Log(errors.Handle(auth.AuthCheck(res.handlePatch), logger), logger))
@@ -53,12 +54,21 @@ func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httpro
 	if err != nil {
 		return wrapDecode(err)
 	}
-	user, err := res.service.Create(&data)
+	_, err = res.service.Create(&data)
 	if err != nil {
 		return err
 	}
 	w.WriteHeader(http.StatusCreated)
-	w.Header().Set("Location", fmt.Sprintf("%v/users/%v", config.Get("API_SERVER"), strconv.FormatInt(int64(user.Id), 10)))
+	return nil
+}
+
+func (res *resource) handleActivate(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
+	activationLink := p.ByName("link")
+	err := res.service.Activate(activationLink)
+	if err != nil {
+		return err
+	}
+	http.Redirect(w, r, config.Get("API_SERVER_TEST")+"/login", http.StatusSeeOther)
 	return nil
 }
 

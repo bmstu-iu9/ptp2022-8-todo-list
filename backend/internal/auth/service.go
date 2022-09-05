@@ -56,9 +56,16 @@ type Claims struct {
 
 // Login authorizes the user.
 func (s service) Login(input LoginUserRequest) (UserData, error) {
+	err := s.repo.DeleteDeadUsers()
+	if err != nil {
+		return UserData{}, err
+	}
 	entityUser, err := s.repo.GetUser(input.Email, -1)
 	if err != nil {
-		return UserData{}, errors.New("user not found")
+		return UserData{}, err
+	}
+	if !entityUser.IsActivated {
+		return UserData{}, errors.New("u did not verify your email adress")
 	}
 	isPassEquals := entityUser.Password == *entity.NewPassword(fmt.Sprintf("%x", md5.Sum([]byte(input.Password))))
 	if !isPassEquals {
@@ -75,6 +82,10 @@ func (s service) Login(input LoginUserRequest) (UserData, error) {
 
 // Logout deletes data about the authorized user.
 func (s service) Logout(refreshToken string) error {
+	err := s.repo.DeleteDeadUsers()
+	if err != nil {
+		return err
+	}
 	return s.repo.DeleteToken(refreshToken)
 }
 
