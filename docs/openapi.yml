@@ -432,22 +432,39 @@ paths:
           $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/UnexpectedError'
-    patch:
-      summary: Patch item
+  /users/{userId}/items/{itemId}/buy:
+    parameters:
+      - schema:
+          type: integer
+        name: userId
+        in: path
+        required: true
+      - schema:
+          type: integer
+        name: itemId
+        in: path
+        required: true
+    post:
+      summary: Buy an item from store.
+      description: >
+        Buys an item from store. Returns item object, new balance and difference
+        from old balance to new.
       tags:
         - Items
-      requestBody:
-        content:
-          application/json:
-            schema: {}
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Item'
+                type: object
+                properties:
+                  item:
+                    $ref: '#/components/schemas/Item'
+                  balance:
+                    type: integer
+                  balanceChange:
+                    type: integer
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -521,35 +538,46 @@ components:
       properties:
         nickname:
           type: string
+          readOnly: true
         name:
           type: string
         email:
           type: string
+          readOnly: true
         surname:
           type: string
         aboutInfo:
           type: string
         level:
           type: integer
+          readOnly: true
         balance:
           type: integer
+          readOnly: true
         health:
           type: integer
+          readOnly: true
         experience:
           type: integer
+          readOnly: true
     Item:
       type: object
       properties:
         id:
           type: integer
+          readOnly: true
         name:
           type: string
+          readOnly: true
         imageSrc:
           type: string
+          readOnly: true
         description:
           type: string
+          readOnly: true
         price:
           type: integer
+          readOnly: true
         category:
           type: string
           enum: [armor, weapon, pet, skin]
@@ -561,6 +589,7 @@ components:
         state:
           type: string
           enum: [store, equipped, inventoried]
+          readOnly: true
     Problem:
       type: object
       properties:
