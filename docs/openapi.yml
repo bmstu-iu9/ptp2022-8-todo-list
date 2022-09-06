@@ -518,7 +518,25 @@ components:
           type: string
     Character:
       type: object
-      description: TODO
+      properties:
+        nickname:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        surname:
+          type: string
+        aboutInfo:
+          type: string
+        level:
+          type: integer
+        balance:
+          type: integer
+        health:
+          type: integer
+        experience:
+          type: integer
     Item:
       type: object
       properties:
