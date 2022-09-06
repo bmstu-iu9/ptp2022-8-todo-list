@@ -28,14 +28,13 @@ services:
       restart_policy:
         condition: on-failure
   docs:
-    image: python:slim
+    image: nginx:stable
     container_name: docs
     volumes:
-      - ./docs/index.html:/index.html
-      - ./docs/openapi.yml:/openapi.yml
+      - ./docs/index.html:/usr/share/nginx/html/index.html:ro
+      - ./docs/openapi.yml:/usr/share/nginx/html/openapi.yml:ro
     ports:
-      - 5332:8080
-    command: python -m http.server 8080
+      - 5332:80
     deploy:
       restart_policy:
         condition: on-failure
