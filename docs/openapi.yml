@@ -31,6 +31,8 @@ paths:
   /users:
     post:
       summary: Create new user
+      description: >
+        Creates a new user. Email should be unique.
       requestBody:
         required: true
         content:
@@ -97,6 +99,8 @@ paths:
       tags:
         - Users
       summary: Modify user
+      description: >
+        Modifies a user. Any field can be omitted. Email should be unique.
       requestBody:
         content:
           application/json:
