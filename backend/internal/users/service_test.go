@@ -102,9 +102,9 @@ func TestCRUD(t *testing.T) {
 			Name: "create validate error",
 			Input: CreateTestCase{
 				&CreateUserRequest{
-					Email:    "example.com",
-					Nickname: "stewkk",
-					Password: "oadfahdks",
+					Email:    "stewkk",
+					Nickname: "oadfahdks",
+					Password: "",
 				},
 			},
 			IsOK: false,
@@ -145,7 +145,7 @@ func TestCRUD(t *testing.T) {
 			Input: UpdateTestCase{
 				Id: 0,
 				Data: &UpdateUserRequest{
-					Email:           entity.NewEmail("test@example.com"),
+					Email:           newEmail("test@example.com"),
 					CurrentPassword: "wasdqwertytest",
 				},
 			},
@@ -171,7 +171,7 @@ func TestCRUD(t *testing.T) {
 			Input: UpdateTestCase{
 				Id: 0,
 				Data: &UpdateUserRequest{
-					NewPassword:     entity.NewPassword("test321test"),
+					NewPassword:     newPassword("test321test"),
 					CurrentPassword: "wasdqwertytest",
 				},
 			},
@@ -187,7 +187,7 @@ func TestCRUD(t *testing.T) {
 			Input: UpdateTestCase{
 				Id: 0,
 				Data: &UpdateUserRequest{
-					Nickname:        entity.NewNickname("example"),
+					Nickname:        newNickname("example"),
 					CurrentPassword: "test321test",
 				},
 			},
@@ -218,7 +218,7 @@ func TestCRUD(t *testing.T) {
 			Input: UpdateTestCase{
 				Id: 0,
 				Data: &UpdateUserRequest{
-					Nickname:        entity.NewNickname("example123"),
+					Nickname:        newNickname("example123"),
 					CurrentPassword: "wrongPassword",
 				},
 			},
@@ -230,7 +230,7 @@ func TestCRUD(t *testing.T) {
 			Input: UpdateTestCase{
 				Id: 0,
 				Data: &UpdateUserRequest{
-					Email:           entity.NewEmail("example123"),
+					Email:           newEmail("example123"),
 					CurrentPassword: "test321test",
 				},
 			},

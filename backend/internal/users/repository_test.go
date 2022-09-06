@@ -31,8 +31,8 @@ func TestRepo(t *testing.T) {
 		test.IsNil(t, err)
 		test.DeepEqual(t, want, got)
 	})
-
 	user := &entity.User{
+		Id:       0,
 		Email:    "slava@example.com",
 		Nickname: "slavaruswarrior",
 		Password: "Ryudfnsb675",

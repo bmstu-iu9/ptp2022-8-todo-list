@@ -9,6 +9,8 @@ import (
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 	"github.com/google/uuid"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/validation"
 )
 
 // Service encapsulates usecase logic for users.
@@ -20,56 +22,93 @@ type Service interface {
 	Activate(activationLink string) error
 }
 
-// NewUser represents the data for creating new User.
-type CreateUserRequest struct {
-	Email    entity.Email    `json:"email"`
-	Nickname entity.Nickname `json:"nickname"`
-	Password entity.Password `json:"password"`
+// User represents the data about an API user.
+type User struct {
+	Id       int64    `json:"id"`
+	Email    Email    `json:"email"`
+	Nickname Nickname `json:"nickname"`
 }
 
-// Validate validates the CreateUserRequest fields.
-func (req *CreateUserRequest) Validate() error {
-	wrap := func(err error) error {
-		return fmt.Errorf("%w: %v", errors.ErrValidation, err)
-	}
+type (
+	// Email represents email.
+	Email    entity.Email
+	// Nickname represents user's nickname.
+	Nickname entity.Nickname
+	// Password represents plaintext password.
+	Password entity.Password
+)
 
-	if err := req.Email.Validate(); err != nil {
-		return wrap(err)
+func newEmail(str string) *Email {
+	return (*Email)(&str)
+}
+
+func newPassword(str string) *Password {
+	return (*Password)(&str)
+}
+
+func newNickname(str string) *Nickname {
+	return (*Nickname)(&str)
+}
+
+func (field *Email) validate() bool {
+	if field == nil {
+		return true
 	}
-	if err := req.Nickname.Validate(); err != nil {
-		return wrap(err)
+	return validation.ValidateField(string(*field), 1, 200, `^[^\s@]+@[^\s@]+\.[^\s@]+$`)
+}
+
+func (field *Nickname) validate() bool {
+	if field == nil {
+		return true
 	}
-	if err := req.Password.Validate(); err != nil {
-		return wrap(err)
+	return validation.ValidateField(string(*field), 4, 20, `^([a-z\d]+-)*[a-z\d]+$`)
+}
+
+func (field *Password) validate() bool {
+	if field == nil {
+		return true
 	}
-	return nil
+	return validation.ValidateField(string(*field), 8, 100, `^[A-Za-z0-9]\w{8,}$`)
+}
+
+func newUser(entity *entity.User) User {
+	return User{
+		Id:       entity.Id,
+		Email:    Email(entity.Email),
+		Nickname: Nickname(entity.Nickname),
+	}
+}
+
+// NewUser represents the data for creating new User.
+type CreateUserRequest struct {
+	Email    Email    `json:"email"`
+	Nickname Nickname `json:"nickname"`
+	Password Password `json:"password"`
+}
+
+// validate validates the CreateUserRequest fields.
+func (req *CreateUserRequest) validate() error {
+	if req.Email.validate() && req.Nickname.validate() && req.Password.validate() {
+		return nil
+	}
+	return errors.ErrValidation
 }
 
 // UpdateUserRequest represents the data for modifing User.
 // Fields Email, Nickname and NewPassword are optional.
 type UpdateUserRequest struct {
-	Email           *entity.Email    `json:"email"`
-	Nickname        *entity.Nickname `json:"nickname"`
-	NewPassword     *entity.Password `json:"newPassword"`
-	CurrentPassword entity.Password  `json:"currentPassword"`
+	Email           *Email    `json:"email"`
+	Nickname        *Nickname `json:"nickname"`
+	NewPassword     *Password `json:"newPassword"`
+	CurrentPassword Password  `json:"currentPassword"`
 }
 
-// Validate validates the UpdateUserRequest fields.
-func (req *UpdateUserRequest) Validate() error {
-	wrap := func(err error) error {
-		return fmt.Errorf("%w: %v", errors.ErrValidation, err)
+// validate validates the UpdateUserRequest fields.
+func (req *UpdateUserRequest) validate() error {
+	if req.Email.validate() && req.Nickname.validate() && req.NewPassword.validate() {
+		return nil
 	}
-
-	if err := req.Email.Validate(); err != nil {
-		return wrap(err)
-	}
-	if err := req.Nickname.Validate(); err != nil {
-		return wrap(err)
-	}
-	if err := req.NewPassword.Validate(); err != nil {
-		return wrap(err)
-	}
-	return nil
+	return errors.ErrValidation
 }
 
 type service struct {
@@ -104,8 +143,8 @@ func (s service) Delete(id int64) (entity.UserDto, error) {
 }
 
 // Create creates User from input data.
-func (s service) Create(input *CreateUserRequest) (entity.UserDto, error) {
-	err := input.Validate()
+func (s service) Create(input *CreateUserRequest) (User, error) {
+	err := input.validate()
 	if err != nil {
 		return entity.UserDto{}, err
 	}
@@ -128,7 +167,7 @@ func (s service) Create(input *CreateUserRequest) (entity.UserDto, error) {
 
 // Update modifies User with given id.
 func (s service) Update(id int64, input *UpdateUserRequest) (entity.UserDto, error) {
-	err := input.Validate()
+	err := input.validate()
 	if err != nil {
 		return entity.UserDto{}, err
 	}
@@ -138,18 +177,18 @@ func (s service) Update(id int64, input *UpdateUserRequest) (entity.UserDto, err
 		return entity.UserDto{}, err
 	}
 
-	if entityUser.Password != input.CurrentPassword {
-		return entity.UserDto{}, errors.ErrWrongPassword
+	if Password(entityUser.Password) != input.CurrentPassword {
+		return User{}, errors.ErrAuth
 	}
 
 	if input.Email != nil {
-		entityUser.Email = *input.Email
+		entityUser.Email = entity.Email(*input.Email)
 	}
 	if input.Nickname != nil {
-		entityUser.Nickname = *input.Nickname
+		entityUser.Nickname = entity.Nickname(*input.Nickname)
 	}
 	if input.NewPassword != nil {
-		entityUser.Password = *input.NewPassword
+		entityUser.Password = entity.Password(*input.NewPassword)
 	}
 	err = s.repo.Update(&entityUser)
 	if err != nil {

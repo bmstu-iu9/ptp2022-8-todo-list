@@ -36,6 +36,17 @@ func wrapSql(err error) error {
 	}
 }
 
+func wrapSql(err error) error {
+	switch err {
+	case nil:
+		return nil
+	case sql.ErrNoRows:
+		return fmt.Errorf("%w: %v", errors.ErrNotFound, err)
+	default:
+		return fmt.Errorf("%w: %v", errors.ErrDb, err)
+	}
+}
+
 // repository persists users in database.
 type repository struct {
 	db     *sql.DB
@@ -91,6 +102,7 @@ func (repo repository) CheckActivationLink(activationLink string) error {
 	err = row.Scan(&activationLink)
 	return wrapSql(err)
 }
+
 func (repo repository) UpdateActivationStatus(activationLink string) error {
 	_, err := repo.db.Exec("UPDATE users SET is_activated = 'true' WHERE activation_link=$1", activationLink)
 	return err

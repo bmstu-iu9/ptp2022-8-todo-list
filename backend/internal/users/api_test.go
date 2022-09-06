@@ -21,7 +21,7 @@ var (
 )
 
 func init() {
-	mux = router.New()
+	mux = router.New(logger)
 	logger = log.New()
 	service := NewService(&mockRepository{
 		id: 2,
@@ -50,10 +50,8 @@ func TestApi(t *testing.T) {
 		return buf.String()
 	}
 
-	badRequest := toJson(errors.Problem{Title: "Bad request", Status: http.StatusBadRequest})
 	notFound := toJson(errors.Problem{Title: "Not found", Status: http.StatusNotFound})
-	forbidden := toJson(errors.Problem{Title: "Forbidden", Status: http.StatusForbidden})
-	unauthorized := toJson(errors.Problem{Title: "Unauthorized", Status: http.StatusUnauthorized})
+	forbidden := toJson(errors.Problem{Title: "Forbidden", Status: http.StatusForbidden, Detail: "Wrong login or password"})
 
 	tests := []test.ApiTestCase{
 		{Name: "create OK", Method: "POST", Url: "/users",
@@ -64,12 +62,12 @@ func TestApi(t *testing.T) {
 			WantBody: toJson(entity.UserDto{Id: 2, Email: "slava@example.com", Nickname: "slavarusvarrior"}),
 			WantCode: http.StatusOK},
 		{Name: "create input error", Method: "POST", Url: "/users",
-			Body:     `"email": "slava@example.com", "nickname": "slavarusvarrior", "password": "sDFHgjssndbfns123"`,
-			WantBody: badRequest,
+			Body: `"email": "slava@example.com", "nickname": "slavarusvarrior", "password": "sDFHgjssndbfns123"`,
+			WantBody: toJson(errors.Problem{Title: "Bad request", Status: http.StatusBadRequest, Detail: "Bad request body"}),
 			WantCode: http.StatusBadRequest},
 		{Name: "create input error", Method: "POST", Url: "/users",
-			Body:     `{"email": "slava@example.com", "password": "sDFHgjssndbfns123"}`,
-			WantBody: badRequest,
+			Body: `{"email": "slava@example.com", "password": "sDFHgjssndbfns123"}`,
+			WantBody: toJson(errors.Problem{Title: "Bad request", Status: http.StatusBadRequest, Detail: "Request body parameters validation failed"}),
 			WantCode: http.StatusBadRequest},
 		{Name: "get OK", Method: "GET", Url: "/users/1",
 			Header:   http.Header{"Authorization": []string{GenerateBearerAccessToken("geogreck@example.com", 1)}},
@@ -104,7 +102,7 @@ func TestApi(t *testing.T) {
 		{Name: "modify input error", Method: "PATCH", Url: "/users/1",
 			Header:   http.Header{"Authorization": []string{GenerateBearerAccessToken("geogreck@example.com", 1)}},
 			Body:     `{"email": "testexample.com", "currentPassword": "Test123Test"}`,
-			WantBody: badRequest,
+			WantBody: toJson(errors.Problem{Title: "Bad request", Status: http.StatusBadRequest, Detail: "Request body parameters validation failed"}),
 			WantCode: http.StatusBadRequest},
 		{Name: "delete OK", Method: "DELETE", Url: "/users/1",
 			Header:   http.Header{"Authorization": []string{GenerateBearerAccessToken("geogreck@example.com", 1)}},

@@ -22,7 +22,7 @@ func main() {
 		os.Exit(1)
 	}
 	logger.Debug("DB connection established")
-	mux := router.New()
+	mux := router.New(logger)
 
 	ping.RegisterHandlers(mux, logger)
 	users.RegisterHandlers(

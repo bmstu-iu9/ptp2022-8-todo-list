@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/accesslog"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/config"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"github.com/julienschmidt/httprouter"
@@ -19,10 +20,11 @@ func RegisterHandlers(mux *httprouter.Router, service Service, logger log.Logger
 	res := resource{service, logger}
 
 	mux.POST("/users", accesslog.Log(errors.Handle(res.handlePost, logger), logger))
+	// TODO неидеоматичный endpoint
 	mux.GET("/activate/:link", accesslog.Log(errors.Handle(res.handleActivate, logger), logger))
-	mux.GET("/users/:id", accesslog.Log(errors.Handle(auth.AuthCheck(res.handleGet), logger), logger))
-	mux.DELETE("/users/:id", accesslog.Log(errors.Handle(auth.AuthCheck(res.handleDelete), logger), logger))
-	mux.PATCH("/users/:id", accesslog.Log(errors.Handle(auth.AuthCheck(res.handlePatch), logger), logger))
+	mux.GET("/users/:id", accesslog.Log(errors.Handle(auth.Check(res.handleGet), logger), logger))
+	mux.DELETE("/users/:id", accesslog.Log(errors.Handle(auth.Check(res.handleDelete), logger), logger))
+	mux.PATCH("/users/:id", accesslog.Log(errors.Handle(auth.Check(res.handlePatch), logger), logger))
 }
 
 type resource struct {
@@ -59,9 +61,12 @@ func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httpro
 		return err
 	}
 	w.WriteHeader(http.StatusCreated)
+	// TODO http.Redirect
+	w.Header().Set("Location", fmt.Sprintf("%v/users/%v", config.Get("API_SERVER"), strconv.FormatInt(int64(user.Id), 10)))
 	return nil
 }
 
+// TODO посмотреть
 func (res *resource) handleActivate(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
 	activationLink := p.ByName("link")
 	err := res.service.Activate(activationLink)
