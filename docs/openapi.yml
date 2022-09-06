@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Славатидика API
   description: Gamified TODO-list API.
-  version: 0.4.0
+  version: 0.4.1
   contact:
     name: Starovoytov Alexandr
     url: https://t.me/stewkk
@@ -521,7 +521,28 @@ components:
       description: TODO
     Item:
       type: object
-      description: TODO
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        imageSrc:
+          type: string
+        description:
+          type: string
+        price:
+          type: integer
+        category:
+          type: string
+          enum: [armor, weapon, pet, skin]
+          readOnly: true
+        rarity:
+          type: string
+          enum: [common, rare, epic, legendary, mythical]
+          readOnly: true
+        state:
+          type: string
+          enum: [store, equipped, inventoried]
     Problem:
       type: object
       properties:
