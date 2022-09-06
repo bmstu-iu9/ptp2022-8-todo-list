@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Славатидика API
   description: Gamified TODO-list API.
-  version: 0.4.1
+  version: 0.5.0
   contact:
     name: Starovoytov Alexandr
     url: https://t.me/stewkk
@@ -300,6 +300,49 @@ paths:
           $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/UnexpectedError'
+  /users/{user_id}/tasks/{task_id}/complete:
+    parameters:
+      - schema:
+          type: integer
+        name: user_id
+        in: path
+        required: true
+      - schema:
+          type: integer
+        name: task_id
+        in: path
+        required: true
+    post:
+      summary: Mark task as completed.
+      description: >
+        Marks task as completed. Returns task object, difference from old
+        balance and experience to new balance and experience.
+      tags:
+        - Tasks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task:
+                    $ref: '#/components/schemas/Task'
+                  balanceChange:
+                    type: integer
+                  experienceChange:
+                    type: integer
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
   /users/{id}/character:
     parameters:
       - schema:
@@ -533,6 +576,7 @@ components:
                 format: Hex string
         status:
           type: string
+          enum: [active, completed, archived]
     Character:
       type: object
       properties:
