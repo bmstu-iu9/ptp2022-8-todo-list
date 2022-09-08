@@ -2,17 +2,19 @@ package tasks
 
 import (
 	"database/sql"
+	"fmt"
 
 	_ "github.com/lib/pq"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 )
 
 type Repository interface {
 	Get(user_id int64) ([]entity.Task, error)
 	GetById(task_id int64) (entity.Task, error)
-	GetLabels(task_id int64) ([]entity.TaskLabel, error)
+	// GetLabels(task_id int64) ([]entity.TaskLabel, error)
 	Create(task_data *entity.Task) error
 	Update(task_data *entity.Task) error
 	Delete(task_id int64) error
@@ -32,9 +34,14 @@ func (r repository) Get(user_id int64) ([]entity.Task, error) {
 	rows, err := r.db.Query(q, user_id)
 
 	if err != nil {
-		return nil, err
+		switch err {
+		case sql.ErrNoRows:
+			return nil, fmt.Errorf("%w: %v", errors.ErrNotFound, err)
+		default:
+			return nil, fmt.Errorf("%w: %v", errors.ErrDb, err)
+		}
 	}
-	
+
 	defer rows.Close()
 
 	tasks := make([]entity.Task, 0)
@@ -53,10 +60,10 @@ func (r repository) Get(user_id int64) ([]entity.Task, error) {
 		)
 
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("%w: %v", errors.ErrDb, err)
 		}
 
-		task.Labels, err = r.GetLabels(task.Id)
+		task.Labels, err = r.getLabels(task.Id)
 
 		if err != nil {
 			return nil, err
@@ -84,17 +91,20 @@ func (r repository) GetById(task_id int64) (entity.Task, error) {
 	)
 
 	if err != nil {
-		return entity.Task{}, err
+		switch err {
+		case sql.ErrNoRows:
+			return entity.Task{}, fmt.Errorf("%w: %v", errors.ErrNotFound, err)
+		default:
+			return entity.Task{}, fmt.Errorf("%w: %v", errors.ErrDb, err)
+		}
 	}
 
-	task.Labels, err = r.GetLabels(task_id)
-	// logger := log.New()
-	// logger.Debug("Labels from db: ", task.Labels)
+	task.Labels, err = r.getLabels(task_id)
 
 	return task, err
 }
 
-func (r repository) GetLabels(task_id int64) ([]entity.TaskLabel, error) {
+func (r repository) getLabels(task_id int64) ([]entity.TaskLabel, error) {
 	q := "SELECT id, name, color FROM task_labels WHERE task_id = $1;"
 
 	label := entity.TaskLabel{}
@@ -102,14 +112,14 @@ func (r repository) GetLabels(task_id int64) ([]entity.TaskLabel, error) {
 	rows, err := r.db.Query(q, task_id)
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%w: %v", errors.ErrDb, err)
 	}
 
 	for rows.Next() {
 		label.TaskId = task_id
 		err = rows.Scan(&label.Id, &label.Name, &label.Color)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("%w: %v", errors.ErrDb, err)
 		}
 
 		labels = append(labels, label)
@@ -133,7 +143,7 @@ func (r repository) Create(task_data *entity.Task) error {
 		task_data.Status).Scan(&task_data.Id)
 
 	if err != nil {
-		return err
+		return fmt.Errorf("%w: %v", errors.ErrDb, err)
 	}
 
 	for _, label := range task_data.Labels {
@@ -141,7 +151,7 @@ func (r repository) Create(task_data *entity.Task) error {
 		_, err := r.db.Exec(q, task_data.Id, label.Name, label.Color)
 
 		if err != nil {
-			return err
+			return fmt.Errorf("%w: %v", errors.ErrDb, err)
 		}
 	}
 
@@ -149,11 +159,11 @@ func (r repository) Create(task_data *entity.Task) error {
 }
 
 func (r repository) Update(task_data *entity.Task) error {
-	q := "UPDATE tasks SET (name, description, due_date, cur_status) = ($1, $2, $3, $4) WHERE id = $5;"
-	_, err := r.db.Exec(q, task_data.Name, task_data.Description, task_data.DueDate, task_data.Status, task_data.Id)
+	q := "UPDATE tasks SET (name, description, due_date, schtirlich_humorescue, cur_status) = ($1, $2, $3, $4, $5) WHERE id = $6;"
+	_, err := r.db.Exec(q, task_data.Name, task_data.Description, task_data.DueDate, task_data.SchtirlichHumorescue, task_data.Status, task_data.Id)
 
 	if err != nil {
-		return err
+		return fmt.Errorf("%w: %v", errors.ErrDb, err)
 	}
 
 	logger := log.New()
@@ -169,7 +179,7 @@ func (r repository) Update(task_data *entity.Task) error {
 		}
 
 		if err != nil {
-			return err
+			return fmt.Errorf("%w: %v", errors.ErrDb, err)
 		}
 	}
 
@@ -179,5 +189,8 @@ func (r repository) Update(task_data *entity.Task) error {
 func (r repository) Delete(task_id int64) error {
 	q := "DELETE FROM tasks WHERE id = $1;"
 	_, err := r.db.Exec(q, task_id)
-	return err
+	if err != nil {
+		return fmt.Errorf("%w: %v", errors.ErrDb, err)
+	}
+	return nil
 }

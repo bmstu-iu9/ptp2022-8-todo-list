@@ -23,7 +23,7 @@ type User struct {
 
 type (
 	// Email represents email.
-	Email    entity.Email
+	Email entity.Email
 	// Nickname represents user's nickname.
 	Nickname entity.Nickname
 	// Password represents plaintext password.

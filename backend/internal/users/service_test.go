@@ -317,4 +317,3 @@ func (repo mockRepository) Update(user *entity.User) error {
 	}
 	return errors.ErrNotFound
 }
-

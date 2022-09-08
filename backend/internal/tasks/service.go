@@ -1,27 +1,31 @@
 package tasks
 
 import (
+	"fmt"
+
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 )
 
 type CreateTaskRequest struct {
-	UserId					int64				`json:"-"`
-	Name 					string 				`json:"name"`
-	Description 			string 				`json:"description,omitempty"`
-	CreatedOn				string				`json:"createdOn"`
-	DueDate					string				`json:"dueDate"`
-	SchtirlichHumorescue 	string 				`json:"schtirlichHumorescue"`
-	Labels					[]entity.TaskLabel	`json:"labels"`
-	Status					string				`json:"status"`
+	UserId               int64              `json:"-"`
+	Name                 string             `json:"name"`
+	Description          string             `json:"description,omitempty"`
+	CreatedOn            string             `json:"createdOn"`
+	DueDate              string             `json:"dueDate"`
+	SchtirlichHumorescue string             `json:"schtirlichHumorescue"`
+	Labels               []entity.TaskLabel `json:"labels"`
+	Status               string             `json:"status"`
 }
 
 type UpdateTaskRequest struct {
-	TaskId		int64				`json:"-"`
-	Name 		string 				`json:"name,omitempty"`
-	Description string 				`json:"description,omitempty"`
-	DueDate		string				`json:"dueDate,omitempty"`
-	Labels		[]entity.TaskLabel	`json:"labels,omitempty"`
-	Status		string				`json:"status,omitempty"`
+	TaskId               int64              `json:"-"`
+	Name                 string             `json:"name,omitempty"`
+	Description          string             `json:"description,omitempty"`
+	DueDate              string             `json:"dueDate,omitempty"`
+	SchtirlichHumorescue string             `json:"schtirlichHumorescue,omitempty"`
+	Labels               []entity.TaskLabel `json:"labels,omitempty"`
+	Status               string             `json:"status,omitempty"`
 }
 
 type Service interface {
@@ -52,7 +56,7 @@ func (s service) Get(user_id int64) ([]entity.Task, error) {
 
 func (s service) GetById(task_id int64) (entity.Task, error) {
 	task, err := s.r.GetById(task_id)
-	
+
 	if err != nil {
 		return entity.Task{}, err
 	}
@@ -69,18 +73,18 @@ func (s service) Create(task_data *CreateTaskRequest) (entity.Task, error) {
 	err := task_data.Validate()
 
 	if err != nil {
-		return entity.Task{}, err
+		return entity.Task{}, fmt.Errorf("%w: %v", errors.ErrValidation, err)
 	}
 
 	task := &entity.Task{
-		UserId: task_data.UserId,
-		Name: task_data.Name,
-		Description: task_data.Description,
-		CreatedOn: task_data.CreatedOn,
-		DueDate: task_data.DueDate,
+		UserId:               task_data.UserId,
+		Name:                 task_data.Name,
+		Description:          task_data.Description,
+		CreatedOn:            task_data.CreatedOn,
+		DueDate:              task_data.DueDate,
 		SchtirlichHumorescue: task_data.SchtirlichHumorescue,
-		Labels: task_data.Labels,
-		Status: task_data.Status,
+		Labels:               task_data.Labels,
+		Status:               task_data.Status,
 	}
 
 	// logger := log.New()
@@ -100,7 +104,7 @@ func (s service) Update(task_data *UpdateTaskRequest) (entity.Task, error) {
 	err := task_data.Validate()
 
 	if err != nil {
-		return entity.Task{}, err
+		return entity.Task{}, fmt.Errorf("%w: %v", errors.ErrValidation, err)
 	}
 
 	task, err := s.r.GetById(task_data.TaskId)
@@ -109,15 +113,29 @@ func (s service) Update(task_data *UpdateTaskRequest) (entity.Task, error) {
 		return entity.Task{}, err
 	}
 
-	or := func (ss ...string) (string) { for _, s := range ss { if s != "" { return s } }; return ""; }
+	or := func(ss ...string) string {
+		for _, s := range ss {
+			if s != "" {
+				return s
+			}
+		}
+		return ""
+	}
 
 	task.Name = or(task_data.Name, task.Name)
 	task.Description = or(task_data.Description, task.Description)
 	task.DueDate = or(task_data.DueDate, task.DueDate)
+	task.SchtirlichHumorescue = or(task_data.SchtirlichHumorescue, task.SchtirlichHumorescue)
 	task.Labels = task_data.Labels
 	task.Status = or(task_data.Status, task.Status)
 
 	err = s.r.Update(&task)
+
+	if err != nil {
+		return entity.Task{}, err
+	}
+
+	task, err = s.r.GetById(task.Id)
 
 	return task, err
 }
