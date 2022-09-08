@@ -41,6 +41,10 @@ INSERT INTO users(email, nickname, password)
 VALUES('test@example.com', 'test', 'Test123Test');
 `)
 
+	if err != nil {
+		return nil, err
+	}
+
 	logger.Debug("Creating new tasks table and test task")
 	_, err = db.Exec(`
 DROP TABLE IF EXISTS tasks CASCADE;

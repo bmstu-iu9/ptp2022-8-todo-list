@@ -153,7 +153,7 @@ func TestService(t *testing.T) {
 		want := task_examples[3]
 		test.IsNil(t, err)
 		test.DeepEqual(t, want, got)
-		got, err = s.GetById(2)
+		_, err = s.GetById(2)
 		test.NotNil(t, err)
 	})
 }
