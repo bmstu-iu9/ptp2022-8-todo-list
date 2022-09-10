@@ -7,6 +7,8 @@ import (
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 )
 
+// CreateTaskRequest represents task creation request
+// description is optional
 type CreateTaskRequest struct {
 	UserId               int64              `json:"-"`
 	Name                 string             `json:"name"`
@@ -18,6 +20,8 @@ type CreateTaskRequest struct {
 	Status               string             `json:"status"`
 }
 
+// UpdateTaskRequest represents task modify request
+// all of the fields is optional
 type UpdateTaskRequest struct {
 	TaskId               int64              `json:"-"`
 	Name                 string             `json:"name,omitempty"`
@@ -28,6 +32,7 @@ type UpdateTaskRequest struct {
 	Status               string             `json:"status,omitempty"`
 }
 
+// Service encapsulates usecase logic for tasks.
 type Service interface {
 	Get(user_id int64) ([]entity.Task, error)
 	GetById(task_id int64) (entity.Task, error)
@@ -40,10 +45,12 @@ type service struct {
 	r Repository
 }
 
+// NewService creates a new user service.
 func NewService(r Repository) Service {
 	return service{r}
 }
 
+// Get returns all tasks for user with specified id
 func (s service) Get(user_id int64) ([]entity.Task, error) {
 	tasks, err := s.r.Get(user_id)
 
@@ -54,6 +61,7 @@ func (s service) Get(user_id int64) ([]entity.Task, error) {
 	return tasks, err
 }
 
+// GetById returns single task with specified id
 func (s service) GetById(task_id int64) (entity.Task, error) {
 	task, err := s.r.GetById(task_id)
 
@@ -69,6 +77,7 @@ func (t *CreateTaskRequest) Validate() error {
 	return nil
 }
 
+// Create creates task from task_data argument
 func (s service) Create(task_data *CreateTaskRequest) (entity.Task, error) {
 	err := task_data.Validate()
 
@@ -87,9 +96,6 @@ func (s service) Create(task_data *CreateTaskRequest) (entity.Task, error) {
 		Status:               task_data.Status,
 	}
 
-	// logger := log.New()
-	// logger.Debug("Labels proccessed: ", task.Labels)
-
 	err = s.r.Create(task)
 
 	return *task, err
@@ -100,6 +106,7 @@ func (t *UpdateTaskRequest) Validate() error {
 	return nil
 }
 
+// Update modifies task using task_data
 func (s service) Update(task_data *UpdateTaskRequest) (entity.Task, error) {
 	err := task_data.Validate()
 
@@ -140,6 +147,7 @@ func (s service) Update(task_data *UpdateTaskRequest) (entity.Task, error) {
 	return task, err
 }
 
+// Delete removes task with specified id
 func (s service) Delete(task_id int64) (entity.Task, error) {
 	task, err := s.r.GetById(task_id)
 	if err != nil {

@@ -13,6 +13,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+// RegisterHandlers registers handlers for Tasks API methods
 func RegisterHandlers(mux *httprouter.Router, service Service, logger log.Logger) {
 	res := resource{service, logger}
 
@@ -44,7 +45,7 @@ func (res *resource) handleGet(w http.ResponseWriter, r *http.Request, p httprou
 	tasks, err := res.service.Get(int64(id))
 
 	if err != nil {
-		return err // fmt.Errorf("%w: %v", errors.ErrNotFound, err)
+		return err
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -52,7 +53,7 @@ func (res *resource) handleGet(w http.ResponseWriter, r *http.Request, p httprou
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrBodyEncode, err)
 	}
-	// w.WriteHeader(http.StatusOK)
+
 	return nil
 }
 
@@ -87,7 +88,6 @@ func (res *resource) handleGetById(w http.ResponseWriter, r *http.Request, p htt
 		return fmt.Errorf("%w: %v", errors.ErrBodyEncode, err)
 	}
 
-	// w.WriteHeader(http.StatusOK)
 	return nil
 }
 
@@ -107,7 +107,6 @@ func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httpro
 
 	task_req := CreateTaskRequest{UserId: int64(user_id)}
 	err = json.NewDecoder(r.Body).Decode(&task_req)
-	// res.logger.Debug("Labels received: ", task_req.Labels)
 
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrBodyDecode, err)
@@ -163,7 +162,6 @@ func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httpr
 		return fmt.Errorf("%w: %v", errors.ErrBodyEncode, err)
 	}
 
-	// w.WriteHeader(http.StatusOK)
 	return nil
 }
 
