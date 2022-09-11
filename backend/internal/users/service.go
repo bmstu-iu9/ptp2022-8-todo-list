@@ -15,7 +15,7 @@ type Service interface {
 }
 
 // User represents the data about an API user.
-type User struct {`
+type User struct {
 	Id       int64    `json:"id"`
 	Email    Email    `json:"email"`
 	Nickname Nickname `json:"nickname"`
@@ -23,7 +23,7 @@ type User struct {`
 
 type (
 	// Email represents email.
-	Email    entity.Email
+	Email entity.Email
 	// Nickname represents user's nickname.
 	Nickname entity.Nickname
 	// Password represents plaintext password.
