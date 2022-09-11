@@ -27,6 +27,7 @@ func TestRepo(t *testing.T) {
 			Nickname: "test",
 			Password: "Test123Test",
 		}
+
 		test.IsNil(t, err)
 		test.DeepEqual(t, want, got)
 	})
