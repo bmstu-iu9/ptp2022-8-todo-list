@@ -114,6 +114,12 @@ cd ptp2022-8-todo-list
 Запустить `docker-composer`:
 
 ```sh
+make
+```
+
+или
+
+```sh
 docker compose up
 ```
 
@@ -149,15 +155,14 @@ docker compose up
 
 В корне проекта:
 
-# !!!!!! Обновить список make-команд
-
 | Команда         | Результат                                                                                |
 |-----------------|------------------------------------------------------------------------------------------|
-| `make`          | Запускает frontend, api и базу данных, при этом в realtime обновляется *только frontend* |
+| `make`          | Запускает frontend, api и базу данных в режиме `prod`                                    |
+| `make dev`      | Запускает frontend, api и базу данных в режиме `dev`                                     |
 | `make frontend` | Запускает frontend с realtime обновлениями                                               |
+| `make frontend-prod` | Запускает `prod` frontend с подменой стартовой страницы и с работающим `Single Page Application|
 | `make lint`     | Запускает линтер для frontend                                                            |
-| `make deploy`   | Запускает `production` версию frontend                                                   |
-| `make frontend-prod` | Запускает `prod` frontend с подменой стартовой страницы |
+
 Frontend доступен на [localhost:8000](http://localhost:8000), а api на [localhost:8080](http://localhost:8080).
 
 В папке `backend/`:
@@ -166,19 +171,14 @@ Frontend доступен на [localhost:8000](http://localhost:8000), а api �
 |-------------|----------------------------------|
 | `make`      | Запускает локальный сервер api   |
 | `make test` | Запускает линтер и тесты для api |
+| `make db`   | Запускает базу данных            |
 
 ## Наша команда
 
-Александр **[@stewkk](https://github.com/stewkk)** Старовойтов — LEAD Backend  
-
-Денис **[@OkDenAl](https://github.com/OkDenAl)** Окутин — Backend  
-
-Арсений **[@uma-op](https://github.com/uma-op)** Банников — Backend  
-
-Георгий **[@geogreck](https://github.com/geogreck)** Гречко — LEAD frontend  (А ещё я написал этот ужасающий README)
-
-Вячеслав **[@VyacheslavIsWorkingNow](https://github.com/VyacheslavIsWorkingNow)** Локшин — frontend  
-
-Кирилл **[@t1d333](https://github.com/t1d333)** Киселёв —  frontend  
-
-Татьяна **[@Tanya-g99](https://github.com/Tanya-g99)** Гнатенко — frontend  
+ - Александр **[@stewkk](https://github.com/stewkk)** Старовойтов — LEAD Backend  
+ - Денис **[@OkDenAl](https://github.com/OkDenAl)** Окутин — Backend  
+ - Арсений **[@uma-op](https://github.com/uma-op)** Банников — Backend  
+ - Георгий **[@geogreck](https://github.com/geogreck)** Гречко — LEAD frontend  (А ещё я написал этот ужасающий README)
+ - Вячеслав **[@VyacheslavIsWorkingNow](https://github.com/VyacheslavIsWorkingNow)** Локшин — frontend  
+ - Кирилл **[@t1d333](https://github.com/t1d333)** Киселёв —  frontend  
+ - Татьяна **[@Tanya-g99](https://github.com/Tanya-g99)** Гнатенко — frontend  
