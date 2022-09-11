@@ -282,6 +282,16 @@ type mockRepository struct {
 	id    int64
 }
 
+func (repo *mockRepository) InitUserInventory(id int64) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (repo *mockRepository) CleanUserInventory(id int64) error {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (repo *mockRepository) Create(user *entity.User) error {
 	user.Id = repo.id
 	repo.id++
@@ -317,4 +327,3 @@ func (repo mockRepository) Update(user *entity.User) error {
 	}
 	return errors.ErrNotFound
 }
-
