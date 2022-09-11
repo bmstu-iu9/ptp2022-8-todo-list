@@ -5,6 +5,7 @@ import (
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	. "gopkg.in/check.v1"
+	"net/http"
 )
 
 type RepositoryTestSuite struct {
@@ -25,35 +26,44 @@ func (r *RepositoryTestSuite) SetUpTest(c *C) {
 }
 
 func (r *RepositoryTestSuite) TestGetAll(c *C) {
-	testItems, err := r.repo.GetAll(1, entity.Filter{StateFilter: entity.Store})
+	req, _ := http.NewRequest("GET", "/user/1/items?state=inventoried", nil)
+	testItems, err := r.repo.GetAll(1, NewFilter(req))
 	c.Check(err, IsNil)
 	c.Check(testItems, DeepEquals, []entity.Item{
 		{
-			ItemId:      3,
-			ItemName:    "testItem3",
-			ImageSrc:    "test3.png",
-			Description: "test3",
-			Price:       69,
-			Rarity:      "legendary",
-			Category:    "weapon",
-			ItemState:   entity.Store,
+			Id:           1,
+			Name:         "testItem1",
+			ImageSrc:     "test.png",
+			ImageForHero: "test.png",
+			Description:  "test1",
+			Price:        65,
+			Rarity:       "rare",
+			Category:     "armor",
+			State:        entity.Inventoried,
+			Armor:        10,
+			Damage:       10,
 		},
 	})
-	testItems, err = r.repo.GetAll(1, entity.Filter{RarityFilter: "rare", CategoryFilter: "weapon"})
+	req, _ = http.NewRequest("GET", "/user/1/items?rarity=rare&category=weapon", nil)
+	testItems, err = r.repo.GetAll(1, NewFilter(req))
 	c.Check(err, IsNil)
 	c.Check(testItems, DeepEquals, []entity.Item{})
-	testItems, err = r.repo.GetAll(1, entity.Filter{CategoryFilter: "armor"})
+	req, _ = http.NewRequest("GET", "/user/1/items?category=armor", nil)
+	testItems, err = r.repo.GetAll(1, NewFilter(req))
 	c.Check(err, IsNil)
 	c.Check(testItems, DeepEquals, []entity.Item{
 		{
-			ItemId:      1,
-			ItemName:    "testItem1",
-			ImageSrc:    "test.png",
-			Description: "test1",
-			Price:       65,
-			Rarity:      "rare",
-			Category:    "armor",
-			ItemState:   entity.Inventoried,
+			Id:           1,
+			Name:         "testItem1",
+			ImageSrc:     "test.png",
+			ImageForHero: "test.png",
+			Description:  "test1",
+			Price:        65,
+			Rarity:       "rare",
+			Category:     "armor",
+			State:        entity.Inventoried,
+			Armor:        10,
+			Damage:       10,
 		},
 	})
 }
@@ -62,14 +72,17 @@ func (r *RepositoryTestSuite) TestGetOne(c *C) {
 	testItem, err := r.repo.GetOne(1, 1)
 	c.Check(err, IsNil)
 	c.Check(testItem, Equals, entity.Item{
-		ItemId:      1,
-		ItemName:    "testItem1",
-		ImageSrc:    "test.png",
-		Description: "test1",
-		Price:       65,
-		Rarity:      "rare",
-		Category:    "armor",
-		ItemState:   entity.Inventoried,
+		Id:           1,
+		Name:         "testItem1",
+		ImageSrc:     "test.png",
+		ImageForHero: "test.png",
+		Description:  "test1",
+		Price:        65,
+		Rarity:       "rare",
+		Category:     "armor",
+		State:        entity.Inventoried,
+		Armor:        10,
+		Damage:       10,
 	})
 	_, err = r.repo.GetOne(2, 2)
 	c.Check(err, NotNil)
@@ -79,34 +92,39 @@ func (r *RepositoryTestSuite) TestGetOne(c *C) {
 	testItem, err = r.repo.GetOne(1, 2)
 	c.Check(err, IsNil)
 	c.Check(testItem, Equals, entity.Item{
-		ItemId:      2,
-		ItemName:    "testItem2",
-		ImageSrc:    "test2.png",
-		Description: "test2",
-		Price:       62,
-		Rarity:      "epic",
-		Category:    "weapon",
-		ItemState:   entity.Equipped,
+		Id:           2,
+		Name:         "testItem2",
+		ImageSrc:     "test2.png",
+		ImageForHero: "test2.png",
+		Description:  "test2",
+		Price:        62,
+		Rarity:       "epic",
+		Category:     "weapon",
+		State:        entity.Equipped,
+		Damage:       5,
 	})
 }
 
 func (r *RepositoryTestSuite) TestUpdate(c *C) {
 	item := entity.Item{
-		ItemId:    1,
-		ItemState: entity.Equipped,
+		Id:    1,
+		State: entity.Equipped,
 	}
 	err := r.repo.Update(1, &item)
 	c.Check(err, IsNil)
 	testItems, err := r.repo.GetOne(1, 1)
 	c.Check(err, IsNil)
 	c.Check(testItems, Equals, entity.Item{
-		ItemId:      1,
-		ItemName:    "testItem1",
-		ImageSrc:    "test.png",
-		Description: "test1",
-		Price:       65,
-		Rarity:      "rare",
-		Category:    "armor",
-		ItemState:   entity.Equipped,
+		Id:           1,
+		Name:         "testItem1",
+		ImageSrc:     "test.png",
+		ImageForHero: "test.png",
+		Description:  "test1",
+		Price:        65,
+		Rarity:       "rare",
+		Category:     "armor",
+		State:        entity.Equipped,
+		Armor:        10,
+		Damage:       10,
 	})
 }

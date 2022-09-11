@@ -3,13 +3,54 @@ package items
 import (
 	"encoding/json"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/accesslog"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/julienschmidt/httprouter"
 )
 
+func strToItemStateArr(states []string) []entity.ItemState {
+	itemState := make([]entity.ItemState, 0)
+	for _, state := range states {
+		itemState = append(itemState, entity.ItemState(state))
+	}
+	return itemState
+}
+
+// NewFilter creates a new item filter.
+func NewFilter(r *http.Request) ItemFilter {
+	var itemFilter ItemFilter
+
+	stateFilter := strings.Split(r.URL.Query().Get("state"), ",")
+	if stateFilter[0] == "" {
+		defaultStateFilter := []entity.ItemState{"equipped", "inventoried", "store"}
+		itemFilter.StateFilter = defaultStateFilter
+	} else {
+		itemFilter.StateFilter = strToItemStateArr(stateFilter)
+	}
+
+	rarityFilter := strings.Split(r.URL.Query().Get("rarity"), ",")
+	if rarityFilter[0] == "" {
+		defaultRarityFilter := []string{"common", "rare", "epic", "legendary"}
+		itemFilter.RarityFilter = defaultRarityFilter
+	} else {
+		itemFilter.RarityFilter = rarityFilter
+	}
+
+	categoryFilter := strings.Split(r.URL.Query().Get("category"), ",")
+	if categoryFilter[0] == "" {
+		defaultCategoryFilter := []string{"armor", "weapon", "pet", "skin"}
+		itemFilter.CategoryFilter = defaultCategoryFilter
+	} else {
+		itemFilter.CategoryFilter = categoryFilter
+	}
+	return itemFilter
+}
+
+// RegisterHandlers registers handlers for Items API methods.
 func RegisterHandlers(mux *httprouter.Router, service Service, logger log.Logger) {
 	res := resource{service, logger}
 
@@ -40,10 +81,8 @@ func (res *resource) handleGetAll(w http.ResponseWriter, r *http.Request, p http
 	err = json.NewEncoder(w).Encode(items)
 	if err != nil {
 		res.logger.Info(err)
-		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }
 
 func (res *resource) handleGetOne(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
@@ -68,10 +107,8 @@ func (res *resource) handleGetOne(w http.ResponseWriter, r *http.Request, p http
 	err = json.NewEncoder(w).Encode(item)
 	if err != nil {
 		res.logger.Info(err)
-		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }
 
 func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
@@ -94,7 +131,7 @@ func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httpr
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	item, err := res.service.Modify(userId, itemId, &data)
+	item, err := res.service.UpdateItemState(userId, itemId, &data)
 	if err != nil {
 		res.logger.Info(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -106,7 +143,6 @@ func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httpr
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }
 
 func getUserId(p httprouter.Params) (int, error) {

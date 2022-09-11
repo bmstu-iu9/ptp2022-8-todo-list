@@ -1,30 +1,34 @@
 package entity
 
-// A Item represents single in-game item.
+// Item represents single in-game item.
 type Item struct {
-	ItemId      int    `json:"item_id"`
-	ItemName    string `json:"item_name"`
-	ImageSrc    string `json:"image_src"`
-	Description string `json:"description"`
-	Price       int    `json:"price"`
-	Category    string `json:"category"`
-	Rarity      string `json:"rarity"`
+	Id           int    `json:"id"`
+	Name         string `json:"name"`
+	ImageSrc     string `json:"imageSrc"`
+	ImageForHero string `json:"imageForHero"`
+	Description  string `json:"description"`
+	Price        int    `json:"price"`
+	Category     string `json:"category"`
+	Armor        int    `json:"armor"`
+	Damage       int    `json:"damage"`
+	Rarity       string `json:"rarity"`
 
-	ItemState State `json:"item_state"`
+	State ItemState `json:"state"`
 }
 
-//State represents ItemsState.
+// State represents state.
 type State string
 
-const (
-	Unknown     State = ""
-	Equipped    State = "equipped"
-	Inventoried State = "inventoried"
-	Store       State = "store"
-)
+// ItemState represents item state.
+type ItemState State
 
-type Filter struct {
-	StateFilter    State
-	RarityFilter   string
-	CategoryFilter string
-}
+const (
+	// Unknown shows that the ItemState is unknown for server.
+	Unknown ItemState = ""
+	// Equipped shows that user is using this item.
+	Equipped ItemState = "equipped"
+	// Inventoried shows that item is in inventory.
+	Inventoried ItemState = "inventoried"
+	// Store shows that item in a store
+	Store ItemState = "store"
+)

@@ -18,18 +18,18 @@ func (s *ServiceTestSuite) SetUpTest(c *C) {
 }
 
 func (s *ServiceTestSuite) TestGetAll(c *C) {
-	items, err := s.service.GetAll(1, entity.Filter{})
+	items, err := s.service.GetAll(1, ItemFilter{})
 	c.Check(err, IsNil)
 	c.Check(items, DeepEquals, []entity.Item{
 		{
-			ItemId:   10,
-			ItemName: "sword",
-			Rarity:   "rare",
+			Id:     10,
+			Name:   "sword",
+			Rarity: "rare",
 		},
 		{
-			ItemId:   6,
-			ItemName: "head",
-			Rarity:   "legendary",
+			Id:     6,
+			Name:   "head",
+			Rarity: "legendary",
 		},
 	})
 }
@@ -38,16 +38,16 @@ func (s *ServiceTestSuite) TestGetOne(c *C) {
 	item, err := s.service.GetOne(1, 10)
 	c.Check(err, IsNil)
 	c.Check(item, Equals, entity.Item{
-		ItemId:   10,
-		ItemName: "sword",
-		Rarity:   "rare",
+		Id:     10,
+		Name:   "sword",
+		Rarity: "rare",
 	})
 	item, err = s.service.GetOne(1, 6)
 	c.Check(err, IsNil)
 	c.Check(item, Equals, entity.Item{
-		ItemId:   6,
-		ItemName: "head",
-		Rarity:   "legendary",
+		Id:     6,
+		Name:   "head",
+		Rarity: "legendary",
 	})
 	_, err = s.service.GetOne(10, 6)
 	c.Check(err, NotNil)
@@ -60,13 +60,13 @@ func (s *ServiceTestSuite) TestModify(c *C) {
 		ItemState: entity.Equipped,
 	}
 	for i := 0; i < 2; i++ {
-		item, err := s.service.Modify(1, 10, &newItem)
+		item, err := s.service.UpdateItemState(1, 10, &newItem)
 		c.Check(err, IsNil)
 		c.Check(item, Equals, entity.Item{
-			ItemId:    10,
-			ItemName:  "sword",
-			ItemState: entity.Equipped,
-			Rarity:    "rare",
+			Id:     10,
+			Name:   "sword",
+			State:  entity.Equipped,
+			Rarity: "rare",
 		})
 	}
 }

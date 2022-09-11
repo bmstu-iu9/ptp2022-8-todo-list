@@ -37,16 +37,16 @@ func (s *ApiTestSuite) TestGetAll(c *C) {
 		req, _ := http.NewRequest("GET", "/user/"+userId+"/items"+filters, nil)
 		s.mux.ServeHTTP(s.writer, req)
 	}
-	makeRequest("1", "?rarityfilter=rare")
+	makeRequest("1", "?rarity=rare")
 	c.Check(s.writer.Code, Equals, http.StatusOK)
 	got := []entity.Item{}
 	err := json.NewDecoder(s.writer.Body).Decode(&got)
 	c.Check(err, Equals, nil)
 	c.Check(got, DeepEquals, []entity.Item{
 		{
-			ItemId:   10,
-			ItemName: "sword",
-			Rarity:   "rare",
+			Id:     10,
+			Name:   "sword",
+			Rarity: "rare",
 		},
 	})
 }
@@ -63,9 +63,9 @@ func (s *ApiTestSuite) TestGetOne(c *C) {
 	err := json.NewDecoder(s.writer.Body).Decode(&got)
 	c.Check(err, Equals, nil)
 	c.Check(got, DeepEquals, entity.Item{
-		ItemId:   10,
-		ItemName: "sword",
-		Rarity:   "rare",
+		Id:     10,
+		Name:   "sword",
+		Rarity: "rare",
 	})
 	makeRequest("4", "10")
 	c.Check(s.writer.Code, Equals, http.StatusNotFound)
@@ -81,20 +81,20 @@ func (s *ApiTestSuite) TestPatch(c *C) {
 		s.mux.ServeHTTP(s.writer, req)
 	}
 
-	makeRequest("1", "10", `{"item_state":"equipped"}`)
+	makeRequest("1", "10", `{"itemState":"equipped"}`)
 	c.Check(s.writer.Code, Equals, http.StatusOK)
 	got := entity.Item{}
 	err := json.NewDecoder(s.writer.Body).Decode(&got)
 	c.Check(err, IsNil)
 	c.Check(got, DeepEquals, entity.Item{
-		ItemId:    10,
-		ItemName:  "sword",
-		Rarity:    "rare",
-		ItemState: entity.Equipped,
+		Id:     10,
+		Name:   "sword",
+		Rarity: "rare",
+		State:  entity.Equipped,
 	})
-	makeRequest("1", "2", `{"ItemName": "test"}`)
+	makeRequest("1", "2", `{"name": "test"}`)
 	c.Check(s.writer.Code, Equals, http.StatusInternalServerError)
-	makeRequest("10", "10", `{"ItemName": "test"}`)
+	makeRequest("10", "10", `{"name": "test"}`)
 	c.Check(s.writer.Code, Equals, http.StatusInternalServerError)
 }
 
@@ -103,10 +103,10 @@ type mockRepository struct {
 	userId int
 }
 
-func (m mockRepository) IsItemInInventory(userId, itemId int) (status entity.State, err error) {
+func (m mockRepository) IsItemInInventory(userId, itemId int) (entity.ItemState, error) {
 	if userId == m.userId {
 		for _, item := range m.data {
-			if item.ItemId == itemId {
+			if item.Id == itemId {
 				return entity.Inventoried, nil
 			}
 		}
@@ -115,15 +115,15 @@ func (m mockRepository) IsItemInInventory(userId, itemId int) (status entity.Sta
 		itemId, userId)
 }
 
-func (m *mockRepository) Create(userId, itemId int, state entity.State) error {
+func (m *mockRepository) Create(userId, itemId int, state entity.ItemState) error {
 	return nil
 }
 
-func (m mockRepository) GetAll(userId int, filters entity.Filter) ([]entity.Item, error) {
+func (m mockRepository) GetAll(userId int, filters ItemFilter) ([]entity.Item, error) {
 	ans := make([]entity.Item, 0)
-	if filters.RarityFilter != "" {
+	if filters.RarityFilter != nil {
 		for _, item := range m.data {
-			if item.Rarity == filters.RarityFilter {
+			if item.Rarity == filters.RarityFilter[0] {
 				ans = append(ans, item)
 			}
 		}
@@ -137,7 +137,7 @@ func (m mockRepository) GetOne(userId, itemId int) (entity.Item, error) {
 		return entity.Item{}, errors.New("No user")
 	}
 	for _, item := range m.data {
-		if item.ItemId == itemId {
+		if item.Id == itemId {
 			return item, nil
 		}
 	}
@@ -146,7 +146,7 @@ func (m mockRepository) GetOne(userId, itemId int) (entity.Item, error) {
 
 func (m mockRepository) Update(userId int, item *entity.Item) error {
 	for i, curItem := range m.data {
-		if curItem.ItemId == item.ItemId {
+		if curItem.Id == item.Id {
 			m.data[i] = *item
 			return nil
 		}
@@ -158,14 +158,14 @@ func NewMockRerository() *mockRepository {
 	return &mockRepository{
 		data: []entity.Item{
 			{
-				ItemId:   10,
-				ItemName: "sword",
-				Rarity:   "rare",
+				Id:     10,
+				Name:   "sword",
+				Rarity: "rare",
 			},
 			{
-				ItemId:   6,
-				ItemName: "head",
-				Rarity:   "legendary",
+				Id:     6,
+				Name:   "head",
+				Rarity: "legendary",
 			},
 		},
 		userId: 1,

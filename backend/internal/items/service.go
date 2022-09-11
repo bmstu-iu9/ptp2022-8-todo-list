@@ -2,28 +2,21 @@ package items
 
 import (
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
-	"net/http"
 )
-
-// NewFilter creates a new filter.
-func NewFilter(r *http.Request) entity.Filter {
-	return entity.Filter{
-		StateFilter:    entity.State(r.URL.Query().Get("statefilter")),
-		RarityFilter:   r.URL.Query().Get("rarityfilter"),
-		CategoryFilter: r.URL.Query().Get("categoryfilter"),
-	}
-}
 
 // UpdateItemStateRequest represents the data for modifing ItemState.
 type UpdateItemStateRequest struct {
-	ItemState entity.State `json:"item_state"`
+	ItemState entity.ItemState `json:"itemState"`
 }
 
 // Service encapsulates usecase logic for items.
 type Service interface {
-	GetAll(userId int, filters entity.Filter) ([]entity.Item, error)
+	// GetAll returns all items.
+	GetAll(userId int, filters ItemFilter) ([]entity.Item, error)
+	// GetOne returns item with specified id owned by user with specified id.
 	GetOne(userId, itemId int) (entity.Item, error)
-	Modify(userId, itemId int, input *UpdateItemStateRequest) (entity.Item, error)
+	// UpdateItemState returns item with specified id with new ItemState.
+	UpdateItemState(userId, itemId int, input *UpdateItemStateRequest) (entity.Item, error)
 }
 
 type service struct {
@@ -36,38 +29,22 @@ func NewService(repo Repository) Service {
 }
 
 // GetAll returns all items.
-func (s service) GetAll(userId int, filters entity.Filter) ([]entity.Item, error) {
+func (s service) GetAll(userId int, filters ItemFilter) ([]entity.Item, error) {
 	return s.repo.GetAll(userId, filters)
 }
 
 // GetOne returns item with specified id owned by user with specified id.
 func (s service) GetOne(userId, itemId int) (entity.Item, error) {
-	_, err := s.repo.IsItemInInventory(userId, itemId)
-	if err != nil {
-		return entity.Item{}, err
-	}
 	return s.repo.GetOne(userId, itemId)
 }
 
-// Modify returns item with specified id with new ItemState.
-func (s service) Modify(userId, itemId int, input *UpdateItemStateRequest) (entity.Item, error) {
-	status, err := s.repo.IsItemInInventory(userId, itemId)
-	if status == entity.Unknown {
-		return entity.Item{}, err
-	}
-	if status == entity.Store {
-		err = s.repo.Create(userId, itemId, input.ItemState)
-		if err != nil {
-			return entity.Item{}, err
-		}
-	}
+// UpdateItemState returns item with specified id with new ItemState.
+func (s service) UpdateItemState(userId, itemId int, input *UpdateItemStateRequest) (entity.Item, error) {
 	entityItem, err := s.GetOne(userId, itemId)
 	if err != nil {
 		return entity.Item{}, err
 	}
-	if input.ItemState == entity.Equipped || input.ItemState == entity.Inventoried {
-		entityItem.ItemState = input.ItemState
-	}
+	entityItem.State = input.ItemState
 	err = s.repo.Update(userId, &entityItem)
 	return entityItem, err
 }

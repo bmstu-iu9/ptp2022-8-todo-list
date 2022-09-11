@@ -17,7 +17,7 @@ type Service interface {
 
 // User represents the data about an API user.
 type User struct {
-	Id       int64    `json:"id"`
+	Id       int64  `json:"id"`
 	Email    string `json:"email"`
 	Nickname string `json:"nickname"`
 }
@@ -113,6 +113,10 @@ func (s service) Delete(id int64) (User, error) {
 	if err != nil {
 		return User{}, err
 	}
+	err = s.repo.CleanUserInventory(id)
+	if err != nil {
+		return User{}, err
+	}
 	return newUser(&user), nil
 }
 
@@ -129,6 +133,10 @@ func (s service) Create(input *CreateUserRequest) (User, error) {
 		Password: input.Password,
 	}
 	err = s.repo.Create(entityUser)
+	if err != nil {
+		return User{}, err
+	}
+	err = s.repo.InitUserInventory(entityUser.Id)
 	if err != nil {
 		return User{}, err
 	}
