@@ -1,61 +1,85 @@
 package users
 
 import (
+	"testing"
+
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/db"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
-	. "gopkg.in/check.v1"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/test"
 )
 
-type RepoTestSuite struct {
-	repo Repository
-}
-
-func init() {
-	Suite(&RepoTestSuite{})
-}
-
-func (s *RepoTestSuite) SetUpSuite(c *C) {
+func TestRepo(t *testing.T) {
 	logger := log.New()
 	db, err := db.New(logger)
 	if err != nil {
 		panic(err)
 	}
 
-	s.repo = NewRepository(db, logger)
-}
+	repo := NewRepository(db, logger)
 
-func (s *RepoTestSuite) TestRepo(c *C) {
-	testUser, err := s.repo.Get(1)
-	c.Check(err, IsNil)
-	c.Check(testUser, DeepEquals, entity.User{
-		Id:       1,
-		Email:    "test@example.com",
-		Nickname: "test",
-		Password: "Test123Test",
+	t.Run("get", func(t *testing.T) {
+		got, err := repo.Get(1)
+
+		want := entity.User{
+			Id:       1,
+			Email:    "test@example.com",
+			Nickname: "test",
+			Password: "Test123Test",
+		}
+		test.IsNil(t, err)
+		test.DeepEqual(t, want, got)
 	})
-
 	user := &entity.User{
+		Id:       0,
 		Email:    "slava@example.com",
 		Nickname: "slavaruswarrior",
 		Password: "Ryudfnsb675",
 	}
-	err = s.repo.Create(user)
-	c.Check(err, IsNil)
-	got, err := s.repo.Get(user.Id)
-	c.Check(err, IsNil)
-	c.Check(*user, DeepEquals, got)
-	c.Check(user.Id, Equals, int64(3))
 
-	user.Email = "example@example.com"
-	err = s.repo.Update(user)
-	c.Check(err, IsNil)
-	got, err = s.repo.Get(user.Id)
-	c.Check(err, IsNil)
-	c.Check(got.Email, Equals, "example@example.com")
+	t.Run("create", func(t *testing.T) {
+		err = repo.Create(user)
 
-	err = s.repo.Delete(user.Id)
-	c.Check(err, IsNil)
-	_, err = s.repo.Get(user.Id)
-	c.Check(err, NotNil)
+		test.IsNil(t, err)
+	})
+
+	t.Run("create validate", func(t *testing.T) {
+		got, err := repo.Get(user.Id)
+
+		want := *user
+
+		test.IsNil(t, err)
+		test.DeepEqual(t, want, got)
+		if user.Id != 2 {
+			t.Fatalf("expected user.Id: 2, got: %#v", got)
+		}
+	})
+
+	t.Run("update", func(t *testing.T) {
+		user.Email = "example@example.com"
+		err = repo.Update(user)
+
+		test.IsNil(t, err)
+	})
+
+	t.Run("update validate", func(t *testing.T) {
+		got, err := repo.Get(user.Id)
+
+		want := *user
+
+		test.IsNil(t, err)
+		test.DeepEqual(t, want, got)
+	})
+
+	t.Run("delete", func(t *testing.T) {
+		err = repo.Delete(user.Id)
+
+		test.IsNil(t, err)
+	})
+
+	t.Run("delete validate", func(t *testing.T) {
+		_, err = repo.Get(user.Id)
+
+		test.NotNil(t, err)
+	})
 }

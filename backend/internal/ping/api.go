@@ -10,9 +10,9 @@ import (
 
 // RegisterHandlers sets up routing of the HTTP handlers.
 func RegisterHandlers(mux *httprouter.Router, logger log.Logger) {
-	mux.GET("/ping", accesslog.Log(ping, logger))
+	mux.GET("/ping", accesslog.Log(handleGet, logger))
 }
 
-func ping(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	w.WriteHeader(418)
+func handleGet(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	w.WriteHeader(http.StatusTeapot)
 }

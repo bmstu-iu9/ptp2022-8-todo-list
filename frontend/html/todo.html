@@ -64,7 +64,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="inventory.html">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-seam"
             viewBox="0 0 16 16">
             <path
@@ -75,7 +75,7 @@
       </li>
 
       <li class="nav-item menu__exit">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="start_page.html">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
             class="bi bi-box-arrow-left" viewBox="0 0 16 16">
             <path fill-rule="evenodd"
@@ -94,15 +94,15 @@
   <div class="body">
     <div class="todo">
 
-      <div class="todo_input">
-        <input class="todo_text d-inline" type="text">
+      <div class="todo__input">
+        <input class="todo__text d-inline" type="text">
         <a class="add bg-primary text-white active d-inline-block" title="Добавить задачу">
           <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="add-btn bi bi-plus" viewBox="0 0 16 16">
             <path
               d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
           </svg>
         </a>
-        <a class="expansion bg-primary text-white active d-inline-block" title="Расширенные настройки" id="btn"
+        <a class="expansion bg-primary text-white active d-inline-block" title="Расширенные настройки"  data-bs-toggle="modal" data-bs-target="#modal" id="btn"
           href="#">
           <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
             <path
@@ -110,26 +110,6 @@
           </svg>
         </a>
       </div>
-
-      <script>
-        function myFunction() {
-          document.getElementById("myDropdown").classList.toggle("show");
-        }
-
-        window.onclick = function (event) {
-          if (!event.target.matches('.dropbtn') && !document.getElementsByClassName('list-unstyled')[0].contains(event.target)) {
-            var dropdowns = document.getElementsByClassName("list-unstyled");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-              var openDropdown = dropdowns[i];
-              if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-              }
-            }
-
-          }
-        }
-      </script>
 
       <div class="my-2 row todo__filter">
 
@@ -139,41 +119,22 @@
             <option value="active">активные</option>
             <option value="completed">завершённые</option>
             <option value="archived">архивированные</option>
+            <option value="all">все</option>
           </select>
         </div>
 
         <div class="col h-38px">
           <div class="dropdown-menu d-block pt-0">
-            <form class="todo__categories__form p-0 m-0">
-              <input onclick="myFunction()" type="search" class="dropbtn form-control" autocomplete="false"
-                placeholder="Категория">
+            <form class="todo__categories__form p-0 m-0 w-100">
+              <input id="sort__search" autocomplete="off" type="search" class="dropbtn form-control" autocomplete="false" placeholder="Категории">
             </form>
-            <ul id="myDropdown" class="list-unstyled mb-0">
-              <!-- <input class="form-control" id="myInput" type="text" placeholder="Поиск"> -->
-              <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
-                  <span style="background-color: rgba(0, 116, 15, 0.5);"
-                    class="d-inline-block rounded-circle p-1"></span>
-                  <label class="todo__category" for="category1">семья</label>
-                </a></li>
+            <div id="sort__form__category" class="sort__list-category-contener">
+              <ul class="sort__list-category mb-0">
+                
+              </ul>
 
-              <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
-                  <span style="background-color: rgba(0, 73, 209, 0.5);"
-                    class="d-inline-block rounded-circle p-1"></span>
-                  <label class="todo__category" for="category2">работа</label>
-                </a></li>
-
-              <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
-                  <span style="background-color: rgba(101, 1, 168, 0.5);"
-                    class="d-inline-block rounded-circle p-1"></span>
-                  <label class="todo__category" for="category2">кот</label>
-                </a></li>
-
-              <li><a class="dropdown-item d-flex align-items-center gap-2 py-1" href="#">
-                  <span style="background-color: rgba(168, 54, 1, 0.5);"
-                    class="d-inline-block rounded-circle p-1"></span>
-                  <label class="todo__category" for="category2">позвонить гоше</label>
-                </a></li>
-            </ul>
+              <button type="button" class="sort__btn-all btn btn-primary w-100">Сбросить</button>
+            </div>
           </div>
         </div>
 
@@ -184,8 +145,6 @@
 
 
       </ul>
-
-
 
       <div class="window__form modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -221,7 +180,7 @@
 
                 <div class="d-block position-static mb-3 rounded-3">
                   <form class="bg-light p-0 m-0">
-                    <input type="search" class="dropbtn2 form-control" autocomplete="false"
+                    <input id="add-task__search" autocomplete="off" type="search" class="dropbtn1 form-control" autocomplete="false"
                       placeholder="Выбрать категорию">
                   </form>
                   <div id="form__category" class="list-category-contener">
@@ -235,7 +194,7 @@
                           <input type="text" class="form-control" id="name__category" placeholder="Новая категория">
                         </div>
                         <div class="m-0 color__category">
-                          <input class="h-100 color__category" type="color" value="#563d7c" title="Задать цвет"
+                          <input class="h-100 color__category" type="color" title="Задать цвет"
                             id="color__category">
                         </div>
                         <div class="add p-0">
@@ -256,11 +215,11 @@
 
 
                 <div class="form-group mb-3">
-                  <textarea name="comment" class="form-control" title="Введите комментарий" placeholder="Комментарий"
+                  <textarea name="comment" class="form-control" title="Введите описание" placeholder="Описание"
                     id="comment"></textarea>
                 </div>
 
-                <div class="form-group mb-3">
+                <div class="form-group">
                   <input class="form-control" type="file" name="file" id="input__file" multiple>
                 </div>
 
@@ -281,12 +240,12 @@
 
 
 
-      <div class="window__form modal fade" id="modal__editor" tabindex="-1" aria-labelledby="exampleModalLabel" opened-task-id="">
-        aria-hidden="true">
+      <div class="window__form modal fade" id="modal__editor" tabindex="-1" aria-labelledby="exampleModalLabel"
+        opened-task-id="" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title form__title" id = "modal-title-info">Информация</h5>
+              <h5 class="modal-title form__title" id="modal-title-info">Информация</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -313,22 +272,22 @@
 
                 <div class="container p-0" title="Выбранные категории">
                   <div class="chosen__categories row mb-3 m-0">
-                    
+
                   </div>
                 </div>
 
-                <div id = "form__edit__categories" class="d-block position-static mb-3 rounded-3">
-                  
+                <div id="form__edit__categories" class="d-block position-static mb-3 rounded-3">
+
                 </div>
 
 
                 <div class="form-floating mb-3">
-                  <textarea name="comment" class="form-control" title="Введите комментарий" placeholder="Комментарий"
+                  <textarea name="comment" class="form-control" title="Введите описание" placeholder="Описание"
                     id="commentE"></textarea>
-                  <label for="commentE">Комментарий</label>
+                  <label for="commentE">Описание</label>
                 </div>
 
-                <div class="form-floating mb-3">
+                <div class="form-group">
                   <input class="form-control" type="file" name="file" id="input__fileE" multiple>
                 </div>
 
@@ -340,19 +299,15 @@
             </div>
             <div class="modal-footer">
               <div class="container py-3 text-center">
-                <button type="button" class="btn btn-primary btn-edit">Редактировать</button>
-                <button type="button" class="btn btn-primary btn-edit-save">Сохранить изменения</button>
+                <button type="button" class="btn btn-primary btn-edit mx-auto">Редактировать</button>
+                <button type="button" class="btn btn-primary btn-edit-save mx-auto" data-bs-dismiss="modal">Сохранить
+                  изменения</button>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
-
-
-
 
 
   </div>
