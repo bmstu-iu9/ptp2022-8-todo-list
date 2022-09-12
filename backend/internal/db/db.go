@@ -74,7 +74,7 @@ INSERT INTO items (name, image_src,image_for_hero, description, price, item_cate
 	}
 	_, err = db.Exec(`
 DROP TYPE IF EXISTS states CASCADE;
-CREATE TYPE states AS ENUM ('equipped','inventoried','store');
+CREATE TYPE states AS ENUM ('equipped', 'inventoried', 'store');
 DROP TABLE IF EXISTS inventory;
 CREATE TABLE inventory (
     user_id int,
