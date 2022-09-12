@@ -83,6 +83,10 @@ jobs:
               with:
                 path: "frontend/js/"
                 type: ".ts"
+            
+            - name: Prettier Checking
+              if: ${{ always()  }}
+              run: yarn prettier --config ./frontend/prettier.config.cjs --ignore-path ./frontend/.prettierignore  ${{ steps.changed-files-ts.outputs.modified_files }} ${{ steps.changed-files-ts.outputs.added_files }} -w
 
             - name: TsLint Checking
               if: ${{ always() && (steps.changed-files-ts.outputs.added_files || steps.changed-files-ts.outputs.modified_files) }} 
