@@ -153,7 +153,7 @@ export default function startServer(spec) {
                     req.url,
                     ' ',
                     code === '404' ? fontColors.get('red') : fontColors.get('green'),
-                    code,
+                    code
                 )
             })
         }
@@ -168,7 +168,7 @@ export default function startServer(spec) {
                 ' ',
                 fontColors.get('yellow'),
                 '302 -->',
-                reroutePaths.get(req.url),
+                reroutePaths.get(req.url)
             )
         } else if (pathsReroute.has(req.url)) {
             filePath = path + pathsReroute.get(req.url)
@@ -182,7 +182,7 @@ export default function startServer(spec) {
                     pathsReroute.get(req.url),
                     ' ',
                     code === '404' ? fontColors.get('red') : fontColors.get('green'),
-                    code,
+                    code
                 )
             })
         } else {

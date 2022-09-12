@@ -1,318 +1,293 @@
 <!DOCTYPE html>
 <html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <meta name="theme-color" content="#712cf9" />
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <meta name="theme-color" content="#712cf9" />
+    <title>Document</title>
+    <link href="../scss/todo.scss" rel="stylesheet" />
+    <link href="../scss/menu.scss" rel="stylesheet" />
+    <script src="../js/request.ts"></script>
+    <script defer src="../js/config.ts"></script>
+    <script defer src="../js/list/utility.ts"></script>
+    <script defer src="../js/list/task.ts"></script>
+    <script defer src="../js/list/todolist.ts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  </head>
 
-  <title>Document</title>
-  <link href="../scss/todo.scss" rel="stylesheet" />
-  <link href="../scss/menu.scss" rel="stylesheet" />
-  <script src="../js/request.ts"></script>
-  <script defer src="../js/config.ts"></script>
-  <script defer src="../js/list/utility.ts"></script>
-  <script defer src="../js/list/task.ts"></script>
-  <script defer src="../js/list/todolist.ts"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-    crossorigin="anonymous"></script>
+  <body class="w-100 h-100">
+    <div class="menu">
+      <input id="menu__toggle" class="d-none" type="checkbox" />
+      <label class="menu__btn" for="menu__toggle">
+        <span></span>
+      </label>
+      <ul class="menu__box nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="profile_page.html">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+              <path
+                d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"
+              />
+            </svg>
+            <p>Профиль</p>
+          </a>
+        </li>
 
+        <li class="nav-item menu__open">
+          <a class="nav-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list-check" viewBox="0 0 16 16">
+              <path
+                fill-rule="evenodd"
+                d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3.854 2.146a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 3.293l1.146-1.147a.5.5 0 0 1 .708 0zm0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 7.293l1.146-1.147a.5.5 0 0 1 .708 0zm0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"
+              />
+            </svg>
+            <p>Список дел</p>
+          </a>
+        </li>
 
-</head>
+        <li class="nav-item">
+          <a class="nav-link" href="shop.html">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-shop" viewBox="0 0 16 16">
+              <path
+                d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zM4 15h3v-5H4v5zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3zm3 0h-2v3h2v-3z"
+              />
+            </svg>
+            <p>Магазин</p>
+          </a>
+        </li>
 
-<body class="w-100 h-100">
-  <div class="menu">
+        <li class="nav-item">
+          <a class="nav-link" href="inventory.html">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
+              <path
+                d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"
+              />
+            </svg>
+            <p>Инвентарь</p>
+          </a>
+        </li>
 
-    <input id="menu__toggle" class="d-none" type="checkbox" />
-    <label class="menu__btn" for="menu__toggle">
-      <span></span>
-    </label>
-    <ul class="menu__box nav flex-column">
-      <li class="nav-item">
-        <a class="nav-link" href="profile_page.html">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person"
-            viewBox="0 0 16 16">
-            <path
-              d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
-          </svg>
-          <p>Профиль</p>
-        </a>
-      </li>
-
-      <li class="nav-item menu__open">
-        <a class="nav-link">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list-check"
-            viewBox="0 0 16 16">
-            <path fill-rule="evenodd"
-              d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3.854 2.146a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 3.293l1.146-1.147a.5.5 0 0 1 .708 0zm0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 7.293l1.146-1.147a.5.5 0 0 1 .708 0zm0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z" />
-          </svg>
-          <p>Список дел</p>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="shop.html">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-shop"
-            viewBox="0 0 16 16">
-            <path
-              d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zM4 15h3v-5H4v5zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3zm3 0h-2v3h2v-3z" />
-          </svg>
-          <p>Магазин</p>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="inventory.html">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-seam"
-            viewBox="0 0 16 16">
-            <path
-              d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z" />
-          </svg>
-          <p>Инвентарь</p>
-        </a>
-      </li>
-
-      <li class="nav-item menu__exit">
-        <a class="nav-link" href="start_page.html">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-            class="bi bi-box-arrow-left" viewBox="0 0 16 16">
-            <path fill-rule="evenodd"
-              d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
-            <path fill-rule="evenodd"
-              d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
-          </svg>
-          <p>Выход</p>
-        </a>
-      </li>
-    </ul>
-  </div>
-
-  <!--                 LIST          -->
-
-  <div class="body">
-    <div class="todo">
-
-      <div class="todo__input">
-        <input class="todo__text d-inline" type="text">
-        <a class="add bg-primary text-white active d-inline-block" title="Добавить задачу">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="add-btn bi bi-plus" viewBox="0 0 16 16">
-            <path
-              d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-          </svg>
-        </a>
-        <a class="expansion bg-primary text-white active d-inline-block" title="Расширенные настройки"  data-bs-toggle="modal" data-bs-target="#modal" id="btn"
-          href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-            <path
-              d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
-          </svg>
-        </a>
-      </div>
-
-      <div class="my-2 row todo__filter">
-
-
-        <div class="col todo__stage">
-          <select class="stage form-control">
-            <option value="active">активные</option>
-            <option value="completed">завершённые</option>
-            <option value="archived">архивированные</option>
-            <option value="all">все</option>
-          </select>
-        </div>
-
-        <div class="col h-38px">
-          <div class="dropdown-menu d-block pt-0">
-            <form class="todo__categories__form p-0 m-0 w-100">
-              <input id="sort__search" autocomplete="off" type="search" class="dropbtn form-control" autocomplete="false" placeholder="Категории">
-            </form>
-            <div id="sort__form__category" class="sort__list-category-contener">
-              <ul class="sort__list-category mb-0">
-                
-              </ul>
-
-              <button type="button" class="sort__btn-all btn btn-primary w-100">Сбросить</button>
-            </div>
-          </div>
-        </div>
-
-
-      </div>
-
-      <ul class="todolist list-group d-flex flex-column" id="todolist">
-
-
+        <li class="nav-item menu__exit">
+          <a class="nav-link" href="start_page.html">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+              <path
+                fill-rule="evenodd"
+                d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"
+              />
+              <path
+                fill-rule="evenodd"
+                d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"
+              />
+            </svg>
+            <p>Выход</p>
+          </a>
+        </li>
       </ul>
+    </div>
 
-      <div class="window__form modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title form__title">Создание задачи</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+    <!--                 LIST          -->
 
-              <form>
-                <div class="form-group mb-3">
-                  <input type="text" class="form-control rounded-3" id="name" placeholder="Название" required
-                    title="Введите название задачи">
-                  <div class="invalid-feedback">
-                    Пожалуйста, введите название задачи
-                  </div>
-                </div>
+    <div class="body">
+      <div class="todo">
+        <div class="todo__input">
+          <input class="todo__text d-inline" type="text" />
+          <a class="add bg-primary text-white active d-inline-block" title="Добавить задачу">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="add-btn bi bi-plus" viewBox="0 0 16 16">
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+            </svg>
+          </a>
+          <a
+            class="expansion bg-primary text-white active d-inline-block"
+            title="Расширенные настройки"
+            data-bs-toggle="modal"
+            data-bs-target="#modal"
+            id="btn"
+            href="#"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+              <path
+                d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"
+              />
+            </svg>
+          </a>
+        </div>
 
-                <div class="form-group mb-3">
-                  <input type="date" class="form-control rounded-3" id="date" name="date" placeholder="Дата">
-                </div>
+        <div class="my-2 row todo__filter">
+          <div class="col todo__stage">
+            <select class="stage form-control">
+              <option value="active">активные</option>
+              <option value="completed">завершённые</option>
+              <option value="archived">архивированные</option>
+              <option value="all">все</option>
+            </select>
+          </div>
 
-                <div class="form-group mb-3">
-                  <input class="form-control rounded-3" type="time" id="time" placeholder="Время">
-                </div>
-
-                <div class="container p-0" title="Выбранные категории">
-                  <div class="chosen__categories row mb-3 m-0">
-                  </div>
-                </div>
-
-                <div class="d-block position-static mb-3 rounded-3">
-                  <form class="bg-light p-0 m-0">
-                    <input id="add-task__search" autocomplete="off" type="search" class="dropbtn1 form-control" autocomplete="false"
-                      placeholder="Выбрать категорию">
-                  </form>
-                  <div id="form__category" class="list-category-contener">
-                    <ul class="list-category mb-0 px-0">
-                    </ul>
-
-
-                    <div id="Dropdown2" class="add__category">
-                      <div class="row">
-                        <div class="m-0 p-0 name__category">
-                          <input type="text" class="form-control" id="name__category" placeholder="Новая категория">
-                        </div>
-                        <div class="m-0 color__category">
-                          <input class="h-100 color__category" type="color" title="Задать цвет"
-                            id="color__category">
-                        </div>
-                        <div class="add p-0">
-                          <a class="bg-primary text-white active d-inline-block add-lbl" title="Добавить" href="#">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="37" height="37" fill="currentColor"
-                              class="bi bi-plus" viewBox="0 0 16 16">
-                              <path
-                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                            </svg>
-                          </a>
-                        </div>
-
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-
-
-                <div class="form-group mb-3">
-                  <textarea name="comment" class="form-control" title="Введите описание" placeholder="Описание"
-                    id="comment"></textarea>
-                </div>
-
-                <div class="form-group">
-                  <input class="form-control" type="file" name="file" id="input__file" multiple>
-                </div>
-
-
-
+          <div class="col h-38px">
+            <div class="dropdown-menu d-block pt-0">
+              <form class="todo__categories__form p-0 m-0 w-100">
+                <input id="sort__search" autocomplete="off" type="search" class="dropbtn form-control" autocomplete="false" placeholder="Категории" />
               </form>
+              <div id="sort__form__category" class="sort__list-category-contener">
+                <ul class="sort__list-category mb-0"></ul>
 
-
-            </div>
-            <div class="modal-footer">
-              <div class="container py-3 text-center">
-                <button type="button" class="btn btn-primary add-extended" data-bs-dismiss="modal">Создать</button>
+                <button type="button" class="sort__btn-all btn btn-primary w-100">Сбросить</button>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
+        <ul class="todolist list-group d-flex flex-column" id="todolist"></ul>
 
-
-      <div class="window__form modal fade" id="modal__editor" tabindex="-1" aria-labelledby="exampleModalLabel"
-        opened-task-id="" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title form__title" id="modal-title-info">Информация</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-
-              <form>
-                <div class="form-floating mb-3">
-                  <input type="text" class="form-control rounded-3" id="nameE" placeholder="Название"
-                    title="Введите название задачи">
-                  <label for="nameE">Название</label>
-                  <div class="invalid-feedback">
-                    Пожалуйста, введите название задачи
+        <div class="window__form modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title form__title">Создание задачи</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="form-group mb-3">
+                    <input type="text" class="form-control rounded-3" id="name" placeholder="Название" required title="Введите название задачи" />
+                    <div class="invalid-feedback">Пожалуйста, введите название задачи</div>
                   </div>
-                </div>
 
-                <div class="form-floating mb-3">
-                  <input type="date" class="form-control rounded-3" id="dateE" name="date" placeholder="Дата">
-                  <label for="dateE">Дата</label>
-                </div>
-
-                <div class="form-floating mb-3">
-                  <input class="form-control rounded-3" type="time" id="timeE" placeholder="Время">
-                  <label for="timeE">Время</label>
-                </div>
-
-                <div class="container p-0" title="Выбранные категории">
-                  <div class="chosen__categories row mb-3 m-0">
-
+                  <div class="form-group mb-3">
+                    <input type="date" class="form-control rounded-3" id="date" name="date" placeholder="Дата" />
                   </div>
+
+                  <div class="form-group mb-3">
+                    <input class="form-control rounded-3" type="time" id="time" placeholder="Время" />
+                  </div>
+
+                  <div class="container p-0" title="Выбранные категории">
+                    <div class="chosen__categories row mb-3 m-0"></div>
+                  </div>
+
+                  <div class="d-block position-static mb-3 rounded-3">
+                    <form class="bg-light p-0 m-0">
+                      <input
+                        id="add-task__search"
+                        autocomplete="off"
+                        type="search"
+                        class="dropbtn1 form-control"
+                        autocomplete="false"
+                        placeholder="Выбрать категорию"
+                      />
+                    </form>
+                    <div id="form__category" class="list-category-contener">
+                      <ul class="list-category mb-0 px-0"></ul>
+
+                      <div id="Dropdown2" class="add__category">
+                        <div class="row">
+                          <div class="m-0 p-0 name__category">
+                            <input type="text" class="form-control" id="name__category" placeholder="Новая категория" />
+                          </div>
+                          <div class="m-0 color__category">
+                            <input class="h-100 color__category" type="color" title="Задать цвет" id="color__category" />
+                          </div>
+                          <div class="add p-0">
+                            <a class="bg-primary text-white active d-inline-block add-lbl" title="Добавить" href="#">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="37"
+                                height="37"
+                                fill="currentColor"
+                                class="bi bi-plus"
+                                viewBox="0 0 16 16"
+                              >
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                              </svg>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <textarea name="comment" class="form-control" title="Введите описание" placeholder="Описание" id="comment"></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <input class="form-control" type="file" name="file" id="input__file" multiple />
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <div class="container py-3 text-center">
+                  <button type="button" class="btn btn-primary add-extended" data-bs-dismiss="modal">Создать</button>
                 </div>
-
-                <div id="form__edit__categories" class="d-block position-static mb-3 rounded-3">
-
-                </div>
-
-
-                <div class="form-floating mb-3">
-                  <textarea name="comment" class="form-control" title="Введите описание" placeholder="Описание"
-                    id="commentE"></textarea>
-                  <label for="commentE">Описание</label>
-                </div>
-
-                <div class="form-group">
-                  <input class="form-control" type="file" name="file" id="input__fileE" multiple>
-                </div>
-
-
-
-              </form>
-
-
+              </div>
             </div>
-            <div class="modal-footer">
-              <div class="container py-3 text-center">
-                <button type="button" class="btn btn-primary btn-edit mx-auto">Редактировать</button>
-                <button type="button" class="btn btn-primary btn-edit-save mx-auto" data-bs-dismiss="modal">Сохранить
-                  изменения</button>
+          </div>
+        </div>
+
+        <div
+          class="window__form modal fade"
+          id="modal__editor"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          opened-task-id=""
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title form__title" id="modal-title-info">Информация</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control rounded-3" id="nameE" placeholder="Название" title="Введите название задачи" />
+                    <label for="nameE">Название</label>
+                    <div class="invalid-feedback">Пожалуйста, введите название задачи</div>
+                  </div>
+
+                  <div class="form-floating mb-3">
+                    <input type="date" class="form-control rounded-3" id="dateE" name="date" placeholder="Дата" />
+                    <label for="dateE">Дата</label>
+                  </div>
+
+                  <div class="form-floating mb-3">
+                    <input class="form-control rounded-3" type="time" id="timeE" placeholder="Время" />
+                    <label for="timeE">Время</label>
+                  </div>
+
+                  <div class="container p-0" title="Выбранные категории">
+                    <div class="chosen__categories row mb-3 m-0"></div>
+                  </div>
+
+                  <div id="form__edit__categories" class="d-block position-static mb-3 rounded-3"></div>
+
+                  <div class="form-floating mb-3">
+                    <textarea name="comment" class="form-control" title="Введите описание" placeholder="Описание" id="commentE"></textarea>
+                    <label for="commentE">Описание</label>
+                  </div>
+
+                  <div class="form-group">
+                    <input class="form-control" type="file" name="file" id="input__fileE" multiple />
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <div class="container py-3 text-center">
+                  <button type="button" class="btn btn-primary btn-edit mx-auto">Редактировать</button>
+                  <button type="button" class="btn btn-primary btn-edit-save mx-auto" data-bs-dismiss="modal">Сохранить изменения</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
-  </div>
-
-
-</body>
-
+  </body>
 </html>

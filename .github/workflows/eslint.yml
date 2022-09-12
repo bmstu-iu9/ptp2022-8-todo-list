@@ -98,10 +98,17 @@ jobs:
               with:
                 files: |
                   **/*.html
-                              
+
+            - name: Get all HTML files
+              id: files-html
+              uses: Rishabh510/Path-lister-action@master
+              with:
+                path: "frontend/html/"
+                type: ".html"
+
             - name: Prettier Checking
               if: ${{ always()  }}
-              run: yarn prettier --config ./frontend/prettier.config.cjs --ignore-path ./frontend/.prettierignore  ${{ steps.changed-files-html.outputs.modified_files }} ${{ steps.changed-files-html.outputs.added_files }} -w
+              run: yarn prettier --config ./frontend/html/prettier.config.cjs --ignore-path ./frontend/.prettierignore  ${{ steps.files-html.outputs.paths }} -w
 
             - name: Commit changes
               if: always()
