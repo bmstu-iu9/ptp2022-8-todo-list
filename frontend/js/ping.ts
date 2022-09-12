@@ -1,7 +1,6 @@
 // @ts-check
 
 window.onload = function () {
-
     const pingBtn = <HTMLButtonElement>document.getElementsByClassName('ping-btn')[0]
 
     pingBtn.addEventListener('click', () => {
@@ -18,7 +17,7 @@ window.onload = function () {
         http.onreadystatechange = function () {
             if (http.readyState == 4) {
                 if (http.status != 200) {
-                    alert(http.status + ": " + http.statusText)
+                    alert(http.status + ': ' + http.statusText)
                 } else {
                     alert(http.responseText)
                 }
