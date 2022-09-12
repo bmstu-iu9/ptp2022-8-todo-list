@@ -40,7 +40,7 @@ jobs:
               if: steps.yarn-cache.outputs.cache-hit != 'true'
               run: yarn install
 
-            - name: Get specific changed files
+            - name: Get all file changes
               id: changed-files
               uses: tj-actions/changed-files@v23.1
               with:
@@ -55,7 +55,7 @@ jobs:
                   echo Changed files: ${{ steps.changed-files.outputs.modified_files }}
                   echo Removed files: ${{ steps.changed-files.outputs.deleted_files }}
 
-            - name: Get specific changed files
+            - name: Get changed JavaScript files
               id: changed-files-js
               uses: tj-actions/changed-files@v23.1
               with:
@@ -63,21 +63,21 @@ jobs:
                   **/*.js
             
             - name: Prettier Checking
-              if: ${{ always()  }}
+              if: ${{ always() && (steps.changed-files-js.outputs.added_files || steps.changed-files-js.outputs.modified_files) }}
               run: yarn prettier --config ./frontend/prettier.config.cjs --ignore-path ./frontend/.prettierignore  ${{ steps.changed-files-js.outputs.modified_files }} ${{ steps.changed-files-js.outputs.added_files }} -w
 
             - name: ESLint Checking
               if: ${{ always() && (steps.changed-files-js.outputs.added_files || steps.changed-files-js.outputs.modified_files) }}
               run: yarn eslint --config ./frontend/.eslintrc.cjs --ignore-path ./frontend/.eslintignore ${{ steps.changed-files-js.outputs.modified_files }} ${{ steps.changed-files-js.outputs.added_files }} --fix
 
-            - name: Get specific changed files
+            - name: Get changed TypeScript files
               id: changed-files-ts
               uses: tj-actions/changed-files@v23.1
               with:
                 files: |
                   **/*.ts
 
-            - name: Get specific changed files
+            - name: Get all TypeScript files
               id: files-ts
               uses: Rishabh510/Path-lister-action@master
               with:
@@ -85,12 +85,23 @@ jobs:
                 type: ".ts"
             
             - name: Prettier Checking
-              if: ${{ always()  }}
+              if: ${{ always()  && (steps.changed-files-ts.outputs.added_files || steps.changed-files-ts.outputs.modified_files) }}
               run: yarn prettier --config ./frontend/prettier.config.cjs --ignore-path ./frontend/.prettierignore  ${{ steps.changed-files-ts.outputs.modified_files }} ${{ steps.changed-files-ts.outputs.added_files }} -w
 
             - name: TsLint Checking
               if: ${{ always() && (steps.changed-files-ts.outputs.added_files || steps.changed-files-ts.outputs.modified_files) }} 
               run: yarn tsc -t es6 --noEmit ${{ steps.files-ts.outputs.paths }}
+
+            - name: Get all HTML files changes
+              id: changed-files-html
+              uses: tj-actions/changed-files@v23.1
+              with:
+                files: |
+                  **/*.html
+                              
+            - name: Prettier Checking
+              if: ${{ always()  }}
+              run: yarn prettier --config ./frontend/prettier.config.cjs --ignore-path ./frontend/.prettierignore  ${{ steps.changed-files-html.outputs.modified_files }} ${{ steps.changed-files-html.outputs.added_files }} -w
 
             - name: Commit changes
               if: always()
