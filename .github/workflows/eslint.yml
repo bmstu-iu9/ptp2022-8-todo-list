@@ -63,8 +63,8 @@ jobs:
                   **/*.js
             
             - name: Prettier Checking
-              if: ${{ always() && (steps.changed-files-js.outputs.added_files || steps.changed-files-js.outputs.modified_files) }}
-              run: yarn prettier --config ./frontend/prettier.config.cjs --ignore-path ./frontend/.prettierignore  ${{ steps.changed-files-js.outputs.modified_files }} ${{ steps.changed-files-js.outputs.added_files }} --fix
+              if: ${{ always()  }}
+              run: yarn prettier --config ./frontend/prettier.config.cjs --ignore-path ./frontend/.prettierignore  ${{ steps.changed-files-js.outputs.modified_files }} ${{ steps.changed-files-js.outputs.added_files }} -w
 
             - name: ESLint Checking
               if: ${{ always() && (steps.changed-files-js.outputs.added_files || steps.changed-files-js.outputs.modified_files) }}
@@ -93,4 +93,4 @@ jobs:
               uses: stefanzweifel/git-auto-commit-action@v4.1.2
               with:
                   commit_message: Apply formatting changes
-#           branch: ${{ github.head_ref }}
+                  branch: ${{ github.head_ref }}
