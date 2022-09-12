@@ -86,8 +86,7 @@ jobs:
             
             - name: Prettier Checking
               if: ${{ always()  && (steps.changed-files-ts.outputs.added_files || steps.changed-files-ts.outputs.modified_files) }}
-          #    run: yarn prettier --config ./frontend/prettier.config.cjs --ignore-path ./frontend/.prettierignore  ${{ steps.changed-files-ts.outputs.modified_files }} ${{ steps.changed-files-ts.outputs.added_files }} -w
-              run: yarn prettier --config ./frontend/prettier.config.cjs --ignore-path ./frontend/.prettierignore  ${{ steps.files-ts.outputs.paths }} -w
+              run: yarn prettier --config ./frontend/prettier.config.cjs --ignore-path ./frontend/.prettierignore  ${{ steps.changed-files-ts.outputs.modified_files }} ${{ steps.changed-files-ts.outputs.added_files }} -w
             - name: TsLint Checking
               if: ${{ always() && (steps.changed-files-ts.outputs.added_files || steps.changed-files-ts.outputs.modified_files) }} 
               run: yarn tsc -t es6 --noEmit ${{ steps.files-ts.outputs.paths }}
