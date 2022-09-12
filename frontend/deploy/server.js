@@ -17,13 +17,13 @@ let pathsReroute = new Map([
     ['/app', '/html/spa.html'],
     ['/login', '/html/login.html'],
     ['/', 'index.html'],
-["", ""],
+    ['', ''],
 ])
 if (process.env['ENV_MODE'] === 'PROD') {
-    console.log(fontColors.get('black'),'PROD MODE, index.html set to start_page.html.')
+    console.log(fontColors.get('black'), 'PROD MODE, index.html set to start_page.html.')
     pathsReroute.set('/', '/html/start_page.html')
 } else {
-    console.log(fontColors.get('black'),'DEV MODE, index.html not modified.')
+    console.log(fontColors.get('black'), 'DEV MODE, index.html not modified.')
 }
 
 /**
