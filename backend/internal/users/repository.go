@@ -62,13 +62,13 @@ func (repo repository) Create(user *entity.User) error {
 func (repo repository) InitUserInventory(id int64) error {
 	_, err := repo.db.Exec("INSERT INTO inventory (user_id,item_id) SELECT users.id,items.id "+
 		"FROM users INNER JOIN items ON users.id = $1 ", id)
-	return err
+	return wrapSql(err)
 }
 
 // CleanUserInventory deletes the list of items for user with spec id.
 func (repo repository) CleanUserInventory(id int64) error {
 	_, err := repo.db.Exec("DELETE FROM inventory WHERE user_id = $1 ", id)
-	return err
+	return wrapSql(err)
 }
 
 // Get reads the user with specified id from database.

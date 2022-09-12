@@ -2,7 +2,9 @@ package items
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 )
 
@@ -33,6 +35,17 @@ func NewRepository(db *sql.DB, logger log.Logger) Repository {
 	return repository{db, logger}
 }
 
+func wrapSql(err error) error {
+	switch err {
+	case nil:
+		return nil
+	case sql.ErrNoRows:
+		return fmt.Errorf("%w: %v", errors.ErrNotFound, err)
+	default:
+		return fmt.Errorf("%w: %v", errors.ErrDb, err)
+	}
+}
+
 func makeStringForSql(filterParams []string) string {
 	s := ""
 	for i, param := range filterParams {
@@ -54,15 +67,15 @@ func (repo repository) GetAll(userId int, filters ItemFilter) ([]entity.Item, er
           (`+makeStringForSql(filters.CategoryFilter)+`) AND inventory.user_id = $1 AND 
 		  items.id = inventory.item_id`, userId)
 	if err != nil {
-		return nil, err
+		return nil, wrapSql(err)
 	}
 	items := make([]entity.Item, 0)
+	curItem := entity.Item{}
 	for rows.Next() {
-		curItem := entity.Item{}
 		err = rows.Scan(&curItem.Id, &curItem.Name, &curItem.ImageSrc, &curItem.ImageForHero, &curItem.Description,
 			&curItem.Price, &curItem.Category, &curItem.Rarity, &curItem.Armor, &curItem.Damage, &curItem.State)
 		if err != nil {
-			return nil, err
+			return nil, wrapSql(err)
 		}
 		for i := 0; i < len(filters.StateFilter); i++ {
 			if curItem.State == filters.StateFilter[i] {
@@ -80,18 +93,18 @@ func (repo repository) GetOne(userId, itemId int) (entity.Item, error) {
 		"inventory ON items.id = $1 AND inventory.item_id = $2 AND inventory.user_id = $3",
 		itemId, itemId, userId)
 	if err != nil {
-		return entity.Item{}, err
+		return entity.Item{}, wrapSql(err)
 	}
 	row.Next()
 	curItem := entity.Item{}
 	err = row.Scan(&curItem.Id, &curItem.Name, &curItem.ImageSrc, &curItem.ImageForHero, &curItem.Description,
 		&curItem.Price, &curItem.Category, &curItem.Rarity, &curItem.Armor, &curItem.Damage, &curItem.State)
-	return curItem, err
+	return curItem, wrapSql(err)
 }
 
 // Update changes the item's state in database.
 func (repo repository) Update(userId int, item *entity.Item) error {
 	_, err := repo.db.Exec("UPDATE inventory SET item_state = $1 WHERE item_id = $2 AND user_id =$3",
 		item.State, item.Id, userId)
-	return err
+	return wrapSql(err)
 }

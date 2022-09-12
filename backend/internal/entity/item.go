@@ -23,8 +23,6 @@ type State string
 type ItemState State
 
 const (
-	// Unknown shows that the ItemState is unknown for server.
-	Unknown ItemState = ""
 	// Equipped shows that user is using this item.
 	Equipped ItemState = "equipped"
 	// Inventoried shows that item is in inventory.
