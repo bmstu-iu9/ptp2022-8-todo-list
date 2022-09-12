@@ -1,7 +1,9 @@
 package items
 
 import (
+	"errors"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/validation"
 )
 
 // UpdateItemStateRequest represents the data for modifing ItemState.
@@ -30,6 +32,15 @@ func NewService(repo Repository) Service {
 
 // GetAll returns all items.
 func (s service) GetAll(userId int, filters ItemFilter) ([]entity.Item, error) {
+	if !validation.ValidateItemState(filters.StateFilter) {
+		return nil, errors.New("wrong state filter name")
+	}
+	if !validation.ValidateItemCategory(filters.CategoryFilter) {
+		return nil, errors.New("wrong category filter name")
+	}
+	if !validation.ValidateItemRarity(filters.RarityFilter) {
+		return nil, errors.New("wrong rarity filter name")
+	}
 	return s.repo.GetAll(userId, filters)
 }
 
@@ -40,6 +51,9 @@ func (s service) GetOne(userId, itemId int) (entity.Item, error) {
 
 // UpdateItemState returns item with specified id with new ItemState.
 func (s service) UpdateItemState(userId, itemId int, input *UpdateItemStateRequest) (entity.Item, error) {
+	if !validation.ValidateItemState([]entity.ItemState{input.ItemState}) {
+		return entity.Item{}, errors.New("wrong state filter name")
+	}
 	entityItem, err := s.GetOne(userId, itemId)
 	if err != nil {
 		return entity.Item{}, err
