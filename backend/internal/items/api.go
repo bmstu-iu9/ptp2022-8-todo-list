@@ -74,7 +74,7 @@ func (res *resource) handleGetAll(w http.ResponseWriter, r *http.Request, p http
 	filters := NewFilter(r)
 	items, err := res.service.GetAll(userId, filters)
 	if err != nil {
-		return fmt.Errorf("%w: %v", errors.ErrNotFound, err)
+		return err
 	}
 	err = json.NewEncoder(w).Encode(items)
 	if err != nil {
