@@ -91,9 +91,9 @@ func TestRepo(t *testing.T) {
 		got, err := repo.GetOne(1, 1)
 		test.IsNil(t, err)
 		test.DeepEqual(t, testsDbValues[0], got)
-		got, err = repo.GetOne(1, 3)
+		_, err = repo.GetOne(1, 3)
 		test.NotNil(t, err)
-		got, err = repo.GetOne(3, 1)
+		_, err = repo.GetOne(3, 1)
 		test.NotNil(t, err)
 	})
 
