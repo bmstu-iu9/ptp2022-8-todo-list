@@ -21,6 +21,10 @@ type Repository interface {
 	Delete(id int64) error
 	// Update modifies User.
 	Update(user *entity.User) error
+	// InitUserInventory init the list of items for user with spec id.
+	InitUserInventory(id int64) error
+	// CleanUserInventory deletes the list of items for user with spec id.
+	CleanUserInventory(id int64) error
 }
 
 func wrapSql(err error) error {
@@ -51,6 +55,19 @@ func (repo repository) Create(user *entity.User) error {
 	err := repo.db.QueryRow("INSERT INTO users(email, nickname, password)"+
 		"VALUES ($1, $2, $3) RETURNING id", user.Email, user.Nickname, user.Password).
 		Scan(&user.Id)
+	return wrapSql(err)
+}
+
+// InitUserInventory init the list of items for user with spec id.
+func (repo repository) InitUserInventory(id int64) error {
+	_, err := repo.db.Exec("INSERT INTO inventory (user_id,item_id) SELECT users.id,items.id "+
+		"FROM users INNER JOIN items ON users.id = $1 ", id)
+	return wrapSql(err)
+}
+
+// CleanUserInventory deletes the list of items for user with spec id.
+func (repo repository) CleanUserInventory(id int64) error {
+	_, err := repo.db.Exec("DELETE FROM inventory WHERE user_id = $1 ", id)
 	return wrapSql(err)
 }
 
