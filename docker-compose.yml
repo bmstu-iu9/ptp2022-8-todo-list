@@ -49,5 +49,5 @@ services:
       POSTGRES_DB: slavatidika
       POSTGRES_PASSWORD: example
     volumes:
-      - ./postgres:/var/lib/postgresql/data/
+      - /var/slavatidika:/var/lib/postgresql/data/
     network_mode: host
