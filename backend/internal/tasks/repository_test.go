@@ -9,10 +9,6 @@ import (
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/test"
 )
 
-// func GenerateErrorString(field string, got, expected any) string {
-// 	return fmt.Sprintf("%v mismatch: got => %v | expected => %v", field, got, expected)
-// }
-
 var task_examples []entity.Task = []entity.Task{
 	{ // 0
 		Id:                   1,
@@ -27,7 +23,7 @@ var task_examples []entity.Task = []entity.Task{
 				Id:     1,
 				TaskId: 1,
 				Name:   "test_name",
-				Color:  "test_color",
+				Color:  "#000000",
 			},
 		},
 		Status: entity.IN_PROGRESS,
@@ -45,7 +41,7 @@ var task_examples []entity.Task = []entity.Task{
 				Id:     3,
 				TaskId: 1,
 				Name:   "test_name_new",
-				Color:  "test_color_new",
+				Color:  "#ffffff",
 			},
 		},
 		Status: entity.DONE,
@@ -63,7 +59,7 @@ var task_examples []entity.Task = []entity.Task{
 				Id:     0,
 				TaskId: 1,
 				Name:   "test_name_new",
-				Color:  "test_color_new",
+				Color:  "#ffffff",
 			},
 			{
 				Id: 1,
@@ -84,7 +80,7 @@ var task_examples []entity.Task = []entity.Task{
 				Id:     0,
 				TaskId: 2,
 				Name:   "test_name_new_stranger",
-				Color:  "test_color_new_stranger",
+				Color:  "#00ff00",
 			},
 		},
 		Status: entity.DONE,
@@ -102,7 +98,7 @@ var task_examples []entity.Task = []entity.Task{
 				Id:     2,
 				TaskId: 2,
 				Name:   "test_name_new_stranger",
-				Color:  "test_color_new_stranger",
+				Color:  "#00ff00",
 			},
 		},
 		Status: entity.DONE,

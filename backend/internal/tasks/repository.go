@@ -55,17 +55,23 @@ func (r repository) Get(user_id int64) ([]entity.Task, error) {
 	tasks := make([]entity.Task, 0)
 	task := entity.Task{}
 
+	var task_created_on string
+	var task_due_date string
+
 	for rows.Next() {
 		err = rows.Scan(
 			&task.Id,
 			&task.UserId,
 			&task.Name,
 			&task.Description,
-			&task.CreatedOn,
-			&task.DueDate,
+			&task_created_on,
+			&task_due_date,
 			&task.SchtirlichHumorescue,
 			&task.Status,
 		)
+
+		task.CreatedOn = entity.Date(task_created_on)
+		task.DueDate = entity.Date(task_due_date)
 
 		if err != nil {
 			return nil, fmt.Errorf("%w: %v", errors.ErrDb, err)
@@ -88,16 +94,22 @@ func (r repository) GetById(task_id int64) (entity.Task, error) {
 	q := "SELECT id, user_id, name, description, created_on, due_date, schtirlich_humorescue, cur_status FROM tasks WHERE id = $1;"
 
 	task := entity.Task{}
+	var task_created_on string
+	var task_due_date string
+
 	err := r.db.QueryRow(q, task_id).Scan(
 		&task.Id,
 		&task.UserId,
 		&task.Name,
 		&task.Description,
-		&task.CreatedOn,
-		&task.DueDate,
+		&task_created_on,
+		&task_due_date,
 		&task.SchtirlichHumorescue,
 		&task.Status,
 	)
+
+	task.CreatedOn = entity.Date(task_created_on)
+	task.DueDate = entity.Date(task_due_date)
 
 	if err != nil {
 		switch err {

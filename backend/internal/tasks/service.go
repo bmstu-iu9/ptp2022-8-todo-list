@@ -5,31 +5,110 @@ import (
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/validation"
 )
 
 // CreateTaskRequest represents task creation request
 // description is optional
 type CreateTaskRequest struct {
-	UserId               int64              `json:"-"`
-	Name                 string             `json:"name"`
-	Description          string             `json:"description,omitempty"`
-	CreatedOn            string             `json:"createdOn"`
-	DueDate              string             `json:"dueDate"`
-	SchtirlichHumorescue string             `json:"schtirlichHumorescue"`
-	Labels               []entity.TaskLabel `json:"labels"`
-	Status               string             `json:"status"`
+	UserId               int64  `json:"-"`
+	Name                 Name   `json:"name"`
+	Description          Text   `json:"description,omitempty"`
+	CreatedOn            Date   `json:"createdOn"`
+	DueDate              Date   `json:"dueDate"`
+	SchtirlichHumorescue Text   `json:"schtirlichHumorescue"`
+	Labels               Labels `json:"labels"`
+	Status               Status `json:"status"`
 }
 
-// UpdateTaskRequest represents task modify request
+// UpdateTaskRequest represents task  modify request
 // all of the fields is optional
 type UpdateTaskRequest struct {
-	TaskId               int64              `json:"-"`
-	Name                 string             `json:"name,omitempty"`
-	Description          string             `json:"description,omitempty"`
-	DueDate              string             `json:"dueDate,omitempty"`
-	SchtirlichHumorescue string             `json:"schtirlichHumorescue,omitempty"`
-	Labels               []entity.TaskLabel `json:"labels,omitempty"`
-	Status               string             `json:"status,omitempty"`
+	TaskId               int64  `json:"-"`
+	Name                 Name   `json:"name,omitempty"`
+	Description          Text   `json:"description,omitempty"`
+	DueDate              Date   `json:"dueDate,omitempty"`
+	SchtirlichHumorescue Text   `json:"schtirlichHumorescue,omitempty"`
+	Labels               Labels `json:"labels,omitempty"`
+	Status               Status `json:"status,omitempty"`
+}
+
+type (
+	Name   entity.Name
+	Text   entity.Text
+	Date   entity.Date
+	Labels []Label
+	Status entity.Status
+	Color  entity.Color
+	Label  struct {
+		Id     int64 `json:"id"`
+		TaskId int64 `json:"-"`
+		Name   Name  `json:"text"`
+		Color  Color `json:"color"`
+	}
+)
+
+func (f *Name) validate() bool {
+	if f == nil {
+		return false
+	}
+	return validation.ValidateField(string(*f), 1, 255, ".*")
+}
+
+func (f *Text) validate() bool {
+	if f == nil {
+		return false
+	}
+	return validation.ValidateField(string(*f), 1, 8192, ".*")
+}
+
+func (f *Date) validate() bool {
+	if f == nil {
+		return false
+	}
+
+	return validation.ValidateField(string(*f), 1, 100, `^(19|20)\d\d-(0[1-9]|1[012])-(0[1-9]|[12]\d|3[01])T[0-5]\d:[0-5]\d:[0-5]\dZ$`)
+}
+
+func (f *Labels) validate() bool {
+	if f == nil {
+		return false
+	}
+
+	for _, label := range *f {
+		if !label.validate() {
+			return false
+		}
+	}
+	return true
+}
+
+func (f *Color) validate() bool {
+	if f == nil {
+		return false
+	}
+
+	return validation.ValidateField(string(*f), 0, 255, `^#[0-9A-Fa-f]{6}$`)
+}
+
+func (f *Label) validate() bool {
+	if f == nil {
+		return false
+	}
+
+	if f.Id != 0 {
+		return true
+	}
+
+	return f.Name.validate() && f.Color.validate()
+}
+
+func (f *Status) validate() bool {
+	if f == nil {
+		return false
+	}
+
+	return validation.ValidateField(string(*f), 0, 255, "^(in progress|done|outdated)$")
 }
 
 // Service encapsulates usecase logic for tasks.
@@ -73,8 +152,29 @@ func (s service) GetById(task_id int64) (entity.Task, error) {
 }
 
 func (t *CreateTaskRequest) Validate() error {
-	// TODO: implement validation of creation
+	if !(t.Name.validate() &&
+		t.Description.validate() &&
+		t.CreatedOn.validate() &&
+		t.DueDate.validate() &&
+		t.SchtirlichHumorescue.validate() &&
+		t.Labels.validate() &&
+		t.Status.validate()) {
+		return errors.ErrValidation
+	}
 	return nil
+}
+
+func toEntityLabels(labels Labels) entity.Labels {
+	lbs := entity.Labels{}
+	for _, lb := range labels {
+		lbs = append(lbs, entity.TaskLabel{
+			Id:     lb.Id,
+			TaskId: lb.TaskId,
+			Name:   entity.Name(lb.Name),
+			Color:  entity.Color(lb.Color),
+		})
+	}
+	return lbs
 }
 
 // Create creates task from task_data argument
@@ -87,13 +187,13 @@ func (s service) Create(task_data *CreateTaskRequest) (entity.Task, error) {
 
 	task := &entity.Task{
 		UserId:               task_data.UserId,
-		Name:                 task_data.Name,
-		Description:          task_data.Description,
-		CreatedOn:            task_data.CreatedOn,
-		DueDate:              task_data.DueDate,
-		SchtirlichHumorescue: task_data.SchtirlichHumorescue,
-		Labels:               task_data.Labels,
-		Status:               task_data.Status,
+		Name:                 entity.Name(task_data.Name),
+		Description:          entity.Text(task_data.Description),
+		CreatedOn:            entity.Date(task_data.CreatedOn),
+		DueDate:              entity.Date(task_data.DueDate),
+		SchtirlichHumorescue: entity.Text(task_data.SchtirlichHumorescue),
+		Labels:               toEntityLabels(task_data.Labels),
+		Status:               entity.Status(task_data.Status),
 	}
 
 	err = s.r.Create(task)
@@ -102,19 +202,27 @@ func (s service) Create(task_data *CreateTaskRequest) (entity.Task, error) {
 }
 
 func (t *UpdateTaskRequest) Validate() error {
-	// TODO: implement update validation
+	if !(t.Name.validate() &&
+		t.Description.validate() &&
+		t.DueDate.validate() &&
+		t.SchtirlichHumorescue.validate() &&
+		t.Labels.validate() &&
+		t.Status.validate()) {
+		return errors.ErrValidation
+	}
+
 	return nil
 }
 
-// Update modifies task using task_data
-func (s service) Update(task_data *UpdateTaskRequest) (entity.Task, error) {
-	err := task_data.Validate()
+// Update modifies task using request
+func (s service) Update(request *UpdateTaskRequest) (entity.Task, error) {
+	err := request.Validate()
 
 	if err != nil {
 		return entity.Task{}, fmt.Errorf("%w: %v", errors.ErrValidation, err)
 	}
 
-	task, err := s.r.GetById(task_data.TaskId)
+	task, err := s.r.GetById(request.TaskId)
 
 	if err != nil {
 		return entity.Task{}, err
@@ -129,12 +237,12 @@ func (s service) Update(task_data *UpdateTaskRequest) (entity.Task, error) {
 		return ""
 	}
 
-	task.Name = or(task_data.Name, task.Name)
-	task.Description = or(task_data.Description, task.Description)
-	task.DueDate = or(task_data.DueDate, task.DueDate)
-	task.SchtirlichHumorescue = or(task_data.SchtirlichHumorescue, task.SchtirlichHumorescue)
-	task.Labels = task_data.Labels
-	task.Status = or(task_data.Status, task.Status)
+	task.Name = entity.Name(or(string(request.Name), string(task.Name)))
+	task.Description = entity.Text(or(string(request.Description), string(task.Description)))
+	task.DueDate = entity.Date(or(string(request.DueDate), string(task.DueDate)))
+	task.SchtirlichHumorescue = entity.Text(or(string(request.SchtirlichHumorescue), string(task.SchtirlichHumorescue)))
+	task.Labels = toEntityLabels(request.Labels)
+	task.Status = entity.Status(or(string(request.Status), string(task.Status)))
 
 	err = s.r.Update(&task)
 
