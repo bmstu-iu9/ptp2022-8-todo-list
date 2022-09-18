@@ -711,7 +711,7 @@ components:
           readOnly: true
         category:
           type: string
-          enum: [armor, weapon, pet, skin]
+          enum: [helmet, chest, leggins, boots, weapon, pet, skin]
           readOnly: true
         rarity:
           type: string
