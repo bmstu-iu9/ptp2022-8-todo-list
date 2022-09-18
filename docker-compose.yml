@@ -2,8 +2,7 @@ version: '3.8'
 
 services:
   api:
-    build:
-      context: backend/
+    image: slavatidika/api
     container_name: api
     ports:
       - 8080:8080
@@ -11,15 +10,13 @@ services:
       restart_policy:
         condition: on-failure
     environment:
-      - RUNTIME_MODE=debug
+      - RUNTIME_MODE=release
     env_file:
       .env
     depends_on:
       - db
   frontend:
-    build:
-      context: .
-      target: deploy
+    image: slavatidika/frontend
     container_name: frontend
     environment:
       - ENV_MODE=PROD

@@ -22,4 +22,15 @@ lint: build-lint
 
 .PHONY: frontend-prod
 frontend-prod:
-	docker compose up frontend --build
+	@docker compose up frontend --build
+
+.PHONY: publish
+publish: publish-api publish-frontend
+
+.PHONY: publish-api
+publish-api:
+	@docker build -t slavatidika/api backend/ && docker push slavatidika/api
+
+.PHONY: publish-frontend
+publish-frontend:
+	@docker build --target=deploy -t slavatidika/frontend . && docker push slavatidika/frontend

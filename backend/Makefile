@@ -9,10 +9,6 @@ build:
 run: build
 	@docker compose -f ../docker-compose.yml up -d --build api
 
-.PHONY: containers
-containers:
-	@docker build .
-
 .PHONY: unit-test
 unit-test: db
 
