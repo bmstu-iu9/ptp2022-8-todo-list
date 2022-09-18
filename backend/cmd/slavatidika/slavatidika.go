@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/items"
 	"net/http"
 	"os"
+
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/items"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/config"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/db"
@@ -33,6 +34,7 @@ func main() {
 	tasks.RegisterHandlers(
 		mux,
 		tasks.NewService(tasks.NewRepository(db, logger)),
+		logger)
 	items.RegisterHandlers(
 		mux,
 		items.NewService(items.NewRepository(db, logger)),
