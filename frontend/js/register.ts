@@ -1,7 +1,8 @@
 window.onload = function () {
     if (localStorage.getItem('theme') === 'light') changeModeLogin()
-    const re = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
-
+    const re = new RegExp(
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    )
 
     const rgBtn = <HTMLButtonElement>document.getElementsByClassName('btn-regis')[0]
     const lgBtn = <HTMLButtonElement>document.getElementsByClassName('btn-login')[0]
@@ -78,7 +79,6 @@ window.onload = function () {
         }
     })
 }
-
 
 function changeModeLogin() {
     document.body.classList.toggle('bg-dark')
