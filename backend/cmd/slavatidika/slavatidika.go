@@ -31,7 +31,7 @@ func main() {
 		logger)
 	tasks.RegisterHandlers(
 		mux,
-		tasks.NewService(tasks.NewRepository(db)),
+		tasks.NewService(tasks.NewRepository(db, logger)),
 		logger)
 
 	address := fmt.Sprintf("%v:%v",

@@ -27,12 +27,13 @@ type Repository interface {
 
 // repository persists tasks in database.
 type repository struct {
-	db *sql.DB
+	db     *sql.DB
+	logger log.Logger
 }
 
 // NewRepository creates a new tasks repository.
-func NewRepository(db *sql.DB) Repository {
-	return repository{db}
+func NewRepository(db *sql.DB, logger log.Logger) Repository {
+	return repository{db, logger}
 }
 
 // Get reads all tasks with specified user id from database.
@@ -192,10 +193,7 @@ func (r repository) Update(task_data *entity.Task) error {
 		return fmt.Errorf("%w: %v", errors.ErrDb, err)
 	}
 
-	logger := log.New()
-
 	for _, label := range task_data.Labels {
-		logger.Debug("Label update", label)
 		if label.Id != 0 {
 			q = "DELETE FROM task_labels WHERE id = $1"
 			_, err = r.db.Exec(q, label.Id)

@@ -112,7 +112,7 @@ func TestRepo(t *testing.T) {
 		panic(err)
 	}
 
-	r := NewRepository(db)
+	r := NewRepository(db, logger)
 
 	t.Run("get", func(t *testing.T) {
 		got, err := r.Get(1)
