@@ -174,7 +174,7 @@ func (s service) Update(id int64, input *UpdateUserRequest) (User, error) {
 	}
 
 	if Password(entityUser.Password) != input.CurrentPassword {
-		return User{}, errors.ErrAuth
+		return User{}, errors.ErrAuthentication
 	}
 
 	if input.Email != nil {
