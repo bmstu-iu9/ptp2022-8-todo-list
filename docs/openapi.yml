@@ -424,6 +424,27 @@ paths:
         name: id
         in: path
         required: true
+      - schema:
+          type: string
+        required: false
+        in: query
+        name: state
+        description: State filter
+        example: "equipped,inventoried"
+      - schema:
+          type: string
+        required: false
+        in: query
+        name: rarity
+        description: Rarity filter
+        example: "common,rare"
+      - schema:
+          type: string
+        required: false
+        in: query
+        name: category
+        description: Category filter
+        example: "pet,skin,armor"
     get:
       summary: List all items in game
       tags:
