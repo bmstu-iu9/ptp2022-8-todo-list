@@ -37,7 +37,6 @@ function onInventoryLoad() {
                 }
             }
         })
-        console.log(equipment)
         document.getElementById("inventory__user")?.appendChild(getHeroHtml(equipment));
         // Сейчас есть проблемы с отображением скинов
         //if (Equipped.skin !== -1) {

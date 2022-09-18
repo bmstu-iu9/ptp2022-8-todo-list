@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/items"
 	"net/http"
 	"os"
 
@@ -32,6 +33,9 @@ func main() {
 	tasks.RegisterHandlers(
 		mux,
 		tasks.NewService(tasks.NewRepository(db, logger)),
+	items.RegisterHandlers(
+		mux,
+		items.NewService(items.NewRepository(db, logger)),
 		logger)
 
 	address := fmt.Sprintf("%v:%v",
