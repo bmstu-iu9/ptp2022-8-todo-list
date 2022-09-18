@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/items"
 	"net/http"
 	"os"
 
@@ -28,9 +29,13 @@ func main() {
 		mux,
 		users.NewService(users.NewRepository(db, logger)),
 		logger)
+	items.RegisterHandlers(
+		mux,
+		items.NewService(items.NewRepository(db, logger)),
+		logger)
 
 	address := fmt.Sprintf("%v:%v",
-			config.Get("HTTP_HOST"), config.Get("HTTP_PORT"))
+		config.Get("HTTP_HOST"), config.Get("HTTP_PORT"))
 	server := http.Server{
 		Addr:    address,
 		Handler: mux,

@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Славатидика API
   description: Gamified TODO-list API.
-  version: 0.4.0
+  version: 0.5.0
   contact:
     name: Starovoytov Alexandr
     url: https://t.me/stewkk
@@ -31,6 +31,8 @@ paths:
   /users:
     post:
       summary: Create new user
+      description: >
+        Creates a new user. Email should be unique.
       requestBody:
         required: true
         content:
@@ -97,6 +99,8 @@ paths:
       tags:
         - Users
       summary: Modify user
+      description: >
+        Modifies a user. Any field can be omitted. Email should be unique.
       requestBody:
         content:
           application/json:
@@ -300,6 +304,49 @@ paths:
           $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/UnexpectedError'
+  /users/{user_id}/tasks/{task_id}/complete:
+    parameters:
+      - schema:
+          type: integer
+        name: user_id
+        in: path
+        required: true
+      - schema:
+          type: integer
+        name: task_id
+        in: path
+        required: true
+    post:
+      summary: Mark task as completed.
+      description: >
+        Marks task as completed. Returns task object, difference from old
+        balance and experience to new balance and experience.
+      tags:
+        - Tasks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task:
+                    $ref: '#/components/schemas/Task'
+                  balanceChange:
+                    type: integer
+                  experienceChange:
+                    type: integer
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
   /users/{id}/character:
     parameters:
       - schema:
@@ -377,6 +424,27 @@ paths:
         name: id
         in: path
         required: true
+      - schema:
+          type: string
+        required: false
+        in: query
+        name: state
+        description: State filter
+        example: "equipped,inventoried"
+      - schema:
+          type: string
+        required: false
+        in: query
+        name: rarity
+        description: Rarity filter
+        example: "common,rare"
+      - schema:
+          type: string
+        required: false
+        in: query
+        name: category
+        description: Category filter
+        example: "pet,skin,armor"
     get:
       summary: List all items in game
       tags:
@@ -432,22 +500,101 @@ paths:
           $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/UnexpectedError'
-    patch:
-      summary: Patch item
+  /users/{userId}/items/{itemId}/buy:
+    parameters:
+      - schema:
+          type: integer
+        name: userId
+        in: path
+        required: true
+      - schema:
+          type: integer
+        name: itemId
+        in: path
+        required: true
+    post:
+      summary: Buy an item from store.
+      description: >
+        Buys an item from store. Returns item object, new balance and difference
+        from old balance to new.
       tags:
         - Items
-      requestBody:
-        content:
-          application/json:
-            schema: {}
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Item'
+                type: object
+                properties:
+                  item:
+                    $ref: '#/components/schemas/Item'
+                  balance:
+                    type: integer
+                  balanceChange:
+                    type: integer
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  /users/{userId}/items/{itemId}/equip:
+    parameters:
+      - schema:
+          type: integer
+        name: userId
+        in: path
+        required: true
+      - schema:
+          type: integer
+        name: itemId
+        in: path
+        required: true
+    post:
+      summary: Equip an item.
+      description: >
+        Equips an item that is already in user's inventory.
+      tags:
+        - Items
+      responses:
+        '204':
+          description: OK
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  /users/{userId}/items/{itemId}/unequip:
+    parameters:
+      - schema:
+          type: integer
+        name: userId
+        in: path
+        required: true
+      - schema:
+          type: integer
+        name: itemId
+        in: path
+        required: true
+    post:
+      summary: Take off an item.
+      description: >
+        Take off an item from user's character and put in inventory.
+      tags:
+        - Items
+      responses:
+        '204':
+          description: OK
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -516,12 +663,67 @@ components:
                 format: Hex string
         status:
           type: string
+          enum: [active, completed, archived]
     Character:
       type: object
-      description: TODO
+      properties:
+        nickname:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        email:
+          type: string
+          readOnly: true
+        surname:
+          type: string
+        aboutInfo:
+          type: string
+        level:
+          type: integer
+          readOnly: true
+        balance:
+          type: integer
+          readOnly: true
+        health:
+          type: integer
+          readOnly: true
+        experience:
+          type: integer
+          readOnly: true
     Item:
       type: object
-      description: TODO
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        imageSrc:
+          type: string
+          readOnly: true
+        imageForHero:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        price:
+          type: integer
+          readOnly: true
+        category:
+          type: string
+          enum: [helmet, chest, leggins, boots, weapon, pet, skin]
+          readOnly: true
+        rarity:
+          type: string
+          enum: [common, rare, epic, legendary, mythical]
+          readOnly: true
+        state:
+          type: string
+          enum: [store, equipped, inventoried]
+          readOnly: true
     Problem:
       type: object
       properties:
