@@ -13,8 +13,8 @@ import (
 func New(logger log.Logger) *httprouter.Router {
 	return &httprouter.Router{
 		HandleMethodNotAllowed: true,
-		NotFound: toStdHandler(accesslog.Log(errors.Handle(returnNotFound, logger), logger)),
-		MethodNotAllowed: toStdHandler(accesslog.Log(errors.Handle(returnNotAllowed, logger), logger)),
+		NotFound:               toStdHandler(accesslog.Log(errors.Handle(returnNotFound, logger), logger)),
+		MethodNotAllowed:       toStdHandler(accesslog.Log(errors.Handle(returnNotAllowed, logger), logger)),
 	}
 }
 
@@ -31,4 +31,3 @@ func toStdHandler(handler httprouter.Handle) http.Handler {
 		handler(w, r, nil)
 	})
 }
-
