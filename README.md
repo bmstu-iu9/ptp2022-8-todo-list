@@ -137,6 +137,9 @@ Todo-лист представляет собой web-приложение дл�
 
 ## Запуск проекта через Docker Compose
 
+0. Потребуется [docker](https://docs.docker.com/engine/install/) и [docker compose plugin](https://docs.docker.com/compose/install/).
+
+1. Сохраняем в `docker-compose.yml`:
 ``` yaml
 services:
   api:
@@ -178,6 +181,9 @@ services:
     volumes:
       - /var/slavatidika:/var/lib/postgresql/data/
 ```
+2. Выполняем `docker compose up -d`.
+
+Для просмотра логов: `docker compose logs -f`. Чтобы остановить проект, выполняем `docker compose down`.
 
 ## Запуск с локальной сборкой контейнеров
 
