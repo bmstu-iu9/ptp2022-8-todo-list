@@ -703,6 +703,9 @@ components:
         imageSrc:
           type: string
           readOnly: true
+        imageForHero:
+          type: string
+          readOnly: true
         description:
           type: string
           readOnly: true
