@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: backend/
+    container_name: api
+    ports:
+      - 8080:8080
+    deploy:
+      restart_policy:
+        condition: on-failure
+    environment:
+      - RUNTIME_MODE=debug
+    env_file:
+      .env
+    depends_on:
+      - db
+  frontend:
+    build:
+      context: .
+      target: deploy
+    container_name: frontend
+    environment:
+      - ENV_MODE=DEV
+    volumes:
+      - ./frontend:/code/frontend
+    ports:
+      - 8000:3000
+    deploy:
+      restart_policy:
+        condition: on-failure
+  docs:
+    image: nginx:stable
+    container_name: docs
+    volumes:
+      - ./docs/index.html:/usr/share/nginx/html/index.html:ro
+      - ./docs/openapi.yml:/usr/share/nginx/html/openapi.yml:ro
+    ports:
+      - 5332:80
+    deploy:
+      restart_policy:
+        condition: on-failure
+  db:
+    image: postgres
+    container_name: db
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: slavatidika
+      POSTGRES_PASSWORD: example
+    volumes:
+      - /var/slavatidika:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER}

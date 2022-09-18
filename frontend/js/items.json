@@ -1,0 +1,326 @@
+[
+  {
+    "id": 1,
+    "name": "Кожаный шлем",
+    "description": "",
+    "imageSrc": "armorHelmet1.webp",
+    "price": 66,
+    "category": "helmet",
+    "rarity": "common"
+  },
+  {
+    "id": 2,
+    "name": "Кольчуга",
+    "description": "",
+    "imageSrc": "armorHelmet2.webp",
+    "price": 72,
+    "category": "helmet",
+    "rarity": "rare"
+  },
+  {
+    "id": 3,
+    "name": "Золотой шлем",
+    "description": "",
+    "imageSrc": "armorHelmet3.webp",
+    "price": 78,
+    "category": "helmet",
+    "rarity": "epic"
+  },
+  {
+    "id": 4,
+    "name": "Незерский шлем",
+    "description": "",
+    "imageSrc": "armorHelmet4.webp",
+    "price": 84,
+    "category": "helmet",
+    "rarity": "legendary"
+  },
+  {
+    "id": 5,
+    "name": "Кожаный нагрудник",
+    "description": "",
+    "imageSrc": "armorChest1.webp",
+    "price": 90,
+    "category": "armor",
+    "rarity": "common"
+  },
+  {
+    "id": 6,
+    "name": "Кольчужный нагрудник",
+    "description": "",
+    "imageSrc": "armorChest2.webp",
+    "price": 96,
+    "category": "armor",
+    "rarity": "rare"
+  },
+  {
+    "id": 7,
+    "name": "Золотые доспехи",
+    "description": "",
+    "imageSrc": "armorChest3.webp",
+    "price": 102,
+    "category": "armor",
+    "rarity": "epic"
+  },
+  {
+    "id": 8,
+    "name": "Незерская броня",
+    "description": "",
+    "imageSrc": "armorChest4.webp",
+    "price": 108,
+    "category": "armor",
+    "rarity": "legendary"
+  },
+  {
+    "id": 9,
+    "name": "Кожаные штанишки",
+    "description": "",
+    "imageSrc": "armorBeing1.webp",
+    "price": 114,
+    "category": "armor",
+    "rarity": "common"
+  },
+  {
+    "id": 10,
+    "name": "Кованые штаны",
+    "description": "",
+    "imageSrc": "armorBeing2.webp",
+    "price": 120,
+    "category": "armor",
+    "rarity": "rare"
+  },
+  {
+    "id": 11,
+    "name": "Золотые штаны",
+    "description": "",
+    "imageSrc": "armorBeing3.webp",
+    "price": 126,
+    "category": "armor",
+    "rarity": "epic"
+  },
+  {
+    "id": 12,
+    "name": "Алмазные штаны",
+    "description": "",
+    "imageSrc": "armorBeingMiph.webp",
+    "price": 132,
+    "category": "armor",
+    "rarity": "mythical"
+  },
+  {
+    "id": 13,
+    "name": "Каменная зубочистка",
+    "description": "",
+    "imageSrc": "weapon1.webp",
+    "price": 138,
+    "category": "weapon",
+    "rarity": "common"
+  },
+  {
+    "id": 14,
+    "name": "Железная палка",
+    "description": "",
+    "imageSrc": "weapon2.webp",
+    "price": 144,
+    "category": "weapon",
+    "rarity": "rare"
+  },
+  {
+    "id": 15,
+    "name": "Золотой меч",
+    "description": "",
+    "imageSrc": "weapon3.webp",
+    "price": 150,
+    "category": "weapon",
+    "rarity": "epic"
+  },
+  {
+    "id": 16,
+    "name": "Алмазная секира",
+    "description": "",
+    "imageSrc": "weapon4.webp",
+    "price": 156,
+    "category": "weapon",
+    "rarity": "mythical"
+  },
+  {
+    "id": 17,
+    "name": "Незерский меч",
+    "description": "",
+    "imageSrc": "weapon5.webp",
+    "price": 162,
+    "category": "weapon",
+    "rarity": "legendary"
+  },
+  {
+    "id": 18,
+    "name": "Крылья удачи",
+    "description": "",
+    "imageSrc": "weapon6.webp",
+    "price": 168,
+    "category": "weapon",
+    "rarity": "mythical"
+  },
+  {
+    "id": 19,
+    "name": "Дворовой кот",
+    "description": "",
+    "imageSrc": "pet1.webp",
+    "price": 174,
+    "category": "pet",
+    "rarity": "common"
+  },
+  {
+    "id": 20,
+    "name": "Бабушкин кот",
+    "description": "",
+    "imageSrc": "pet2.webp",
+    "price": 180,
+    "category": "pet",
+    "rarity": "rare"
+  },
+  {
+    "id": 21,
+    "name": "Элитная киса",
+    "description": "",
+    "imageSrc": "pet3.webp",
+    "price": 186,
+    "category": "pet",
+    "rarity": "epic"
+  },
+  {
+    "id": 22,
+    "name": "Пантера",
+    "description": "",
+    "imageSrc": "pet4.webp",
+    "price": 192,
+    "category": "pet",
+    "rarity": "legendary"
+  },
+  {
+    "id": 23,
+    "name": "Постриженная овечка",
+    "description": "",
+    "imageSrc": "pet5.webp",
+    "price": 198,
+    "category": "pet",
+    "rarity": "common"
+  },
+  {
+    "id": 24,
+    "name": "Розовая овечка",
+    "description": "",
+    "imageSrc": "pet6.webp",
+    "price": 204,
+    "category": "pet",
+    "rarity": "mythical"
+  },
+  {
+    "id": 25,
+    "name": "Белая лошадь",
+    "description": "",
+    "imageSrc": "pet7.webp",
+    "price": 210,
+    "category": "pet",
+    "rarity": "common"
+  },
+  {
+    "id": 26,
+    "name": "Живая неживая лошадь",
+    "description": "",
+    "imageSrc": "pet8.webp",
+    "price": 216,
+    "category": "pet",
+    "rarity": "rare"
+  },
+  {
+    "id": 27,
+    "name": "Иван",
+    "description": "",
+    "imageSrc": "pet9.webp",
+    "price": 222,
+    "category": "pet",
+    "rarity": "epic"
+  },
+  {
+    "id": 28,
+    "name": "Кролик",
+    "description": "",
+    "imageSrc": "pet10.webp",
+    "price": 228,
+    "category": "pet",
+    "rarity": "legendary"
+  },
+  {
+    "id": 29,
+    "name": "Осёл",
+    "description": "",
+    "imageSrc": "pet11.webp",
+    "price": 234,
+    "category": "pet",
+    "rarity": "common"
+  },
+  {
+    "id": 30,
+    "name": "Пятнистый кролик",
+    "description": "",
+    "imageSrc": "pet12.webp",
+    "price": 240,
+    "category": "pet",
+    "rarity": "mythical"
+  },
+  {
+    "id": 31,
+    "name": "Бэкендер",
+    "description": "",
+    "imageSrc": "man1.png",
+    "price": 246,
+    "category": "skin",
+    "rarity": "common"
+  },
+  {
+    "id": 32,
+    "name": "Человек паук",
+    "description": "",
+    "imageSrc": "man2.png",
+    "price": 252,
+    "category": "skin",
+    "rarity": "rare"
+  },
+  {
+    "id": 33,
+    "name": "Обычный парень",
+    "description": "",
+    "imageSrc": "man3.png",
+    "price": 258,
+    "category": "skin",
+    "rarity": "epic"
+  },
+  {
+    "id": 34,
+    "name": "Блогер",
+    "description": "",
+    "imageSrc": "man4.png",
+    "price": 264,
+    "category": "skin",
+    "rarity": "legendary"
+  },
+  {
+    "id": 35,
+    "name": "Фронтендер",
+    "description": "",
+    "imageSrc": "woman1.png",
+    "price": 270,
+    "category": "skin",
+    "rarity": "mythical"
+  },
+  {
+    "id": 36,
+    "name": "Фулстак",
+    "description": "",
+    "imageSrc": "woman2.png",
+    "price": 276,
+    "category": "skin",
+    "rarity": "mythical"
+  }
+]

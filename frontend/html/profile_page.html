@@ -1,279 +1,362 @@
 <!DOCTYPE html>
 <html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <meta name="theme-color" content="#712cf9" />
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <meta name="theme-color" content="#712cf9" />
+    <title>Профиль</title>
+    <link href="../scss/hero.scss" rel="stylesheet" />
+    <link href="../scss/todo.scss" rel="stylesheet" />
+    <link href="../scss/menu.scss" rel="stylesheet" />
+    <link href="../scss/profile.scss" rel="stylesheet" />
+  </head>
 
-  <title>Document</title>
-  <link href="../scss/todo.scss" rel="stylesheet" />
-  <link href="../scss/menu.scss" rel="stylesheet" />
-  <link href="../scss/profile.scss" rel="stylesheet"/>
-</head>
+  <body class="w-100 h-100">
+    <div class="menu">
+      <input id="menu__toggle" class="d-none" type="checkbox" />
+      <label class="menu__btn" for="menu__toggle">
+        <span></span>
+      </label>
+      <ul class="menu__box nav flex-column">
+        <li class="nav-item menu__open">
+          <a class="nav-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+              <path
+                d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"
+              />
+            </svg>
+            <p>Профиль</p>
+          </a>
+        </li>
 
-<body class="w-100 h-100">
-  <div class="menu">
-    <input id="menu__toggle" class="d-none" type="checkbox" />
-    <label class="menu__btn" for="menu__toggle">
-      <span></span>
-    </label>
-    <ul class="menu__box nav flex-column">
-      <li class="nav-item menu__open">
-        <a class="nav-link" href="profile_page.html">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person"
-            viewBox="0 0 16 16">
-            <path
-              d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
-          </svg>
-          <p>Профиль</p>
-        </a>
-      </li>
+        <li class="nav-item">
+          <a class="nav-link" href="todo.html">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list-check" viewBox="0 0 16 16">
+              <path
+                fill-rule="evenodd"
+                d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3.854 2.146a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 3.293l1.146-1.147a.5.5 0 0 1 .708 0zm0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 7.293l1.146-1.147a.5.5 0 0 1 .708 0zm0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"
+              />
+            </svg>
+            <p>Список дел</p>
+          </a>
+        </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="todo.html">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list-check"
-            viewBox="0 0 16 16">
-            <path fill-rule="evenodd"
-              d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3.854 2.146a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 3.293l1.146-1.147a.5.5 0 0 1 .708 0zm0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 7.293l1.146-1.147a.5.5 0 0 1 .708 0zm0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z" />
-          </svg>
-          <p>Список дел</p>
-        </a>
-      </li>
+        <li class="nav-item">
+          <a class="nav-link" href="shop.html">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-shop" viewBox="0 0 16 16">
+              <path
+                d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zM4 15h3v-5H4v5zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3zm3 0h-2v3h2v-3z"
+              />
+            </svg>
+            <p>Магазин</p>
+          </a>
+        </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-shop"
-            viewBox="0 0 16 16">
-            <path
-              d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zM4 15h3v-5H4v5zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3zm3 0h-2v3h2v-3z" />
-          </svg>
-          <p>Магазин</p>
-        </a>
-      </li>
+        <li class="nav-item">
+          <a class="nav-link" href="inventory.html">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
+              <path
+                d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"
+              />
+            </svg>
+            <p>Инвентарь</p>
+          </a>
+        </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-seam"
-            viewBox="0 0 16 16">
-            <path
-              d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z" />
-          </svg>
-          <p>Инвентарь</p>
-        </a>
-      </li>
+        <li class="nav-item menu__exit">
+          <a class="nav-link" href="start_page.html">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+              <path
+                fill-rule="evenodd"
+                d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"
+              />
+              <path
+                fill-rule="evenodd"
+                d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"
+              />
+            </svg>
+            <p>Выход</p>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="body">
+      <div class="wrapper">
+        <section style="background-color: #fff">
+          <div class="container py-3">
+            <div class="row">
+              <div class="col-lg-4">
+                <div class="card mb-4">
+                  <div class="card-body text-center" id="user-img-card">
+                    <h5 class="my-3" id="nicknameField">@</h5>
+                    <p class="text-muted mb-1">Level 1</p>
+                    <div class="d-flex justify-content-center mb-2">
+                      <div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeDataModal" id="changeDataBtn">Изменить данные</div>
+                      <div class="btn btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Изменить пароль</div>
+                    </div>
 
-      <li class="nav-item menu__exit">
-        <a class="nav-link" href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-            class="bi bi-box-arrow-left" viewBox="0 0 16 16">
-            <path fill-rule="evenodd"
-              d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
-            <path fill-rule="evenodd"
-              d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
-          </svg>
-          <p>Выход</p>
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div class="body">
-    <div class="wrapper">
-      <section style="background-color: #fff;">
-        <div class="container py-3">      
-          <div class="row">
-            <div class="col-lg-4">
-              <div class="card mb-4">
-                <div class="card-body text-center">
-                  <img src="https://i.pinimg.com/736x/cc/ad/60/ccad60cdf28bbe750cad42039de1e67d--art-pages-pixel-art.jpg" alt="avatar"
-                    class="img-fluid" style="width: 150px;">
-                  <h5 class="my-3" id="nicknameField">@</h5>
-                  <p class="text-muted mb-1">Level 1</p>
-                  <div class="d-flex justify-content-center mb-2">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeDataModal" id="changeDataBtn">Изменить данные</button>
-                    <button type="button" class="btn btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Изменить пароль</button>
-                  </div>
-
-                  <!--Модалка для изменения пароля-->
-                  <div div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title">Изменение пароля</h5>
-                        </div>
-                        <div class="modal-body">
-                          <form >
-                            <div class="form-group mb-4">
-                              <input type="password" class="form-control" id="newPasswordInput" placeholder="Новый пароль">
-                            </div>
-                            <div class="form-group mb-2">
-                              <input type="password" class="form-control" id="newPasswordRepeatInput" placeholder="Подтвердите новый пароль">
-                            </div>
-                            <span id="validationResult"></span>
-                          </form>
-                          
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" id="closeChangePasswordModalBtn" data-bs-dismiss="modal">Отмена</button>
-                          <button type="button" class="btn btn-primary" id="changePasswordSubmitBtn">Сохранить новый пароль</button>
+                    <!--Модалка для изменения пароля-->
+                    <div div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title text-dark">Изменение пароля</h5>
+                          </div>
+                          <div class="modal-body">
+                            <form>
+                              <div class="form-group mb-4">
+                                <input type="password" class="form-control" id="oldPasswordInput" placeholder="Введите старый пароль" />
+                              </div>
+                              <div class="form-group mb-4">
+                                <input type="password" class="form-control" id="newPasswordInput" placeholder="Новый пароль" />
+                              </div>
+                              <div class="form-group mb-2">
+                                <input type="password" class="form-control" id="newPasswordRepeatInput" placeholder="Подтвердите новый пароль" />
+                              </div>
+                              <span id="validationResult"></span>
+                            </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="closeChangePasswordModalBtn" data-bs-dismiss="modal">Отмена</button>
+                            <button type="button" class="btn btn-primary" id="changePasswordSubmitBtn">Сохранить новый пароль</button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <!---->
+                    <!---->
 
-
-                  <!-- Модалка для изменения данных -->
-                  <div class="modal fade" id="changeDataModal" tabindex="-1" aria-labelledby="changeDataModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title">Изменение данных</h5>
-                        </div>
-                        <div class="modal-body">
-                          <form id="changeDataForm">
-                            <div class="form-group mb-2">
-                              <label class="sr-only" for="nicknameInput">Username</label>
-                              <div class="input-group mr-sm-2">
-                                <div class="input-group-prepend">
-                                  <div class="input-group-text">@</div>
+                    <!-- Модалка для изменения данных -->
+                    <div class="modal fade" id="changeDataModal" tabindex="-1" aria-labelledby="changeDataModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title text-dark">Изменение данных</h5>
+                          </div>
+                          <div class="modal-body">
+                            <form id="changeDataForm">
+                              <div class="form-group mb-2">
+                                <label class="sr-only text-dark" for="nicknameInput">Nickname</label>
+                                <div class="input-group mr-sm-2">
+                                  <div class="input-group-prepend">
+                                    <div class="input-group-text">@</div>
+                                  </div>
+                                  <input type="text" class="form-control" id="nicknameInput" />
                                 </div>
-                                <input type="text" class="form-control" id="nicknameInput">
                               </div>
-                            </div>  
-                            <div class="form-group mb-2">
-                              <label for="nameInput">Имя</label>
-                              <input type="text" class="form-control" id="nameInput">
-                            </div>
-                            <div class="form-group mb-2">
-                              <label for="surnameInput">Фамилия</label>
-                              <input type="text" class="form-control" id="surnameInput">
-                            </div>
-                            <div class="form-group">
-                              <label for="formGroupExampleInput2"></label>
-                              <div class="input-group-prepend">
-                                <span class="input-group-text">О себе</span>
+                              <div class="form-group mb-2">
+                                <label class="text-dark" for="nameInput">Имя</label>
+                                <input type="text" class="form-control" id="nameInput" />
                               </div>
-                              <textarea class="form-control" aria-label="With textarea" id="aboutInfoInput"></textarea>
-                            </div>
-                          </form>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeDataChangeModalBtn">Закрыть</button>
-                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="changeDataSubmitBtn">Сохранить изменения</button>
+                              <div class="form-group mb-2">
+                                <label class="text-dark" for="surnameInput">Фамилия</label>
+                                <input type="text" class="form-control" id="surnameInput" />
+                              </div>
+
+                              <div class="form-group border rounded d-flex mt-3 justify-content-between" style="padding: 11px 0">
+                                <span class="text-dark" style="font-size: 1rem; margin-left: 12px"> Тема </span>
+                                <div class="theme-switch">
+                                  <input type="checkbox" class="checkbox" id="theme-switch-checkbox" />
+                                  <label class="label" for="theme-switch-checkbox">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      fill="#f39c12"
+                                      class="bi bi-sun-fill"
+                                      viewBox="0 0 16 16"
+                                    >
+                                      <path
+                                        d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"
+                                      />
+                                    </svg>
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      fill="#f1c40f"
+                                      class="bi bi-moon-fill"
+                                      viewBox="0 0 16 16"
+                                    >
+                                      <path
+                                        d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"
+                                      />
+                                    </svg>
+                                    <div class="ball"></div>
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label for="formGroupExampleInput2"></label>
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">О себе</span>
+                                </div>
+                                <textarea class="form-control" aria-label="With textarea" id="aboutInfoInput"></textarea>
+                              </div>
+                            </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeDataChangeModalBtn">Закрыть</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="changeDataSubmitBtn">
+                              Сохранить изменения
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  <!-- -->
                 </div>
-                <!-- -->
-              </div>
-              <div class="card mb-4 mb-lg-0">
-                <div class="card-body p-0">
-                  <ul class="list-group list-group-flush rounded-3">
-                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#dc3545" class="bi bi-heart-pulse-fill" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M1.475 9C2.702 10.84 4.779 12.871 8 15c3.221-2.129 5.298-4.16 6.525-6H12a.5.5 0 0 1-.464-.314l-1.457-3.642-1.598 5.593a.5.5 0 0 1-.945.049L5.889 6.568l-1.473 2.21A.5.5 0 0 1 4 9H1.475ZM.879 8C-2.426 1.68 4.41-2 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C11.59-2 18.426 1.68 15.12 8h-2.783l-1.874-4.686a.5.5 0 0 0-.945.049L7.921 8.956 6.464 5.314a.5.5 0 0 0-.88-.091L3.732 8H.88Z"/>
+                <div class="card mb-4 mb-lg-0">
+                  <div class="card-body p-0">
+                    <ul class="list-group list-group-flush rounded-3">
+                      <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          fill="#dc3545"
+                          class="bi bi-heart-pulse-fill"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M1.475 9C2.702 10.84 4.779 12.871 8 15c3.221-2.129 5.298-4.16 6.525-6H12a.5.5 0 0 1-.464-.314l-1.457-3.642-1.598 5.593a.5.5 0 0 1-.945.049L5.889 6.568l-1.473 2.21A.5.5 0 0 1 4 9H1.475ZM.879 8C-2.426 1.68 4.41-2 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C11.59-2 18.426 1.68 15.12 8h-2.783l-1.874-4.686a.5.5 0 0 0-.945.049L7.921 8.956 6.464 5.314a.5.5 0 0 0-.88-.091L3.732 8H.88Z"
+                          />
                         </svg>
-                        <div class="progress" style="width: 80%;">
-                            <div id="health_progress_bar" class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div> 
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#ffc107" class="bi bi-star-fill" viewBox="0 0 16 16">
-                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                          </svg>
-                          <div class="progress" style="width: 80%">
-                            <div id="experience_progress_bar" class="progress-bar bg-warning" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="container d-flex align-items-center justify-content-between p-0">
+                          <div class="progress mx-3" style="width: 65%">
+                            <div
+                              id="health_progress_bar"
+                              class="progress-bar bg-danger"
+                              role="progressbar"
+                              style="width: 100%"
+                              aria-valuenow="100"
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                            ></div>
+                          </div>
+                          <span id="health">100/100</span>
                         </div>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#ffc107" class="bi bi-star-fill" viewBox="0 0 16 16">
+                          <path
+                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                          />
+                        </svg>
+                        <div class="container d-flex justify-content-between align-items-center p-0">
+                          <div class="progress mx-3" style="width: 65%">
+                            <div
+                              id="experience_progress_bar"
+                              class="progress-bar bg-warning"
+                              role="progressbar"
+                              style="width: 75%"
+                              aria-valuenow="75"
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                            ></div>
+                          </div>
+                          <span id="experience">75/100</span>
+                        </div>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#85bb65 " class="bi bi-cash-stack" viewBox="0 0 16 16">
-                            <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
-                            <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2H3z"/>
-                          </svg>
-                      <p id="balance" class="mb-0">228</p>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-8">
-              <div class="card mb-4">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <p class="mb-0">Имя</p>
-                    </div>
-                    <div class="col-sm-9">
-                      <p class="text-muted mb-0" id="nameField">Неизвестно</p>
-                    </div>
-                  </div>
-                  <hr>
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <p class="mb-0">Фамилия</p>
-                    </div>
-                    <div class="col-sm-9">
-                      <p class="text-muted mb-0" id="surnameField">Неизвестно</p>
-                    </div>
-                  </div>
-                  <hr>
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <p class="mb-0">Email</p>
-                    </div>
-                    <div class="col-sm-9">
-                      <p class="text-muted mb-0" id="emailField">example@example.ru</p>
-                    </div>
-                  </div>
-                  <hr>
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <p class="mb-0">О себе</p>
-                    </div>
-                    <div class="col-sm-9">
-                      <p class="text-muted mb-0" id="aboutInfoField">
-                        Неизвестно
-                      </p>
-                    </div>
+                          <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                          <path
+                            d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2H3z"
+                          />
+                        </svg>
+                        <p id="balance" class="mb-0"></p>
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>
-              <div class="row">
-                
-                <div class="col-md-6">
-                  <div class="card mb-4 mb-md-0">
-                    <div class="card-body">
-                      <p class="mb-4"><span class="text-primary font-italic me-1">Характеристики</span></p>
-                      <ul  class="list-group list-group-flush rounded-3">
-                        <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                          <p class="mt-4 mb-1" style="font-size: 1.5rem; color: #f74e52;">Сила</p>
-                          <p id="strength_field" class="mt-4 mb-1">0</p>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                          <p class="mt-4 mb-1" style="font-size: 1.5rem; color: #2995cd">Интеллект</p>
-                          <p id="intelligence_field" class="mt-4 mb-1">0</p>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                          <p class="mt-4 mb-1" style="font-size: 1.5rem; color: #40f433">Ловкость</p> 
-                          <p id="agility_field" class="mt-4 mb-1">0</p>
-                        </li>
-                      </ul>
+              <div class="col-lg-8">
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <p class="mb-0">Имя</p>
+                      </div>
+                      <div class="col-sm-9">
+                        <p class="text-muted mb-0" id="nameField"></p>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <p class="mb-0">Фамилия</p>
+                      </div>
+                      <div class="col-sm-9">
+                        <p class="text-muted mb-0" id="surnameField"></p>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <p class="mb-0">Email</p>
+                      </div>
+                      <div class="col-sm-9">
+                        <p class="text-muted mb-0" id="emailField"></p>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <p class="mb-0">О себе</p>
+                      </div>
+                      <div class="col-sm-9">
+                        <p class="text-muted mb-0" id="aboutInfoField">Неизвестно</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="card mb-4 mb-md-0">
+                      <div class="card-body">
+                        <p class="mb-4"><span class="text-primary font-italic me-1">Характеристики</span></p>
+                        <ul class="list-group list-group-flush rounded-3" style="font-size: 1.4rem">
+                          <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                            <p class="mt-4 mb-1" style="color: #f74e52">Урон</p>
+                            <p id="damage_field" class="mt-4 mb-1">0</p>
+                          </li>
+                          <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                            <p class="mt-4 mb-1" style="font-size: 1.4rem; color: #0025dc">Броня</p>
+                            <p id="armor_field" class="mt-4 mb-1">0</p>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="card mb-4 mb-md-0">
+                      <div class="card-body min-vh-10 min-vw-10">
+                        <p class="mb-4"><span class="text-primary font-italic me-1">Питомец</span></p>
+                        <div class="container-fluid" id="pet-container"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
-  </div>
-  <script src="../js/profile.ts"></script> 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"crossorigin="anonymous"></script>
-</body>
-
+    <script src="../js/config.ts"></script>
+    <script src="../js/request.ts"></script>
+    <script src="../js/inventory/item.ts"></script>
+    <script src="../js/profile/hero.ts"></script>
+    <script src="../js/profile/profile.ts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  </body>
 </html>

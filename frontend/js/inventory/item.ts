@@ -2,6 +2,7 @@ type Item = {
     id: number
     name: string
     imageSrc: string
+    imageForHero: string
     description: string
     price: number
     category: Category

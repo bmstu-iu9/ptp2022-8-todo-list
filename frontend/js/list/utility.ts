@@ -64,7 +64,7 @@ function openUl(form: string, show: string, searchId: string, list: string): boo
                             </a></li>`
             ul.innerHTML = ul.innerHTML.concat(lbl_text)
             if (sortLabels.has(lbl.id) && show === 'show') {
-                (<HTMLElement>document.getElementById(`lbl-${lbl!.id}`))!.style.backgroundColor = `#${lbl.color}99`
+                ;(<HTMLElement>document.getElementById(`lbl-${lbl!.id}`))!.style.backgroundColor = `#${lbl.color}99`
             }
         })
         elem.classList.toggle(show)
@@ -73,7 +73,7 @@ function openUl(form: string, show: string, searchId: string, list: string): boo
 }
 
 function closeUl(dropbtn: string, form: string, list: string, searchId: string, show: string) {
-    (<HTMLUListElement>document.getElementsByClassName(dropbtn)[0]).setAttribute("placeholder", "Выбрать категорию")
+    ;(<HTMLUListElement>document.getElementsByClassName(dropbtn)[0]).setAttribute('placeholder', 'Выбрать категорию')
     let elem = <HTMLDivElement>document.getElementById(form)
     elem.classList.remove(show)
     let ul = <HTMLUListElement>document.getElementsByClassName(list)[0]
@@ -108,7 +108,7 @@ function search(classUl: string, inpt: string) {
             ul.innerHTML = ul.innerHTML.concat(lbl_text)
 
             if (sortLabels.has(lbl.id)) {
-                (<HTMLElement>document.getElementById(`lbl-${lbl!.id}`))!.style.backgroundColor = `#${lbl.color}99`
+                ;(<HTMLElement>document.getElementById(`lbl-${lbl!.id}`))!.style.backgroundColor = `#${lbl.color}99`
             }
         })
     } else {
@@ -124,7 +124,7 @@ function search(classUl: string, inpt: string) {
                 ul.innerHTML = ul.innerHTML.concat(lbl_text)
 
                 if (sortLabels.has(lbl.id)) {
-                    (<HTMLElement>document.getElementById(`lbl-${lbl!.id}`))!.style.backgroundColor = `#${lbl.color}99`
+                    ;(<HTMLElement>document.getElementById(`lbl-${lbl!.id}`))!.style.backgroundColor = `#${lbl.color}99`
                 }
             }
         })

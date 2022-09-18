@@ -1,38 +1,42 @@
 package ping
 
 import (
+	"bytes"
+	"encoding/json"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
-	"github.com/julienschmidt/httprouter"
-	. "gopkg.in/check.v1"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/router"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/test"
 )
 
-type PingTestSuite struct{
-	mux *httprouter.Router
-	writer *httptest.ResponseRecorder
-	logger log.Logger
-}
+func TestApi(t *testing.T) {
+	toJson := func(data interface{}) string {
+		buf := new(bytes.Buffer)
+		err := json.NewEncoder(buf).Encode(data)
+		if err != nil {
+			panic(err)
+		}
+		return buf.String()
+	}
 
-func init() {
-	Suite(&PingTestSuite{})
-}
+	logger := log.New()
+	mux := router.New(logger)
+	RegisterHandlers(mux, logger)
 
-func Test(t *testing.T) { TestingT(t) }
+	tests := []test.ApiTestCase{
+		{Name: "Ping OK", Method: "GET", Url: "/ping", Body: "",
+			WantCode: http.StatusTeapot},
+		{Name: "Ping non-empty body", Method: "GET", Url: "/ping", Body: "12345",
+			WantCode: http.StatusTeapot},
+		{Name: "Ping wrong method", Method: "POST", Url: "/ping", Body: "{}",
+			WantCode: http.StatusMethodNotAllowed, WantBody: toJson(errors.Problem{
+				Title:  "Method not allowed",
+				Status: http.StatusMethodNotAllowed,
+			})},
+	}
 
-func (s *PingTestSuite) SetUpSuite(c *C) {
-	s.mux = httprouter.New()
-	s.logger = log.New()
-	RegisterHandlers(s.mux, s.logger)
-	s.writer = httptest.NewRecorder()
-}
-
-func (s *PingTestSuite) TestPing(c *C) {
-	request, _ := http.NewRequest("GET", "/ping", nil)
-	s.mux.ServeHTTP(s.writer, request)
-
-	c.Check(s.writer.Code, Equals, 418)
-	c.Check(s.writer.Body.Len(), Equals, 0)
+	test.Endpoint(t, tests, mux)
 }
