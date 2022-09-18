@@ -11,7 +11,7 @@ import (
 
 func TestRepo(t *testing.T) {
 	logger := log.New()
-	db, err := db.New(logger)
+	db, err := db.NewForTest(logger)
 	if err != nil {
 		panic(err)
 	}
@@ -51,8 +51,8 @@ func TestRepo(t *testing.T) {
 
 		test.IsNil(t, err)
 		test.DeepEqual(t, want, got)
-		if user.Id != 3 {
-			t.Fatalf("expected user.Id: 3, got: %#v", got)
+		if got.Id != user.Id {
+			t.Fatalf("expected user.Id: %#v , got: %#v", user.Id, got.Id)
 		}
 	})
 

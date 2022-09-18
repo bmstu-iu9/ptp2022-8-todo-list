@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/auth"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/items"
 	"net/http"
 	"os"
 
@@ -32,6 +33,10 @@ func main() {
 	auth.RegisterHandlers(
 		mux,
 		auth.NewService(auth.NewRepository(db, logger)),
+		logger)
+	items.RegisterHandlers(
+		mux,
+		items.NewService(items.NewRepository(db, logger)),
 		logger)
 
 	address := fmt.Sprintf("%v:%v",

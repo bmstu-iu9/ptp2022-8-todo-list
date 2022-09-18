@@ -290,6 +290,16 @@ func (repo *mockRepository) UpdateActivationStatus(activationLink string) error 
 	return nil
 }
 
+func (repo *mockRepository) InitUserInventory(id int64) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (repo *mockRepository) CleanUserInventory(id int64) error {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (repo *mockRepository) Create(user *entity.User, activationLink string) error {
 	user.Id = repo.id
 	repo.id++

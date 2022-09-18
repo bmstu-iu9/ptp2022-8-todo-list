@@ -15,7 +15,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-// RefisterHandlers registers handlers for Users API methods.
+// RegisterHandlers registers handlers for Users API methods.
 func RegisterHandlers(mux *httprouter.Router, service Service, logger log.Logger) {
 	res := resource{service, logger}
 

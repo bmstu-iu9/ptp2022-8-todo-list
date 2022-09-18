@@ -31,7 +31,7 @@ type User struct {
 
 type (
 	// Email represents email.
-	Email    entity.Email
+	Email entity.Email
 	// Nickname represents user's nickname.
 	Nickname entity.Nickname
 	// Password represents plaintext password.
@@ -139,6 +139,10 @@ func (s service) Delete(id int64) (entity.UserDto, error) {
 	if err != nil {
 		return entity.UserDto{}, err
 	}
+	err = s.repo.CleanUserInventory(id)
+	if err != nil {
+		return User{}, err
+	}
 	return entity.NewUserDto(user), nil
 }
 
@@ -161,6 +165,10 @@ func (s service) Create(input *CreateUserRequest) (User, error) {
 	err = sendActivationMail(entityUser.Email, activationLink.String())
 	if err != nil {
 		return entity.UserDto{}, err
+	}
+	err = s.repo.InitUserInventory(entityUser.Id)
+	if err != nil {
+		return User{}, err
 	}
 	return entity.NewUserDto(entityUser), nil
 }

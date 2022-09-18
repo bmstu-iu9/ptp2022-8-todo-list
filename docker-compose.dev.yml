@@ -10,7 +10,10 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
-    network_mode: host
+    environment:
+      - RUNTIME_MODE=debug
+    env_file:
+      .env
     depends_on:
       - db
   frontend:
@@ -49,5 +52,8 @@ services:
       POSTGRES_DB: slavatidika
       POSTGRES_PASSWORD: example
     volumes:
-      - ./postgres:/var/lib/postgresql/data/
-    network_mode: host
+      - /var/slavatidika:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER}

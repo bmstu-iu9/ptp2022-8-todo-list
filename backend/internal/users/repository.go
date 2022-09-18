@@ -21,19 +21,14 @@ type Repository interface {
 	Delete(id int64) error
 	// Update modifies User.
 	Update(user *entity.User) error
+	// TODO: docstring
 	CheckActivationLink(activationLink string) error
+	// TODO: docstring
 	UpdateActivationStatus(activationLink string) error
-}
-
-func wrapSql(err error) error {
-	switch err {
-	case nil:
-		return nil
-	case sql.ErrNoRows:
-		return fmt.Errorf("%w: %v", errors.ErrNotFound, err)
-	default:
-		return fmt.Errorf("%w: %v", errors.ErrDb, err)
-	}
+	// InitUserInventory init the list of items for user with spec id.
+	InitUserInventory(id int64) error
+	// CleanUserInventory deletes the list of items for user with spec id.
+	CleanUserInventory(id int64) error
 }
 
 func wrapSql(err error) error {
@@ -64,6 +59,19 @@ func (repo repository) Create(user *entity.User, activationLink string) error {
 	err := repo.db.QueryRow("INSERT INTO users(email, nickname, password,activation_link)"+
 		"VALUES ($1, $2, $3,$4) RETURNING id", user.Email, user.Nickname, user.Password, activationLink).
 		Scan(&user.Id)
+	return wrapSql(err)
+}
+
+// InitUserInventory init the list of items for user with spec id.
+func (repo repository) InitUserInventory(id int64) error {
+	_, err := repo.db.Exec("INSERT INTO inventory (user_id, item_id) SELECT users.id, items.id "+
+		"FROM users INNER JOIN items ON users.id = $1 ", id)
+	return wrapSql(err)
+}
+
+// CleanUserInventory deletes the list of items for user with spec id.
+func (repo repository) CleanUserInventory(id int64) error {
+	_, err := repo.db.Exec("DELETE FROM inventory WHERE user_id = $1 ", id)
 	return wrapSql(err)
 }
 
