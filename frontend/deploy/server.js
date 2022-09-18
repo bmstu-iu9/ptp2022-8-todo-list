@@ -12,6 +12,7 @@ let reroutePaths = new Map([
     ['/html/login.html', '/login'],
     ['', ''],
 ])
+
 let pathsReroute = new Map([
     ['/app', '/html/spa.html'],
     ['/login', '/html/login.html'],
@@ -19,10 +20,10 @@ let pathsReroute = new Map([
     ['', ''],
 ])
 if (process.env['ENV_MODE'] === 'PROD') {
-    console.log(fontColors.get('black'),'PROD MODE, index.html set to start_page.html.')
+    console.log(fontColors.get('black'), 'PROD MODE, index.html set to start_page.html.')
     pathsReroute.set('/', '/html/start_page.html')
 } else {
-    console.log(fontColors.get('black'),'DEV MODE, index.html not modified.')
+    console.log(fontColors.get('black'), 'DEV MODE, index.html not modified.')
 }
 
 /**
@@ -131,8 +132,8 @@ function serveStatic(res, cache, absPath) {
 
 /**
  *  Starts server.
- * @param {{path: string, port: number}} spec 
- * @returns 
+ * @param {{path: string, port: number}} spec
+ * @returns
  */
 export default function startServer(spec) {
     let { path, port } = spec
@@ -152,14 +153,23 @@ export default function startServer(spec) {
                     req.url,
                     ' ',
                     code === '404' ? fontColors.get('red') : fontColors.get('green'),
-                    code,
+                    code
                 )
             })
         }
         if (reroutePaths.has(req.url)) {
             let reroute = reroutePaths.get(req.url)
             send302(res, reroute)
-            console.log(fontColors.get('green'), 'GET:', fontColors.get('blue'), req.url, ' ', fontColors.get('yellow'), '302 -->', reroutePaths.get(req.url))
+            console.log(
+                fontColors.get('green'),
+                'GET:',
+                fontColors.get('blue'),
+                req.url,
+                ' ',
+                fontColors.get('yellow'),
+                '302 -->',
+                reroutePaths.get(req.url)
+            )
         } else if (pathsReroute.has(req.url)) {
             filePath = path + pathsReroute.get(req.url)
             serveStatic(res, cache, filePath).then((code) => {
@@ -172,7 +182,7 @@ export default function startServer(spec) {
                     pathsReroute.get(req.url),
                     ' ',
                     code === '404' ? fontColors.get('red') : fontColors.get('green'),
-                    code,
+                    code
                 )
             })
         } else {

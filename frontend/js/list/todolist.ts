@@ -48,7 +48,6 @@ function onTodoLoad() {
             glob_id = buf.id + 1
         }
     })
-    
 }
 
 try {
