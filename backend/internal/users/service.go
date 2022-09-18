@@ -71,7 +71,7 @@ func newUser(entity *entity.User) User {
 	}
 }
 
-// NewUser represents the data for creating new User.
+// CreateUserRequest represents the data for creating new User.
 type CreateUserRequest struct {
 	Email    Email    `json:"email"`
 	Nickname Nickname `json:"nickname"`
