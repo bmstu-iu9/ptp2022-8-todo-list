@@ -60,7 +60,7 @@ func (repo repository) Create(user *entity.User) error {
 
 // InitUserInventory init the list of items for user with spec id.
 func (repo repository) InitUserInventory(id int64) error {
-	_, err := repo.db.Exec("INSERT INTO inventory (user_id,item_id) SELECT users.id,items.id "+
+	_, err := repo.db.Exec("INSERT INTO inventory (user_id, item_id) SELECT users.id, items.id "+
 		"FROM users INNER JOIN items ON users.id = $1 ", id)
 	return wrapSql(err)
 }

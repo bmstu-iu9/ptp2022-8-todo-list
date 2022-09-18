@@ -8,7 +8,7 @@ var config = map[string]string{
 	"API_SERVER":   "https://ptp.starovoytovai.ru/api/v1",
 	"DB_PORT":      "5432",
 	"DB_HOST":      "localhost",
-	"DB_USER":      "postgres",
+	"DB_USER":      "slava",
 	"DB_NAME":      "slavatidika",
 	"DB_PASSWORD":  "asdwasd4545",
 	"DB_SSL_MODE":  "disable",

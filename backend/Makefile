@@ -1,5 +1,5 @@
 all: run
-test: lint unit-test
+test: lint unit-test-with-coverage
 
 .PHONY: build
 build:
@@ -13,15 +13,13 @@ run: build
 containers:
 	@docker build .
 
-.PHONY: unit-test-run
-unit-test-run:
-	@docker build . --target unit-test --network host
-
 .PHONY: unit-test
-unit-test: unit-test-run
-	@docker build . --target unit-test-coverage \
-	--output ./ \
-	--network host
+unit-test: db
+
+	@docker build . --target unit-test --network=host
+.PHONY: unit-test-with-coverage
+unit-test-with-coverage: unit-test
+	@docker build . --target coverage --output ./ --network=host
 
 .PHONY: lint
 lint:
