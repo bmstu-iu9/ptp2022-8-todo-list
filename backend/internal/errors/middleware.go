@@ -88,12 +88,12 @@ var errorResponses = []struct {
 		},
 	},
 	{
-		err:  ErrAuth,
-		code: http.StatusForbidden,
+		err:  ErrAuthentication,
+		code: http.StatusUnauthorized,
 		body: Problem{
-			Title:  "Forbidden",
-			Status: http.StatusForbidden,
-			Detail: "Wrong login or password",
+			Title:  "Unauthorized",
+			Status: http.StatusUnauthorized,
+			Detail: "Missing or wrong credentials",
 		},
 	},
 	{
