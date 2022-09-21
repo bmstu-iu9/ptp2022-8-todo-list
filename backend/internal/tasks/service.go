@@ -1,6 +1,7 @@
 package tasks
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
@@ -37,14 +38,12 @@ type (
 	Name   entity.Name
 	Text   entity.Text
 	Date   entity.Date
-	Labels []Label
+	Labels entity.Labels
 	Status entity.Status
 	Color  entity.Color
 	Label  struct {
-		Id     int64 `json:"id"`
-		TaskId int64 `json:"-"`
-		Name   Name  `json:"text"`
-		Color  Color `json:"color"`
+		Name  Name  `json:"text"`
+		Color Color `json:"color"`
 	}
 )
 
@@ -75,7 +74,10 @@ func (f *Labels) validate() bool {
 		return false
 	}
 
-	for _, label := range *f {
+	var lbs []Label
+	json.Unmarshal([]byte(*f), &lbs)
+
+	for _, label := range lbs {
 		if !label.validate() {
 			return false
 		}
@@ -94,10 +96,6 @@ func (f *Color) validate() bool {
 func (f *Label) validate() bool {
 	if f == nil {
 		return false
-	}
-
-	if f.Id != 0 {
-		return true
 	}
 
 	return f.Name.validate() && f.Color.validate()
@@ -157,19 +155,6 @@ func (t *CreateTaskRequest) Validate() error {
 	return nil
 }
 
-func toEntityLabels(labels Labels) entity.Labels {
-	lbs := entity.Labels{}
-	for _, lb := range labels {
-		lbs = append(lbs, entity.TaskLabel{
-			Id:     lb.Id,
-			TaskId: lb.TaskId,
-			Name:   entity.Name(lb.Name),
-			Color:  entity.Color(lb.Color),
-		})
-	}
-	return lbs
-}
-
 // Create creates task from task_data argument
 func (s service) Create(task_data *CreateTaskRequest) (entity.Task, error) {
 	err := task_data.Validate()
@@ -185,7 +170,7 @@ func (s service) Create(task_data *CreateTaskRequest) (entity.Task, error) {
 		CreatedOn:            entity.Date(task_data.CreatedOn),
 		DueDate:              entity.Date(task_data.DueDate),
 		SchtirlichHumorescue: entity.Text(task_data.SchtirlichHumorescue),
-		Labels:               toEntityLabels(task_data.Labels),
+		Labels:               entity.Labels(task_data.Labels),
 		Status:               entity.Status(task_data.Status),
 	}
 
@@ -234,7 +219,7 @@ func (s service) Update(request *UpdateTaskRequest) (entity.Task, error) {
 	task.Description = entity.Text(or(string(request.Description), string(task.Description)))
 	task.DueDate = entity.Date(or(string(request.DueDate), string(task.DueDate)))
 	task.SchtirlichHumorescue = entity.Text(or(string(request.SchtirlichHumorescue), string(task.SchtirlichHumorescue)))
-	task.Labels = toEntityLabels(request.Labels)
+	task.Labels = entity.Labels(request.Labels)
 	task.Status = entity.Status(or(string(request.Status), string(task.Status)))
 
 	err = s.r.Update(&task)

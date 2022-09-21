@@ -20,19 +20,11 @@ type Task struct {
 	Status               Status `json:"status"`
 }
 
-// TaskLabel represents label for task
-type TaskLabel struct {
-	Id     int64 `json:"id"`
-	TaskId int64 `json:"-"`
-	Name   Name  `json:"text"`
-	Color  Color `json:"color"`
-}
-
 type (
 	Name   string
 	Text   string
 	Date   string
-	Labels []TaskLabel
+	Labels string
 	Status string
 	Color  string
 )

@@ -60,7 +60,7 @@ func TestApi(t *testing.T) {
 			Name:     "update",
 			Method:   "PATCH",
 			Url:      "/users/1/tasks/1",
-			Body:     toJson(task_examples[2]),
+			Body:     toJson(task_examples[1]),
 			WantCode: http.StatusOK,
 			WantBody: toJson(task_examples[1]),
 		},
