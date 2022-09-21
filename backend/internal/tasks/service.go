@@ -113,10 +113,15 @@ func (f *Status) validate() bool {
 
 // Service encapsulates usecase logic for tasks.
 type Service interface {
+	// Get returns all tasks for user with specified id
 	Get(user_id int64) ([]entity.Task, error)
+	// GetById returns single task with specified id
 	GetById(task_id int64) (entity.Task, error)
+	// Create saves new task
 	Create(task_data *CreateTaskRequest) (entity.Task, error)
+	// Update modifies task
 	Update(task_data *UpdateTaskRequest) (entity.Task, error)
+	// Delete removes task with specified id
 	Delete(task_id int64) (entity.Task, error)
 }
 
@@ -131,24 +136,12 @@ func NewService(r Repository) Service {
 
 // Get returns all tasks for user with specified id
 func (s service) Get(user_id int64) ([]entity.Task, error) {
-	tasks, err := s.r.Get(user_id)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return tasks, err
+	return s.r.Get(user_id)
 }
 
 // GetById returns single task with specified id
 func (s service) GetById(task_id int64) (entity.Task, error) {
-	task, err := s.r.GetById(task_id)
-
-	if err != nil {
-		return entity.Task{}, err
-	}
-
-	return task, err
+	return s.r.GetById(task_id)
 }
 
 func (t *CreateTaskRequest) Validate() error {

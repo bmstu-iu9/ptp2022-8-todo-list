@@ -35,13 +35,6 @@ func (res *resource) handleGet(w http.ResponseWriter, r *http.Request, p httprou
 		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
 	}
 
-	// TODO: auth check
-	if id == 0 {
-		res.logger.Debug("Zero user_id")
-		w.WriteHeader(http.StatusBadRequest)
-		return nil
-	}
-
 	tasks, err := res.service.Get(int64(id))
 
 	if err != nil {
@@ -58,16 +51,9 @@ func (res *resource) handleGet(w http.ResponseWriter, r *http.Request, p httprou
 }
 
 func (res *resource) handleGetById(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
-	user_id, err := strconv.Atoi(p.ByName("user_id"))
+	_, err := strconv.Atoi(p.ByName("user_id"))
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
-	}
-
-	// TODO: auth check
-	if user_id == 0 {
-		res.logger.Debug("Zero user_id")
-		w.WriteHeader(http.StatusBadRequest)
-		return nil
 	}
 
 	task_id, err := strconv.Atoi(p.ByName("task_id"))
@@ -98,13 +84,6 @@ func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httpro
 		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
 	}
 
-	// TODO: auth check
-	if user_id == 0 {
-		res.logger.Debug("Zero user_id")
-		w.WriteHeader(http.StatusBadRequest)
-		return nil
-	}
-
 	task_req := CreateTaskRequest{UserId: int64(user_id)}
 	err = json.NewDecoder(r.Body).Decode(&task_req)
 
@@ -124,17 +103,10 @@ func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httpro
 }
 
 func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
-	user_id, err := strconv.Atoi(p.ByName("user_id"))
+	_, err := strconv.Atoi(p.ByName("user_id"))
 
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
-	}
-
-	//TODO: auth check
-	if user_id == 0 {
-		res.logger.Debug("Zero user_id")
-		w.WriteHeader(http.StatusBadRequest)
-		return nil
 	}
 
 	task_id, err := strconv.Atoi(p.ByName("task_id"))
@@ -166,17 +138,10 @@ func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httpr
 }
 
 func (res *resource) handleDelete(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
-	user_id, err := strconv.Atoi(p.ByName("user_id"))
+	_, err := strconv.Atoi(p.ByName("user_id"))
 
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
-	}
-
-	// TODO: auth check
-	if user_id == 0 {
-		res.logger.Debug("Zero user id")
-		w.WriteHeader(http.StatusBadRequest)
-		return nil
 	}
 
 	task_id, err := strconv.Atoi(p.ByName("task_id"))

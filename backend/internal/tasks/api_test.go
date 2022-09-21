@@ -33,8 +33,6 @@ func TestApi(t *testing.T) {
 		return buf.String()
 	}
 
-	// notFound := toJson(errors.Problem{Title: "Not found", Status: http.StatusNotFound})
-
 	test_cases := []test.ApiTestCase{
 		{
 			Name:     "get",

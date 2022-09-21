@@ -71,12 +71,12 @@ func (r repository) Get(user_id int64) ([]entity.Task, error) {
 			&task.Status,
 		)
 
-		task.CreatedOn = entity.Date(task_created_on)
-		task.DueDate = entity.Date(task_due_date)
-
 		if err != nil {
 			return nil, fmt.Errorf("%w: %v", errors.ErrDb, err)
 		}
+
+		task.CreatedOn = entity.Date(task_created_on)
+		task.DueDate = entity.Date(task_due_date)
 
 		task.Labels, err = r.getLabels(task.Id)
 
@@ -109,9 +109,6 @@ func (r repository) GetById(task_id int64) (entity.Task, error) {
 		&task.Status,
 	)
 
-	task.CreatedOn = entity.Date(task_created_on)
-	task.DueDate = entity.Date(task_due_date)
-
 	if err != nil {
 		switch err {
 		case sql.ErrNoRows:
@@ -120,6 +117,9 @@ func (r repository) GetById(task_id int64) (entity.Task, error) {
 			return entity.Task{}, fmt.Errorf("%w: %v", errors.ErrDb, err)
 		}
 	}
+
+	task.CreatedOn = entity.Date(task_created_on)
+	task.DueDate = entity.Date(task_due_date)
 
 	task.Labels, err = r.getLabels(task_id)
 
@@ -133,6 +133,7 @@ func (r repository) getLabels(task_id int64) ([]entity.TaskLabel, error) {
 	label := entity.TaskLabel{}
 	labels := make([]entity.TaskLabel, 0)
 	rows, err := r.db.Query(q, task_id)
+	defer rows.Close()
 
 	if err != nil {
 		return nil, fmt.Errorf("%w: %v", errors.ErrDb, err)
