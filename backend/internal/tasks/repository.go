@@ -41,7 +41,6 @@ func (r repository) Get(user_id int64) ([]entity.Task, error) {
 	q := "SELECT id, user_id, name, description, created_on, due_date, schtirlich_humorescue, labels, cur_status FROM tasks WHERE user_id = $1;"
 
 	rows, err := r.db.Query(q, user_id)
-	defer rows.Close()
 
 	if err != nil {
 		switch err {
@@ -51,6 +50,8 @@ func (r repository) Get(user_id int64) ([]entity.Task, error) {
 			return nil, fmt.Errorf("%w: %v", errors.ErrDb, err)
 		}
 	}
+
+	defer rows.Close()
 
 	tasks := make([]entity.Task, 0)
 	task := entity.Task{}

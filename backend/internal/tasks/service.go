@@ -75,7 +75,11 @@ func (f *Labels) validate() bool {
 	}
 
 	var lbs []Label
-	json.Unmarshal([]byte(*f), &lbs)
+	err := json.Unmarshal([]byte(*f), &lbs)
+
+	if err != nil {
+		return false
+	}
 
 	for _, label := range lbs {
 		if !label.validate() {
