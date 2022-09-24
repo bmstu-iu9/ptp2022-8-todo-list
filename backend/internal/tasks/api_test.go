@@ -80,6 +80,38 @@ func TestApi(t *testing.T) {
 				Status: http.StatusNotFound,
 			}),
 		},
+		{
+			Name:     "delete not existent",
+			Method:   "DELETE",
+			Url:      "/users/1/task/2",
+			WantCode: http.StatusNotFound,
+			WantBody: toJson(errors.Problem{
+				Title:  "Not found",
+				Status: http.StatusNotFound,
+			}),
+		},
+		{
+			Name:     "update not existent",
+			Method:   "PATCH",
+			Url:      "/users/1/task/2",
+			Body:     toJson(task_examples[2]),
+			WantCode: http.StatusNotFound,
+			WantBody: toJson(errors.Problem{
+				Title:  "Not found",
+				Status: http.StatusNotFound,
+			}),
+		},
+		{
+			Name:   "get with cringe path",
+			Method: "GET",
+			Url:    "/users/1/tasks/cringe",
+			WantBody: toJson(errors.Problem{
+				Title:  "Bad request",
+				Status: http.StatusBadRequest,
+				Detail: "Bad path parameter",
+			}),
+			WantCode: http.StatusBadRequest,
+		},
 	}
 
 	test.Endpoint(t, test_cases, &mux)

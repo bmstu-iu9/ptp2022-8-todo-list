@@ -22,6 +22,10 @@ func (r *mockRepository) Get(user_id int64) ([]entity.Task, error) {
 		}
 	}
 
+	if len(res) == 0 {
+		return nil, errors.ErrNotFound
+	}
+
 	return res, nil
 }
 
@@ -94,16 +98,26 @@ func TestService(t *testing.T) {
 
 	t.Run("create", func(t *testing.T) {
 		got, err := s.Create(&CreateTaskRequest{
-			UserId:               task_examples[2].UserId,
-			Name:                 Name(task_examples[2].Name),
-			Description:          Text(task_examples[2].Description),
-			CreatedOn:            Date(task_examples[2].CreatedOn),
-			DueDate:              Date(task_examples[2].DueDate),
-			SchtirlichHumorescue: Text(task_examples[2].SchtirlichHumorescue),
-			Labels:               Labels(task_examples[2].Labels),
-			Status:               Status(task_examples[2].Status),
+			UserId:               1,
+			Name:                 "valid",
+			Description:          "valid",
+			CreatedOn:            "2000-01-01T00:00:00Z",
+			DueDate:              "2000-01-01T00:00:00Z",
+			SchtirlichHumorescue: "valid",
+			Labels:               `[]`,
+			Status:               entity.DONE,
 		})
-		want := task_examples[2]
+		want := entity.Task{
+			Id:                   2,
+			UserId:               1,
+			Name:                 "valid",
+			Description:          "valid",
+			CreatedOn:            "2000-01-01T00:00:00Z",
+			DueDate:              "2000-01-01T00:00:00Z",
+			SchtirlichHumorescue: "valid",
+			Labels:               `[]`,
+			Status:               entity.DONE,
+		}
 
 		test.IsNil(t, err)
 		test.DeepEqual(t, want, got)
@@ -131,6 +145,88 @@ func TestService(t *testing.T) {
 		test.IsNil(t, err)
 		test.DeepEqual(t, want, got)
 		_, err = s.GetById(2)
+		test.NotNil(t, err)
+	})
+
+	t.Run("get error", func(t *testing.T) {
+		_, err := s.Get(2)
+		test.NotNil(t, err)
+	})
+
+	t.Run("get by id error", func(t *testing.T) {
+		_, err := s.GetById(2)
+		test.NotNil(t, err)
+	})
+
+	t.Run("update not existent", func(t *testing.T) {
+		_, err := s.Update(&UpdateTaskRequest{
+			TaskId:               2,
+			Name:                 "valid",
+			Description:          "valid",
+			DueDate:              "2000-01-01T00:00:00Z",
+			SchtirlichHumorescue: "valid",
+			Labels:               `[]`,
+			Status:               entity.DONE,
+		})
+
+		test.NotNil(t, err)
+	})
+
+	t.Run("create invalid date", func(t *testing.T) {
+		_, err := s.Create(&CreateTaskRequest{
+			UserId:               1,
+			Name:                 "valid",
+			Description:          "valid",
+			CreatedOn:            "cringe",
+			DueDate:              "cringe",
+			SchtirlichHumorescue: "valid",
+			Labels:               `[]`,
+			Status:               entity.DONE,
+		})
+
+		test.NotNil(t, err)
+	})
+
+	t.Run("create invalid label", func(t *testing.T) {
+		_, err := s.Create(&CreateTaskRequest{
+			UserId:               1,
+			Name:                 "valid",
+			Description:          "valid",
+			CreatedOn:            "2000-01-01T00:00:00Z",
+			DueDate:              "2000-01-01T00:00:00Z",
+			SchtirlichHumorescue: "valid",
+			Labels:               `[{"text":"valid","color":"cringe"}]`,
+			Status:               entity.DONE,
+		})
+
+		test.NotNil(t, err)
+	})
+
+	t.Run("update invalid date", func(t *testing.T) {
+		_, err := s.Update(&UpdateTaskRequest{
+			TaskId:               1,
+			Name:                 "valid",
+			Description:          "valid",
+			DueDate:              "cringe",
+			SchtirlichHumorescue: "valid",
+			Labels:               `[]`,
+			Status:               entity.DONE,
+		})
+
+		test.NotNil(t, err)
+	})
+
+	t.Run("update invalid lable", func(t *testing.T) {
+		_, err := s.Update(&UpdateTaskRequest{
+			TaskId:               1,
+			Name:                 "valid",
+			Description:          "valid",
+			DueDate:              "2000-01-01T00:00:00Z",
+			SchtirlichHumorescue: "valid",
+			Labels:               `[{"text":"valid","color":"cringe"}]`,
+			Status:               entity.DONE,
+		})
+
 		test.NotNil(t, err)
 	})
 }
