@@ -1,99 +1,83 @@
 <!DOCTYPE html>
 <html lang="ru" class="w-100 h-100">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-            crossorigin="anonymous"
-        />
-        <meta name="theme-color" content="#712cf9" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <meta name="theme-color" content="#712cf9" />
+    <link rel="icon" href="../images/to-do.png" />
 
-        <title>Document</title>
-        <!-- Стили -->
-        <link rel="stylesheet" href="../scss/menu.scss" />
-        <link rel="stylesheet" href="../scss/todo.scss" />
-        <link rel="stylesheet" href="../scss/inventory.scss" />
-        <link rel="stylesheet" href="../scss/profile.scss" />
-        <link rel="stylesheet" href="../scss/shop.scss">
-        <link rel="stylesheet" href="../scss/hero.scss">
+    <title>Document</title>
+    <!-- Стили -->
+    <link rel="stylesheet" href="../scss/menu.scss" />
+    <link rel="stylesheet" href="../scss/todo.scss" />
+    <link rel="stylesheet" href="../scss/inventory.scss" />
+    <link rel="stylesheet" href="../scss/profile.scss" />
+    <link rel="stylesheet" href="../scss/shop.scss" />
+    <link rel="stylesheet" href="../scss/hero.scss" />
 
-        <!-- Utility скрипты -->
-        <script src="../js/request.ts"></script>
-        <script src="../js/config.ts"></script>
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            crossorigin="anonymous"
-        ></script>
+    <!-- Utility скрипты -->
+    <script src="../js/request.ts"></script>
+    <script src="../js/config.ts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
-        <!-- Todolist скрипты -->
-        <script defer src="../js/list/utility.ts"></script>
-        <script defer src="../js/list/task.ts"></script>
-        <script defer src="../js/list/todolist.ts"></script>
+    <!-- Todolist скрипты -->
+    <script defer src="../js/list/utility.ts"></script>
+    <script defer src="../js/list/task.ts"></script>
+    <script defer src="../js/list/todolist.ts"></script>
 
-        <!-- Inventory скрипты -->
-        <script defer src="../js/inventory/inventory.ts"></script>
-        <script defer src="../js/inventory/item.ts"></script>
+    <!-- Inventory скрипты -->
+    <script defer src="../js/inventory/inventory.ts"></script>
+    <script defer src="../js/inventory/item.ts"></script>
 
-        <!-- Profile скрипты -->
-        <script defer src="../js/profile/profile.ts"></script>
-        <script defer src="../js/profile/hero.ts"></script>
+    <!-- Profile скрипты -->
+    <script defer src="../js/profile/profile.ts"></script>
+    <script defer src="../js/profile/hero.ts"></script>
 
-        <!-- Shop скрипты -->
-        <script defer src="../js/shop/products.ts"></script>
-        <script defer src="../js/shop/shopLoad.ts"></script>
-        <script defer src="../js/shop/shopModal.ts"></script>
+    <!-- Shop скрипты -->
+    <script defer src="../js/shop/products.ts"></script>
+    <script defer src="../js/shop/shopLoad.ts"></script>
+    <script defer src="../js/shop/shopModal.ts"></script>
 
-        <!-- Скрипты `SPA` -->
-        <script defer src="../js/spa/route.ts"></script>
-        <script defer src="../js/spa/router.ts"></script>
-        <script defer src="../js/spa/index.ts"></script>
-    </head>
+    <!-- Скрипты `SPA` -->
+    <script defer src="../js/spa/route.ts"></script>
+    <script defer src="../js/spa/router.ts"></script>
+    <script defer src="../js/spa/index.ts"></script>
+  </head>
 
-    <body class="w-100 h-100">
-        <div class="menu">
-            <input id="menu__toggle" class="d-none" type="checkbox" />
-            <label class="menu__btn" for="menu__toggle">
-                <span></span>
-            </label>
-            <ul class="menu__box nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="#profile" data-link>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            fill="currentColor"
-                            class="bi bi-person"
-                            viewBox="0 0 16 16"
-                        >
-                            <path
-                                d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1
+  <body class="w-100 h-100">
+    <div class="menu">
+      <input id="menu__toggle" class="d-none" type="checkbox" />
+      <label class="menu__btn" for="menu__toggle">
+        <span></span>
+      </label>
+      <ul class="menu__box nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="#profile" data-link>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+              <path
+                d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1
                 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6
                 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289
                 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832
                 1.664h10z"
-                            />
-                        </svg>
-                        <p>Профиль</p>
-                    </a>
-                </li>
+              />
+            </svg>
+            <p>Профиль</p>
+          </a>
+        </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="#todo" data-link>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            fill="currentColor"
-                            class="bi bi-list-check"
-                            viewBox="0 0 16 16"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0
+        <li class="nav-item">
+          <a class="nav-link" href="#todo" data-link>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list-check" viewBox="0 0 16 16">
+              <path
+                fill-rule="evenodd"
+                d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0
                   1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0
                   1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0
                   1-.5-.5zM3.854 2.146a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0
@@ -103,24 +87,17 @@
                   .708 0zm0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708
                   0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1
                   .708 0z"
-                            />
-                        </svg>
-                        <p>Список дел</p>
-                    </a>
-                </li>
+              />
+            </svg>
+            <p>Список дел</p>
+          </a>
+        </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="#shop" data-link>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            fill="currentColor"
-                            class="bi bi-shop"
-                            viewBox="0 0 16 16"
-                        >
-                            <path
-                                d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609
+        <li class="nav-item">
+          <a class="nav-link" href="#shop" data-link>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-shop" viewBox="0 0 16 16">
+              <path
+                d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609
                     3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25
                     1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37
                     2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0
@@ -134,24 +111,17 @@
                     0-1H1V9a.5.5 0 0 1 .5-.5zM4 15h3v-5H4v5zm5-5a1 1 0 0 1
                     1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3zm3
                     0h-2v3h2v-3z"
-                            />
-                        </svg>
-                        <p>Магазин</p>
-                    </a>
-                </li>
+              />
+            </svg>
+            <p>Магазин</p>
+          </a>
+        </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="#inventory" data-link>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            fill="currentColor"
-                            class="bi bi-box-seam"
-                            viewBox="0 0 16 16"
-                        >
-                            <path
-                                d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846
+        <li class="nav-item">
+          <a class="nav-link" href="#inventory" data-link>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
+              <path
+                d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846
                       3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8
                       5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5
                       2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5
@@ -159,45 +129,38 @@
                       1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0
                       1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1
                       .314-.464L7.443.184z"
-                            />
-                        </svg>
-                        <p>Инвентарь</p>
-                    </a>
-                </li>
+              />
+            </svg>
+            <p>Инвентарь</p>
+          </a>
+        </li>
 
-                <li class="nav-item menu__exit">
-                    <a class="nav-link" href="#">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            fill="currentColor"
-                            class="bi bi-box-arrow-left"
-                            viewBox="0 0 16 16"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0
+        <li class="nav-item menu__exit">
+          <a class="nav-link" href="#">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+              <path
+                fill-rule="evenodd"
+                d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0
                         0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5
                         0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5
                         1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"
-                            />
-                            <path
-                                fill-rule="evenodd"
-                                d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1
+              />
+              <path
+                fill-rule="evenodd"
+                d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1
                           .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147
                           2.146a.5.5 0 0 1-.708.708l-3-3z"
-                            />
-                        </svg>
-                        <p>Выход</p>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div id="body">
-            <div class="body">
-                <h1>Загрузка.</h1>
-            </div>
-        </div>
-    </body>
+              />
+            </svg>
+            <p>Выход</p>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div id="body">
+      <div class="body">
+        <h1>Загрузка.</h1>
+      </div>
+    </div>
+  </body>
 </html>

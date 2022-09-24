@@ -8,4 +8,3 @@ type Problem struct {
 	Detail   string `json:"detail,omitempty"`
 	Instance string `json:"instance,omitempty"`
 }
-

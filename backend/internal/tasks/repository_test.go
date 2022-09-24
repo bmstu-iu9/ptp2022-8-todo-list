@@ -80,7 +80,7 @@ var task_examples = []entity.Task{
 
 func TestRepo(t *testing.T) {
 	logger := log.New()
-	db, err := db.New(logger)
+	db, err := db.NewForTest(logger)
 	if err != nil {
 		panic(err)
 	}
