@@ -236,6 +236,11 @@ paths:
       summary: Create or modify task
       tags:
         - Tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
       responses:
         '201':
           description: Created
