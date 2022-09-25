@@ -29,7 +29,7 @@ var task_examples = []entity.Task{
 		CreatedOn:            "2000-01-01T00:00:00Z",
 		DueDate:              "2000-01-01T00:00:00Z",
 		SchtirlichHumorescue: "test_humorescue_new",
-		Labels:               `[{"text":"test_name_new","color":"#ffffff"},]`,
+		Labels:               `[{"text":"test_name_new","color":"#ffffff"}]`,
 		Status:               entity.DONE,
 	},
 	{ // 2
