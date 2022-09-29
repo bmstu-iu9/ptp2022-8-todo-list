@@ -81,7 +81,7 @@ func runMigrations(db *sql.DB, logger log.Logger) error {
 
 func populateTestData(db *sql.DB, logger log.Logger) error {
 	_, err := db.Exec(`
-TRUNCATE users, items RESTART IDENTITY CASCADE;
+TRUNCATE users, items, tasks RESTART IDENTITY CASCADE;
 
 INSERT INTO users (email, nickname, password) VALUES
 ('test@example.com', 'test', 'Test123Test'),
@@ -96,7 +96,7 @@ VALUES (
 	'2000-01-01T00:00:00.000Z',  -- due_date
 	'test_humorescue',  -- schtirlich_humorescue
 	'[{"text":"test_name","color":"#000000"}]',  -- labels
-	'in progress'  -- status
+	'active'  -- status
 );
 
 INSERT INTO items (name, image_src, image_for_hero, description, price,
