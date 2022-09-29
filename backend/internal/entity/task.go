@@ -2,9 +2,9 @@ package entity
 
 // Task status enumeration
 const (
-	IN_PROGRESS = "in progress"
-	DONE        = "done"
-	OUTDATED    = "outdated"
+	ACTIVE    = "active"
+	COMPLETED = "completed"
+	ARCHIVED  = "archived"
 )
 
 // Task represents task at all layers

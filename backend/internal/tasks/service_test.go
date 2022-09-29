@@ -9,15 +9,14 @@ import (
 )
 
 type mockRepository struct {
-	items    []entity.Task
-	task_id  int64
-	label_id int64
+	items  []entity.Task
+	taskId int64
 }
 
-func (r *mockRepository) Get(user_id int64) ([]entity.Task, error) {
+func (r *mockRepository) Get(userId int64) ([]entity.Task, error) {
 	res := []entity.Task{}
 	for _, item := range r.items {
-		if item.UserId == user_id {
+		if item.UserId == userId {
 			res = append(res, item)
 		}
 	}
@@ -29,9 +28,9 @@ func (r *mockRepository) Get(user_id int64) ([]entity.Task, error) {
 	return res, nil
 }
 
-func (r *mockRepository) GetById(task_id int64) (entity.Task, error) {
+func (r *mockRepository) GetById(userId, taskId int64) (entity.Task, error) {
 	for _, item := range r.items {
-		if item.Id == task_id {
+		if item.Id == taskId {
 			return item, nil
 		}
 	}
@@ -39,9 +38,8 @@ func (r *mockRepository) GetById(task_id int64) (entity.Task, error) {
 }
 
 func (r *mockRepository) Create(task *entity.Task) error {
-	task.Id = r.task_id
-	r.task_id++
-	r.label_id += int64(len(task.Labels))
+	task.Id = r.taskId
+	r.taskId++
 	r.items = append(r.items, *task)
 	return nil
 }
@@ -61,9 +59,9 @@ func (r *mockRepository) Update(task *entity.Task) error {
 	return errors.ErrNotFound
 }
 
-func (r *mockRepository) Delete(task_id int64) error {
+func (r *mockRepository) Delete(userId, taskId int64) error {
 	for i, item := range r.items {
-		if item.Id == task_id {
+		if item.Id == taskId {
 			r.items[i] = r.items[len(r.items)-1]
 			r.items = r.items[:len(r.items)-1]
 			return nil
@@ -75,29 +73,29 @@ func (r *mockRepository) Delete(task_id int64) error {
 func TestService(t *testing.T) {
 	s := service{&mockRepository{
 		items: []entity.Task{
-			task_examples[0],
+			taskExamples[0],
 		},
-		task_id:  2,
-		label_id: 2,
+		taskId: 2,
 	}}
 
 	t.Run("get", func(t *testing.T) {
-		got, err := s.Get(1)
-		want := []entity.Task{task_examples[0]}
+		got, err := s.Get(taskExamples[0].UserId)
+		want := []entity.Task{taskExamples[0]}
 		test.IsNil(t, err)
 		test.DeepEqual(t, want, got)
 	})
 
 	t.Run("get_by_id", func(t *testing.T) {
-		got, err := s.GetById(1)
-		want := task_examples[0]
+		got, err := s.GetById(taskExamples[0].UserId, taskExamples[0].Id)
+		want := taskExamples[0]
 
 		test.IsNil(t, err)
 		test.DeepEqual(t, want, got)
 	})
 
 	t.Run("create", func(t *testing.T) {
-		got, err := s.Create(&CreateTaskRequest{
+		got, err := s.Set(&SetTaskRequest{
+			Mode:                 CREATE,
 			UserId:               1,
 			Name:                 "valid",
 			Description:          "valid",
@@ -105,7 +103,7 @@ func TestService(t *testing.T) {
 			DueDate:              "2000-01-01T00:00:00Z",
 			SchtirlichHumorescue: "valid",
 			Labels:               `[]`,
-			Status:               entity.DONE,
+			Status:               entity.COMPLETED,
 		})
 		want := entity.Task{
 			Id:                   2,
@@ -116,7 +114,7 @@ func TestService(t *testing.T) {
 			DueDate:              "2000-01-01T00:00:00Z",
 			SchtirlichHumorescue: "valid",
 			Labels:               `[]`,
-			Status:               entity.DONE,
+			Status:               entity.COMPLETED,
 		}
 
 		test.IsNil(t, err)
@@ -126,25 +124,26 @@ func TestService(t *testing.T) {
 	t.Run("update", func(t *testing.T) {
 		got, err := s.Update(&UpdateTaskRequest{
 			TaskId:               2,
-			Name:                 Name(task_examples[3].Name),
-			Description:          Text(task_examples[3].Description),
-			DueDate:              Date(task_examples[3].DueDate),
-			SchtirlichHumorescue: Text(task_examples[3].SchtirlichHumorescue),
-			Labels:               Labels(task_examples[3].Labels),
-			Status:               Status(task_examples[3].Status),
+			Name:                 Name(taskExamples[3].Name),
+			Description:          Text(taskExamples[3].Description),
+			DueDate:              Date(taskExamples[3].DueDate),
+			SchtirlichHumorescue: Text(taskExamples[3].SchtirlichHumorescue),
+			Labels:               Labels(taskExamples[3].Labels),
+			Status:               Status(taskExamples[3].Status),
 		})
-		want := task_examples[3]
+
+		want := taskExamples[3]
 
 		test.IsNil(t, err)
 		test.DeepEqual(t, want, got)
 	})
 
 	t.Run("delete", func(t *testing.T) {
-		got, err := s.Delete(2)
-		want := task_examples[3]
+		got, err := s.Delete(taskExamples[3].UserId, taskExamples[3].Id)
+		want := taskExamples[3]
 		test.IsNil(t, err)
 		test.DeepEqual(t, want, got)
-		_, err = s.GetById(2)
+		_, err = s.GetById(taskExamples[3].UserId, taskExamples[3].Id)
 		test.NotNil(t, err)
 	})
 
@@ -154,7 +153,7 @@ func TestService(t *testing.T) {
 	})
 
 	t.Run("get by id error", func(t *testing.T) {
-		_, err := s.GetById(2)
+		_, err := s.GetById(taskExamples[3].UserId, taskExamples[3].Id)
 		test.NotNil(t, err)
 	})
 
@@ -166,14 +165,15 @@ func TestService(t *testing.T) {
 			DueDate:              "2000-01-01T00:00:00Z",
 			SchtirlichHumorescue: "valid",
 			Labels:               `[]`,
-			Status:               entity.DONE,
+			Status:               entity.COMPLETED,
 		})
 
 		test.NotNil(t, err)
 	})
 
 	t.Run("create invalid date", func(t *testing.T) {
-		_, err := s.Create(&CreateTaskRequest{
+		_, err := s.Set(&SetTaskRequest{
+			Mode:                 CREATE,
 			UserId:               1,
 			Name:                 "valid",
 			Description:          "valid",
@@ -181,14 +181,15 @@ func TestService(t *testing.T) {
 			DueDate:              "cringe",
 			SchtirlichHumorescue: "valid",
 			Labels:               `[]`,
-			Status:               entity.DONE,
+			Status:               entity.COMPLETED,
 		})
 
 		test.NotNil(t, err)
 	})
 
 	t.Run("create invalid label", func(t *testing.T) {
-		_, err := s.Create(&CreateTaskRequest{
+		_, err := s.Set(&SetTaskRequest{
+			Mode:                 CREATE,
 			UserId:               1,
 			Name:                 "valid",
 			Description:          "valid",
@@ -196,7 +197,7 @@ func TestService(t *testing.T) {
 			DueDate:              "2000-01-01T00:00:00Z",
 			SchtirlichHumorescue: "valid",
 			Labels:               `[{"text":"valid","color":"cringe"}]`,
-			Status:               entity.DONE,
+			Status:               entity.COMPLETED,
 		})
 
 		test.NotNil(t, err)
@@ -210,7 +211,7 @@ func TestService(t *testing.T) {
 			DueDate:              "cringe",
 			SchtirlichHumorescue: "valid",
 			Labels:               `[]`,
-			Status:               entity.DONE,
+			Status:               entity.COMPLETED,
 		})
 
 		test.NotNil(t, err)
@@ -224,7 +225,7 @@ func TestService(t *testing.T) {
 			DueDate:              "2000-01-01T00:00:00Z",
 			SchtirlichHumorescue: "valid",
 			Labels:               `[{"text":"valid","color":"cringe"}]`,
-			Status:               entity.DONE,
+			Status:               entity.COMPLETED,
 		})
 
 		test.NotNil(t, err)

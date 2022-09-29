@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/accesslog"
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/config"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"github.com/julienschmidt/httprouter"
@@ -19,9 +19,10 @@ func RegisterHandlers(mux *httprouter.Router, service Service, logger log.Logger
 
 	mux.GET("/users/:user_id/tasks", accesslog.Log(errors.Handle(res.handleGet, res.logger), res.logger))
 	mux.GET("/users/:user_id/tasks/:task_id", accesslog.Log(errors.Handle(res.handleGetById, res.logger), res.logger))
-	mux.POST("/users/:user_id/tasks", accesslog.Log(errors.Handle(res.handlePost, res.logger), res.logger))
+	mux.PUT("/users/:user_id/tasks/:task_id", accesslog.Log(errors.Handle(res.handlePut, res.logger), res.logger))
 	mux.PATCH("/users/:user_id/tasks/:task_id", accesslog.Log(errors.Handle(res.handlePatch, res.logger), res.logger))
 	mux.DELETE("/users/:user_id/tasks/:task_id", accesslog.Log(errors.Handle(res.handleDelete, res.logger), res.logger))
+	mux.POST("/users/:user_id/tasks/:task_id/complete", accesslog.Log(errors.Handle(res.handlePost, res.logger), res.logger))
 }
 
 type resource struct {
@@ -51,17 +52,17 @@ func (res *resource) handleGet(w http.ResponseWriter, r *http.Request, p httprou
 }
 
 func (res *resource) handleGetById(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
-	_, err := strconv.Atoi(p.ByName("user_id"))
+	userId, err := strconv.Atoi(p.ByName("user_id"))
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
 	}
 
-	task_id, err := strconv.Atoi(p.ByName("task_id"))
+	taskId, err := strconv.Atoi(p.ByName("task_id"))
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
 	}
 
-	task, err := res.service.GetById(int64(task_id))
+	task, err := res.service.GetById(int64(userId), int64(taskId))
 
 	if err != nil {
 		return err
@@ -77,52 +78,77 @@ func (res *resource) handleGetById(w http.ResponseWriter, r *http.Request, p htt
 	return nil
 }
 
-func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
-	user_id, err := strconv.Atoi(p.ByName("user_id"))
+func (res *resource) handlePut(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
+	userId, err := strconv.Atoi(p.ByName("user_id"))
 
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
 	}
 
-	task_req := CreateTaskRequest{UserId: int64(user_id)}
-	err = json.NewDecoder(r.Body).Decode(&task_req)
+	taskId, err := strconv.Atoi(p.ByName("task_id"))
+
+	if err != nil {
+		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
+	}
+
+	request := SetTaskRequest{UserId: int64(userId)}
+	err = json.NewDecoder(r.Body).Decode(&request)
 
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrBodyDecode, err)
 	}
 
-	task, err := res.service.Create(&task_req)
+	_, err = res.service.GetById(int64(userId), int64(taskId))
+
+	if err != nil {
+		request.Mode = CREATE
+	} else {
+		request.Mode = REWRITE
+	}
+
+	task, err := res.service.Set(&request)
 
 	if err != nil {
 		return err
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%v/users/%v/tasks/%v", config.Get("API_SERVER"), strconv.Itoa(user_id), strconv.Itoa(int(task.Id))))
-	w.WriteHeader(http.StatusCreated)
+	switch request.Mode {
+	case CREATE:
+		w.WriteHeader(http.StatusCreated)
+	case REWRITE:
+		err = json.NewEncoder(w).Encode(&task)
+
+		if err != nil {
+			return fmt.Errorf("%w: %v", errors.ErrBodyEncode, err)
+		}
+
+		w.WriteHeader(http.StatusNoContent)
+	}
+
 	return nil
 }
 
 func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
-	_, err := strconv.Atoi(p.ByName("user_id"))
+	userId, err := strconv.Atoi(p.ByName("user_id"))
 
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
 	}
 
-	task_id, err := strconv.Atoi(p.ByName("task_id"))
+	taskId, err := strconv.Atoi(p.ByName("task_id"))
 
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
 	}
 
-	task_req := UpdateTaskRequest{TaskId: int64(task_id)}
-	err = json.NewDecoder(r.Body).Decode(&task_req)
+	request := UpdateTaskRequest{UserId: int64(userId), TaskId: int64(taskId)}
+	err = json.NewDecoder(r.Body).Decode(&request)
 
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrBodyDecode, err)
 	}
 
-	task, err := res.service.Update(&task_req)
+	task, err := res.service.Update(&request)
 
 	if err != nil {
 		return err
@@ -138,24 +164,64 @@ func (res *resource) handlePatch(w http.ResponseWriter, r *http.Request, p httpr
 }
 
 func (res *resource) handleDelete(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
-	_, err := strconv.Atoi(p.ByName("user_id"))
+	userId, err := strconv.Atoi(p.ByName("user_id"))
 
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
 	}
 
-	task_id, err := strconv.Atoi(p.ByName("task_id"))
+	taskId, err := strconv.Atoi(p.ByName("task_id"))
 
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
 	}
 
-	_, err = res.service.Delete(int64(task_id))
+	_, err = res.service.Delete(int64(userId), int64(taskId))
 
 	if err != nil {
 		return err
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+	return nil
+}
+
+func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
+	userId, err := strconv.Atoi(p.ByName("user_id"))
+
+	if err != nil {
+		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
+	}
+
+	taskId, err := strconv.Atoi(p.ByName("task_id"))
+
+	if err != nil {
+		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
+	}
+
+	task, err := res.service.GetById(int64(userId), int64(taskId))
+
+	if err != nil {
+		return err
+	}
+
+	request := UpdateTaskRequest{
+		UserId: task.UserId,
+		TaskId: task.Id,
+		Status: entity.COMPLETED,
+	}
+
+	task, err = res.service.Update(&request)
+
+	if err != nil {
+		return err
+	}
+
+	err = json.NewEncoder(w).Encode(&task)
+
+	if err != nil {
+		return fmt.Errorf("%w: %v", errors.ErrBodyEncode, err)
+	}
+
 	return nil
 }

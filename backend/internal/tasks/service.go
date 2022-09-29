@@ -9,9 +9,16 @@ import (
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/validation"
 )
 
-// CreateTaskRequest represents task creation request
-// description is optional
-type CreateTaskRequest struct {
+const (
+	CREATE = iota
+	REWRITE
+)
+
+// CreateTaskRequest represents task creation / complete update request
+// description, humorescue and labels are optional
+type SetTaskRequest struct {
+	Mode                 int64  `json:"-"`
+	TaskId               int64  `json:"task_id"`
 	UserId               int64  `json:"-"`
 	Name                 Name   `json:"name"`
 	Description          Text   `json:"description,omitempty"`
@@ -22,10 +29,11 @@ type CreateTaskRequest struct {
 	Status               Status `json:"status"`
 }
 
-// UpdateTaskRequest represents task  modify request
+// UpdateTaskRequest represents task modify request
 // all of the fields is optional
 type UpdateTaskRequest struct {
 	TaskId               int64  `json:"-"`
+	UserId               int64  `json:"-"`
 	Name                 Name   `json:"name,omitempty"`
 	Description          Text   `json:"description,omitempty"`
 	DueDate              Date   `json:"dueDate,omitempty"`
@@ -51,6 +59,11 @@ func (f *Name) validate() bool {
 	if f == nil {
 		return false
 	}
+
+	if *f == "" {
+		return true
+	}
+
 	return validation.ValidateField(string(*f), 1, 255, ".*")
 }
 
@@ -58,6 +71,11 @@ func (f *Text) validate() bool {
 	if f == nil {
 		return false
 	}
+
+	if *f == "" {
+		return true
+	}
+
 	return validation.ValidateField(string(*f), 1, 8192, ".*")
 }
 
@@ -66,12 +84,20 @@ func (f *Date) validate() bool {
 		return false
 	}
 
+	if *f == "" {
+		return true
+	}
+
 	return validation.ValidateField(string(*f), 1, 100, `^(19|20)\d\d-(0[1-9]|1[012])-(0[1-9]|[12]\d|3[01])T[0-5]\d:[0-5]\d:[0-5]\dZ$`)
 }
 
 func (f *Labels) validate() bool {
 	if f == nil {
 		return false
+	}
+
+	if *f == "" {
+		return true
 	}
 
 	var lbs []Label
@@ -110,21 +136,25 @@ func (f *Status) validate() bool {
 		return false
 	}
 
-	return validation.ValidateField(string(*f), 0, 255, "^(in progress|done|outdated)$")
+	if *f == "" {
+		return true
+	}
+
+	return validation.ValidateField(string(*f), 0, 255, "^(active|completed|archived)$")
 }
 
 // Service encapsulates usecase logic for tasks.
 type Service interface {
 	// Get returns all tasks for user with specified id
-	Get(user_id int64) ([]entity.Task, error)
+	Get(userId int64) ([]entity.Task, error)
 	// GetById returns single task with specified id
-	GetById(task_id int64) (entity.Task, error)
-	// Create saves new task
-	Create(task_data *CreateTaskRequest) (entity.Task, error)
+	GetById(userId, taskId int64) (entity.Task, error)
+	// Set creates / complete modifies existent task
+	Set(request *SetTaskRequest) (entity.Task, error)
 	// Update modifies task
-	Update(task_data *UpdateTaskRequest) (entity.Task, error)
+	Update(request *UpdateTaskRequest) (entity.Task, error)
 	// Delete removes task with specified id
-	Delete(task_id int64) (entity.Task, error)
+	Delete(userId, taskId int64) (entity.Task, error)
 }
 
 type service struct {
@@ -137,16 +167,16 @@ func NewService(r Repository) Service {
 }
 
 // Get returns all tasks for user with specified id
-func (s service) Get(user_id int64) ([]entity.Task, error) {
-	return s.r.Get(user_id)
+func (s service) Get(userId int64) ([]entity.Task, error) {
+	return s.r.Get(userId)
 }
 
 // GetById returns single task with specified id
-func (s service) GetById(task_id int64) (entity.Task, error) {
-	return s.r.GetById(task_id)
+func (s service) GetById(userId, taskId int64) (entity.Task, error) {
+	return s.r.GetById(userId, taskId)
 }
 
-func (t *CreateTaskRequest) Validate() error {
+func (t *SetTaskRequest) Validate() error {
 	if !(t.Name.validate() &&
 		t.Description.validate() &&
 		t.CreatedOn.validate() &&
@@ -159,31 +189,43 @@ func (t *CreateTaskRequest) Validate() error {
 	return nil
 }
 
-// Create creates task from task_data argument
-func (s service) Create(task_data *CreateTaskRequest) (entity.Task, error) {
-	err := task_data.Validate()
+// Set creates / complete modifies existent task
+func (s service) Set(request *SetTaskRequest) (entity.Task, error) {
+	err := request.Validate()
 
 	if err != nil {
 		return entity.Task{}, fmt.Errorf("%w: %v", errors.ErrValidation, err)
 	}
 
 	task := &entity.Task{
-		UserId:               task_data.UserId,
-		Name:                 entity.Name(task_data.Name),
-		Description:          entity.Text(task_data.Description),
-		CreatedOn:            entity.Date(task_data.CreatedOn),
-		DueDate:              entity.Date(task_data.DueDate),
-		SchtirlichHumorescue: entity.Text(task_data.SchtirlichHumorescue),
-		Labels:               entity.Labels(task_data.Labels),
-		Status:               entity.Status(task_data.Status),
+		UserId:               request.UserId,
+		Name:                 entity.Name(request.Name),
+		Description:          entity.Text(request.Description),
+		CreatedOn:            entity.Date(request.CreatedOn),
+		DueDate:              entity.Date(request.DueDate),
+		SchtirlichHumorescue: entity.Text(request.SchtirlichHumorescue),
+		Labels:               entity.Labels(request.Labels),
+		Status:               entity.Status(request.Status),
 	}
 
-	err = s.r.Create(task)
+	switch request.Mode {
+	case CREATE:
+		err = s.r.Create(task)
+	case REWRITE:
+		err = s.r.Update(task)
+	}
 
 	return *task, err
 }
 
 func (t *UpdateTaskRequest) Validate() error {
+	fmt.Println("name", t.Name.validate())
+	fmt.Println("desc", t.Description.validate())
+	fmt.Println("due", t.DueDate.validate())
+	fmt.Println("hum", t.SchtirlichHumorescue.validate())
+	fmt.Println("lbs", t.Labels.validate())
+	fmt.Println("st", t.Status.validate())
+
 	if !(t.Name.validate() &&
 		t.Description.validate() &&
 		t.DueDate.validate() &&
@@ -204,7 +246,7 @@ func (s service) Update(request *UpdateTaskRequest) (entity.Task, error) {
 		return entity.Task{}, fmt.Errorf("%w: %v", errors.ErrValidation, err)
 	}
 
-	task, err := s.r.GetById(request.TaskId)
+	task, err := s.r.GetById(request.UserId, request.TaskId)
 
 	if err != nil {
 		return entity.Task{}, err
@@ -223,7 +265,7 @@ func (s service) Update(request *UpdateTaskRequest) (entity.Task, error) {
 	task.Description = entity.Text(or(string(request.Description), string(task.Description)))
 	task.DueDate = entity.Date(or(string(request.DueDate), string(task.DueDate)))
 	task.SchtirlichHumorescue = entity.Text(or(string(request.SchtirlichHumorescue), string(task.SchtirlichHumorescue)))
-	task.Labels = entity.Labels(request.Labels)
+	task.Labels = entity.Labels(or(string(request.Labels), string(task.Labels)))
 	task.Status = entity.Status(or(string(request.Status), string(task.Status)))
 
 	err = s.r.Update(&task)
@@ -232,19 +274,19 @@ func (s service) Update(request *UpdateTaskRequest) (entity.Task, error) {
 		return entity.Task{}, err
 	}
 
-	task, err = s.r.GetById(task.Id)
+	task, err = s.r.GetById(task.UserId, task.Id)
 
 	return task, err
 }
 
 // Delete removes task with specified id
-func (s service) Delete(task_id int64) (entity.Task, error) {
-	task, err := s.r.GetById(task_id)
+func (s service) Delete(userId, taskId int64) (entity.Task, error) {
+	task, err := s.r.GetById(userId, taskId)
 	if err != nil {
 		return entity.Task{}, err
 	}
 
-	err = s.r.Delete(task_id)
+	err = s.r.Delete(userId, taskId)
 
 	return task, err
 }

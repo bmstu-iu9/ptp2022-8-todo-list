@@ -14,15 +14,15 @@ import (
 // Repository encapsulates the logic to access tasks from the data source.
 type Repository interface {
 	// Get returns all tasks for user with specified id
-	Get(user_id int64) ([]entity.Task, error)
+	Get(userId int64) ([]entity.Task, error)
 	// GetById returns single task with specified id
-	GetById(task_id int64) (entity.Task, error)
+	GetById(userId, taskId int64) (entity.Task, error)
 	// Create saves new task
-	Create(task_data *entity.Task) error
+	Create(request *entity.Task) error
 	// Update modifies task
-	Update(task_data *entity.Task) error
+	Update(request *entity.Task) error
 	// Delete removes task with specified id
-	Delete(task_id int64) error
+	Delete(userId, taskId int64) error
 }
 
 // repository persists tasks in database.
@@ -37,10 +37,10 @@ func NewRepository(db *sql.DB, logger log.Logger) Repository {
 }
 
 // Get reads all tasks with specified user id from database.
-func (r repository) Get(user_id int64) ([]entity.Task, error) {
+func (r repository) Get(userId int64) ([]entity.Task, error) {
 	q := "SELECT id, user_id, name, description, created_on, due_date, schtirlich_humorescue, labels, cur_status FROM tasks WHERE user_id = $1;"
 
-	rows, err := r.db.Query(q, user_id)
+	rows, err := r.db.Query(q, userId)
 
 	if err != nil {
 		switch err {
@@ -86,14 +86,14 @@ func (r repository) Get(user_id int64) ([]entity.Task, error) {
 }
 
 // Get reads the task with specified id from database.
-func (r repository) GetById(task_id int64) (entity.Task, error) {
-	q := "SELECT id, user_id, name, description, created_on, due_date, schtirlich_humorescue, labels, cur_status FROM tasks WHERE id = $1;"
+func (r repository) GetById(userId, taskId int64) (entity.Task, error) {
+	q := "SELECT id, user_id, name, description, created_on, due_date, schtirlich_humorescue, labels, cur_status FROM tasks WHERE id = $1 AND user_id = $2;"
 
 	task := entity.Task{}
 	var task_created_on string
 	var task_due_date string
 
-	err := r.db.QueryRow(q, task_id).Scan(
+	err := r.db.QueryRow(q, taskId, userId).Scan(
 		&task.Id,
 		&task.UserId,
 		&task.Name,
@@ -122,20 +122,20 @@ func (r repository) GetById(task_id int64) (entity.Task, error) {
 
 // Create saves a new task in repository and sets an id field of task_data argument
 // to the id of saved task.
-func (r repository) Create(task_data *entity.Task) error {
+func (r repository) Create(request *entity.Task) error {
 	q := `INSERT INTO tasks (user_id, name, description, created_on, due_date, schtirlich_humorescue, labels, cur_status) 
 	VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id;`
 
 	err := r.db.QueryRow(
 		q,
-		task_data.UserId,
-		task_data.Name,
-		task_data.Description,
-		task_data.CreatedOn,
-		task_data.DueDate,
-		task_data.SchtirlichHumorescue,
-		task_data.Labels,
-		task_data.Status).Scan(&task_data.Id)
+		request.UserId,
+		request.Name,
+		request.Description,
+		request.CreatedOn,
+		request.DueDate,
+		request.SchtirlichHumorescue,
+		request.Labels,
+		request.Status).Scan(&request.Id)
 
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrDb, err)
@@ -145,9 +145,9 @@ func (r repository) Create(task_data *entity.Task) error {
 }
 
 // Update saves changes to a task from database.
-func (r repository) Update(task_data *entity.Task) error {
-	q := "UPDATE tasks SET (name, description, due_date, schtirlich_humorescue, labels, cur_status) = ($1, $2, $3, $4, $5, $6) WHERE id = $7;"
-	_, err := r.db.Exec(q, task_data.Name, task_data.Description, task_data.DueDate, task_data.SchtirlichHumorescue, task_data.Labels, task_data.Status, task_data.Id)
+func (r repository) Update(request *entity.Task) error {
+	q := "UPDATE tasks SET (name, description, due_date, schtirlich_humorescue, labels, cur_status) = ($1, $2, $3, $4, $5, $6) WHERE id = $7 AND user_id = $8;"
+	_, err := r.db.Exec(q, request.Name, request.Description, request.DueDate, request.SchtirlichHumorescue, request.Labels, request.Status, request.Id, request.UserId)
 
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrDb, err)
@@ -157,9 +157,9 @@ func (r repository) Update(task_data *entity.Task) error {
 }
 
 // Delete removes a task with specified id from database.
-func (r repository) Delete(task_id int64) error {
-	q := "DELETE FROM tasks WHERE id = $1;"
-	_, err := r.db.Exec(q, task_id)
+func (r repository) Delete(userId, taskId int64) error {
+	q := "DELETE FROM tasks WHERE id = $1 AND user_id = $2;"
+	_, err := r.db.Exec(q, taskId, userId)
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrDb, err)
 	}
