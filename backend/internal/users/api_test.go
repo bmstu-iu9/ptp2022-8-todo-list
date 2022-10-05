@@ -88,7 +88,7 @@ func TestApi(t *testing.T) {
 			WantBody: toJson(errors.Problem{Title: "Bad request", Status: http.StatusBadRequest, Detail: "Request body parameters validation failed"}),
 			WantCode: http.StatusBadRequest},
 		{Name: "delete OK", Method: "DELETE", Url: "/users/1",
-			WantCode: 200},
+			WantCode: http.StatusNoContent},
 		{Name: "delete verify", Method: "DELETE", Url: "/users/1",
 			WantBody: notFound,
 			WantCode: http.StatusNotFound},
