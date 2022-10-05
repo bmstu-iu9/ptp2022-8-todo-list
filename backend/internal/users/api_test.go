@@ -49,8 +49,9 @@ func TestApi(t *testing.T) {
 
 	tests := []test.ApiTestCase{
 		{Name: "create OK", Method: "POST", Url: "/users",
-			Body:     `{"email": "slava@example.com", "nickname": "slavarusvarrior", "password": "sDFHgjssndbfns123"}`,
-			WantCode: http.StatusOK},
+			Body:       `{"email": "slava@example.com", "nickname": "slavarusvarrior", "password": "sDFHgjssndbfns123"}`,
+			WantCode:   http.StatusCreated,
+			WantHeader: http.Header{"Location": {"https://ptp.starovoytovai.ru/api/v1/users/2"}}},
 		{Name: "create verify", Method: "GET", Url: "/users/2",
 			WantBody: toJson(User{Id: 2, Email: "slava@example.com", Nickname: "slavarusvarrior"}),
 			WantCode: http.StatusOK},
@@ -87,7 +88,7 @@ func TestApi(t *testing.T) {
 			WantBody: toJson(errors.Problem{Title: "Bad request", Status: http.StatusBadRequest, Detail: "Request body parameters validation failed"}),
 			WantCode: http.StatusBadRequest},
 		{Name: "delete OK", Method: "DELETE", Url: "/users/1",
-			WantCode: 200},
+			WantCode: http.StatusNoContent},
 		{Name: "delete verify", Method: "DELETE", Url: "/users/1",
 			WantBody: notFound,
 			WantCode: http.StatusNotFound},
