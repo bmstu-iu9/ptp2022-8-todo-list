@@ -36,5 +36,4 @@ function onShopLoad() {
 
 try {
     onShopLoad()
-} catch (error) {
-}
+} catch (error) {}

@@ -60,7 +60,7 @@ func (repo repository) Create(user *entity.User) error {
 
 // InitUserInventory init the list of items for user with spec id.
 func (repo repository) InitUserInventory(id int64) error {
-	_, err := repo.db.Exec("INSERT INTO inventory (user_id,item_id) SELECT users.id,items.id "+
+	_, err := repo.db.Exec("INSERT INTO inventory (user_id, item_id) SELECT users.id, items.id "+
 		"FROM users INNER JOIN items ON users.id = $1 ", id)
 	return wrapSql(err)
 }
@@ -73,14 +73,8 @@ func (repo repository) CleanUserInventory(id int64) error {
 
 // Get reads the user with specified id from database.
 func (repo repository) Get(id int64) (entity.User, error) {
-	row, err := repo.db.Query("SELECT * FROM users WHERE id = $1", id)
-	if err != nil {
-		return entity.User{}, wrapSql(err)
-	}
-	defer row.Close()
 	user := entity.User{}
-	row.Next()
-	err = row.Scan(&user.Id, &user.Email, &user.Nickname, &user.Password)
+	err := repo.db.QueryRow("SELECT * FROM users WHERE id = $1", id).Scan(&user.Id, &user.Email, &user.Nickname, &user.Password)
 	return user, wrapSql(err)
 }
 

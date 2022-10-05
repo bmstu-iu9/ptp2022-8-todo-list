@@ -45,4 +45,3 @@ func New() Logger {
 		log: log.New(os.Stdout, "", log.Ldate|log.Ltime),
 	}
 }
-

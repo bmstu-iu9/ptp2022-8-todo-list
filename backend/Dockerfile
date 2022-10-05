@@ -19,6 +19,9 @@ RUN --mount=target=. \
     --mount=type=cache,target=/root/.cache/go-build \
     mkdir /out && go test -v -coverprofile=/out/cover.out ./...
 
+FROM scratch AS coverage
+COPY --from=unit-test /out/cover.out /cover.out
+
 FROM golangci/golangci-lint:v1.43-alpine AS lint-base
 
 FROM base AS lint
@@ -28,9 +31,6 @@ RUN --mount=target=. \
     --mount=type=cache,target=/root/.cache/go-build \
     --mount=type=cache,target=/root/.cache/golangci-lint \
     golangci-lint run --timeout 10m0s ./...
-
-FROM scratch AS unit-test-coverage
-COPY --from=unit-test /out/cover.out /cover.out
 
 FROM golang:1.18-alpine
 COPY --from=build /out/slavatidika /

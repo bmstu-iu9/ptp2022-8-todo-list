@@ -77,28 +77,6 @@ func TestCRUD(t *testing.T) {
 			IsOK:  false,
 		},
 		{
-			Name: "create OK",
-			Input: CreateTestCase{
-				&CreateUserRequest{
-					Email:    "stewkk@example.com",
-					Nickname: "stewkk",
-					Password: "oadfahdks",
-				},
-			},
-			IsOK: true,
-			Want: User{
-				Id:       6,
-				Email:    "stewkk@example.com",
-				Nickname: "stewkk",
-			},
-		},
-		{
-			Name:  "create validate",
-			Input: GetTestCase{6},
-			Want:  User{6, "stewkk@example.com", "stewkk"},
-			IsOK:  true,
-		},
-		{
 			Name: "create validate error",
 			Input: CreateTestCase{
 				&CreateUserRequest{

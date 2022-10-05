@@ -33,8 +33,8 @@ func TestApi(t *testing.T) {
 			WantCode: http.StatusTeapot},
 		{Name: "Ping wrong method", Method: "POST", Url: "/ping", Body: "{}",
 			WantCode: http.StatusMethodNotAllowed, WantBody: toJson(errors.Problem{
-				Title:    "Method not allowed",
-				Status:   http.StatusMethodNotAllowed,
+				Title:  "Method not allowed",
+				Status: http.StatusMethodNotAllowed,
 			})},
 	}
 

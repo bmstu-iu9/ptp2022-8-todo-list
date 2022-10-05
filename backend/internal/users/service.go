@@ -71,7 +71,7 @@ func newUser(entity *entity.User) User {
 	}
 }
 
-// NewUser represents the data for creating new User.
+// CreateUserRequest represents the data for creating new User.
 type CreateUserRequest struct {
 	Email    Email    `json:"email"`
 	Nickname Nickname `json:"nickname"`
@@ -174,7 +174,7 @@ func (s service) Update(id int64, input *UpdateUserRequest) (User, error) {
 	}
 
 	if Password(entityUser.Password) != input.CurrentPassword {
-		return User{}, errors.ErrAuth
+		return User{}, errors.ErrAuthentication
 	}
 
 	if input.Email != nil {

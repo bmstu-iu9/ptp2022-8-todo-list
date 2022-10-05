@@ -45,7 +45,7 @@ func TestApi(t *testing.T) {
 	}
 
 	notFound := toJson(errors.Problem{Title: "Not found", Status: http.StatusNotFound})
-	forbidden := toJson(errors.Problem{Title: "Forbidden", Status: http.StatusForbidden, Detail: "Wrong login or password"})
+	unauthorized := toJson(errors.Problem{Title: "Unauthorized", Status: http.StatusUnauthorized, Detail: "Missing or wrong credentials"})
 
 	tests := []test.ApiTestCase{
 		{Name: "create OK", Method: "POST", Url: "/users",
@@ -79,8 +79,8 @@ func TestApi(t *testing.T) {
 			WantCode: http.StatusNotFound},
 		{Name: "modify current password error", Method: "PATCH", Url: "/users/1",
 			Body:     `{"email": "test@example.com", "currentPassword": "test12test"}`,
-			WantBody: forbidden,
-			WantCode: http.StatusForbidden},
+			WantBody: unauthorized,
+			WantCode: http.StatusUnauthorized},
 		{Name: "modify verify", Method: "GET", Url: "/users/1",
 			WantCode: http.StatusOK, WantBody: toJson(User{Id: 1, Email: "test@example.com", Nickname: "geogreck"})},
 		{Name: "modify input error", Method: "PATCH", Url: "/users/1",
@@ -88,7 +88,7 @@ func TestApi(t *testing.T) {
 			WantBody: toJson(errors.Problem{Title: "Bad request", Status: http.StatusBadRequest, Detail: "Request body parameters validation failed"}),
 			WantCode: http.StatusBadRequest},
 		{Name: "delete OK", Method: "DELETE", Url: "/users/1",
-			WantCode: http.StatusNoContent},
+			WantCode: 200},
 		{Name: "delete verify", Method: "DELETE", Url: "/users/1",
 			WantBody: notFound,
 			WantCode: http.StatusNotFound},

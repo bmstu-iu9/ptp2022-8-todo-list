@@ -60,7 +60,7 @@ func makeStringForSql(filterParams []string) string {
 
 // GetAll reads all items from database.
 func (repo repository) GetAll(userId int, filters ItemFilter) ([]entity.Item, error) {
-	rows, err := repo.db.Query(`SELECT items.id, name, image_src, image_for_hero, 
+	rows, err := repo.db.Query(`SELECT items.id, name, image_src, image_for_hero,
           description, price, item_category, item_rarity,armor,damage, inventory.item_state 
           FROM items INNER JOIN inventory ON item_rarity IN 
           (`+makeStringForSql(filters.RarityFilter)+`) AND item_category IN   
@@ -69,6 +69,7 @@ func (repo repository) GetAll(userId int, filters ItemFilter) ([]entity.Item, er
 	if err != nil {
 		return nil, wrapSql(err)
 	}
+	defer rows.Close()
 	items := make([]entity.Item, 0)
 	curItem := entity.Item{}
 	for rows.Next() {
@@ -88,16 +89,11 @@ func (repo repository) GetAll(userId int, filters ItemFilter) ([]entity.Item, er
 
 // GetOne reads the item with specified id owned by the user with the specified id from database.
 func (repo repository) GetOne(userId, itemId int) (entity.Item, error) {
-	row, err := repo.db.Query("SELECT items.id, name, image_src, image_for_hero,"+
+	curItem := entity.Item{}
+	err := repo.db.QueryRow("SELECT items.id, name, image_src, image_for_hero,"+
 		" description, price, item_category, item_rarity,armor,damage, inventory.item_state FROM items INNER JOIN "+
 		"inventory ON items.id = $1 AND inventory.item_id = $2 AND inventory.user_id = $3",
-		itemId, itemId, userId)
-	if err != nil {
-		return entity.Item{}, wrapSql(err)
-	}
-	row.Next()
-	curItem := entity.Item{}
-	err = row.Scan(&curItem.Id, &curItem.Name, &curItem.ImageSrc, &curItem.ImageForHero, &curItem.Description,
+		itemId, itemId, userId).Scan(&curItem.Id, &curItem.Name, &curItem.ImageSrc, &curItem.ImageForHero, &curItem.Description,
 		&curItem.Price, &curItem.Category, &curItem.Rarity, &curItem.Armor, &curItem.Damage, &curItem.State)
 	return curItem, wrapSql(err)
 }

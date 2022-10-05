@@ -8,7 +8,14 @@ class Task {
     private id: number
     private status: Status
 
-    constructor(inId: number, inName: string, inDesc?: string, inDueDate?: string, inLabels?: Label[], created: boolean = true) {
+    constructor(
+        inId: number,
+        inName: string,
+        inDesc?: string,
+        inDueDate?: string,
+        inLabels?: Label[],
+        created: boolean = true
+    ) {
         this.name = inName
         this.createdOn = new Date()
         this.desc = inDesc ? inDesc : ''
@@ -24,7 +31,7 @@ class Task {
                 createdOn: this.createdOn,
                 dueDate: this.dueDate,
                 labels: this.labels,
-                status: this.status
+                status: this.status,
             }
             sendRequest('POST', server + '/tasks', JSON.stringify(tsk))
         }
@@ -38,13 +45,17 @@ class Task {
             })
         }
         let str: string
-        str = `<li class="${this.labels.length !== 0 ? 'pb-0 ' : ''}list-group-item id=${this.id}" ${this.status === 'archived' ? 'style="background-color: #e9ecef"' : ''}> 
+        str = `<li class="${this.labels.length !== 0 ? 'pb-0 ' : ''}list-group-item id=${this.id}" ${
+            this.status === 'archived' ? 'style="background-color: #e9ecef"' : ''
+        }> 
                     <div>
-                    <input class="form-check-input me-2" type="checkbox" value="1" ${this.status === 'completed' ? 'checked' : ''
-                } ${this.status === 'archived' ? 'disabled' : ''} id="${this.id}">
+                    <input class="form-check-input me-2" type="checkbox" value="1" ${
+                        this.status === 'completed' ? 'checked' : ''
+                    } ${this.status === 'archived' ? 'disabled' : ''} id="${this.id}">
                     <a class = "name__openModal">
-                    <strong ${this.status === 'completed' ? 'style="text-decoration: line-through"' : ''}>${this.name
-            }</strong></a>
+                    <strong ${this.status === 'completed' ? 'style="text-decoration: line-through"' : ''}>${
+            this.name
+        }</strong></a>
 
                     <a title="У задачи есть прикрепленный файл">
                         <svg xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 24 24" class="bi bi-paperclip">
@@ -54,28 +65,34 @@ class Task {
                         </g>
                         </svg>
                     </a>
-                    ${this.desc !== '' ? `
+                    ${
+                        this.desc !== ''
+                            ? `
                     <a title="У задачи есть описание">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-chat" viewBox="0 0 16 16">
                         <path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"></path>
                         </svg>
                     </a>
                     `
-                : ''}
+                            : ''
+                    }
                     
 
-                    ${this.dueDate ? `
+                    ${
+                        this.dueDate
+                            ? `
                     <div class="todo__time d-inline">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="${this.dueDate && this.dueDate.getTime() >= new Date().getTime()
-                    ? 'todo__non-urgent'
-                    : 'todo__important'
-                } bi bi-clock-fill" viewBox="0 0 16 16">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="${
+                            this.dueDate && this.dueDate.getTime() >= new Date().getTime()
+                                ? 'todo__non-urgent'
+                                : 'todo__important'
+                        } bi bi-clock-fill" viewBox="0 0 16 16">
                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"></path>
                         </svg>
                         <span>${formatDate(this.dueDate)}</span>
                     </div>`
-                : ''
-            }
+                            : ''
+                    }
                     ${labelStr}
 
                     <div class="d-flex flex-row justify-content-end">
@@ -174,7 +191,7 @@ class Task {
             createdOn: this.createdOn,
             dueDate: this.dueDate,
             labels: this.labels,
-            status: this.status
+            status: this.status,
         }
         sendRequest('PUT', server + `/tasks/${this.id}`, JSON.stringify(tsk))
     }
