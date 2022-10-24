@@ -25,7 +25,7 @@ func TestRepo(t *testing.T) {
 			Id:       1,
 			Email:    "test@example.com",
 			Nickname: "test",
-			Password: "Test123Test",
+			Password: "bd73d8db35a186a62c081da14526866c",
 		}
 
 		test.IsNil(t, err)
@@ -39,7 +39,7 @@ func TestRepo(t *testing.T) {
 	}
 
 	t.Run("create", func(t *testing.T) {
-		err = repo.Create(user)
+		err = repo.Create(user, "link")
 
 		test.IsNil(t, err)
 	})

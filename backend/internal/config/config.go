@@ -13,6 +13,9 @@ var config = map[string]string{
 	"DB_PASSWORD":  "asdwasd4545",
 	"DB_SSL_MODE":  "disable",
 	"RUNTIME_MODE": "debug",
+	"EMAIL_HOST":      "smtp.gmail.com",
+	"EMAIL_SENDER":    "slavatidika@gmail.com",
+	"EMAIL_PASSWORD":  "ojlakqwiiuvknvcx",
 }
 
 func init() {

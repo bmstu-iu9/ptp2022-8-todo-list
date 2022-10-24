@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/auth"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/items"
 	"net/http"
 	"os"
@@ -28,6 +29,10 @@ func main() {
 	users.RegisterHandlers(
 		mux,
 		users.NewService(users.NewRepository(db, logger)),
+		logger)
+	auth.RegisterHandlers(
+		mux,
+		auth.NewService(auth.NewRepository(db, logger)),
 		logger)
 	items.RegisterHandlers(
 		mux,

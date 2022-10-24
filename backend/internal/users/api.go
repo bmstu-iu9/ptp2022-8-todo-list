@@ -18,6 +18,8 @@ func RegisterHandlers(mux *httprouter.Router, service Service, logger log.Logger
 	res := resource{service, logger}
 
 	mux.POST("/users", accesslog.Log(errors.Handle(res.handlePost, logger), logger))
+	// TODO неидеоматичный endpoint
+	mux.GET("/activate/:link", accesslog.Log(errors.Handle(res.handleActivate, logger), logger))
 	mux.GET("/users/:id", accesslog.Log(errors.Handle(res.handleGet, logger), logger))
 	mux.DELETE("/users/:id", accesslog.Log(errors.Handle(res.handleDelete, logger), logger))
 	mux.PATCH("/users/:id", accesslog.Log(errors.Handle(res.handlePatch, logger), logger))
@@ -58,6 +60,17 @@ func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httpro
 	}
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Location", fmt.Sprintf("%v/users/%v", config.Get("API_SERVER"), strconv.FormatInt(int64(user.Id), 10)))
+	return nil
+}
+
+// TODO посмотреть
+func (res *resource) handleActivate(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
+	activationLink := p.ByName("link")
+	err := res.service.Activate(activationLink)
+	if err != nil {
+		return err
+	}
+	http.Redirect(w, r, config.Get("API_SERVER_TEST")+"/login", http.StatusSeeOther)
 	return nil
 }
 

@@ -14,13 +14,17 @@ import (
 // Repository encapsulates the logic to access users from the data source.
 type Repository interface {
 	// Create saves new user in storage.
-	Create(user *entity.User) error
+	Create(user *entity.User, activationLink string) error
 	// Get returns User with specified id.
 	Get(id int64) (entity.User, error)
 	// Delete removes User with specified id.
 	Delete(id int64) error
 	// Update modifies User.
 	Update(user *entity.User) error
+	// TODO: docstring
+	CheckActivationLink(activationLink string) error
+	// TODO: docstring
+	UpdateActivationStatus(activationLink string) error
 	// InitUserInventory init the list of items for user with spec id.
 	InitUserInventory(id int64) error
 	// CleanUserInventory deletes the list of items for user with spec id.
@@ -51,9 +55,9 @@ func NewRepository(db *sql.DB, logger log.Logger) Repository {
 
 // Create saves a new user in repository and sets an id field of user argument
 // to the id of saved user.
-func (repo repository) Create(user *entity.User) error {
-	err := repo.db.QueryRow("INSERT INTO users(email, nickname, password)"+
-		"VALUES ($1, $2, $3) RETURNING id", user.Email, user.Nickname, user.Password).
+func (repo repository) Create(user *entity.User, activationLink string) error {
+	err := repo.db.QueryRow("INSERT INTO users(email, nickname, password,activation_link)"+
+		"VALUES ($1, $2, $3,$4) RETURNING id", user.Email, user.Nickname, user.Password, activationLink).
 		Scan(&user.Id)
 	return wrapSql(err)
 }
@@ -73,8 +77,13 @@ func (repo repository) CleanUserInventory(id int64) error {
 
 // Get reads the user with specified id from database.
 func (repo repository) Get(id int64) (entity.User, error) {
+	row, err := repo.db.Query("SELECT id,email,nickname,password FROM users WHERE id = $1", id)
+	if err != nil {
+		return entity.User{}, wrapSql(err)
+	}
+	defer row.Close()
 	user := entity.User{}
-	err := repo.db.QueryRow("SELECT * FROM users WHERE id = $1", id).Scan(&user.Id, &user.Email, &user.Nickname, &user.Password)
+	err = repo.db.QueryRow("SELECT * FROM users WHERE id = $1", id).Scan(&user.Id, &user.Email, &user.Nickname, &user.Password)
 	return user, wrapSql(err)
 }
 
@@ -89,4 +98,19 @@ func (repo repository) Update(user *entity.User) error {
 	_, err := repo.db.Exec("UPDATE users SET email = $1, nickname = $2,"+
 		"password = $3 WHERE id = $4", user.Email, user.Nickname, user.Password, user.Id)
 	return wrapSql(err)
+}
+
+func (repo repository) CheckActivationLink(activationLink string) error {
+	row, err := repo.db.Query("SELECT (activation_link) FROM users WHERE activation_link=$1", activationLink)
+	if err != nil {
+		return wrapSql(err)
+	}
+	row.Next()
+	err = row.Scan(&activationLink)
+	return wrapSql(err)
+}
+
+func (repo repository) UpdateActivationStatus(activationLink string) error {
+	_, err := repo.db.Exec("UPDATE users SET is_activated = 'true' WHERE activation_link=$1", activationLink)
+	return err
 }

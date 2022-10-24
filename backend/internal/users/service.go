@@ -1,17 +1,23 @@
 package users
 
 import (
+	"fmt"
+	"net/smtp"
+
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/config"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/validation"
+	"github.com/google/uuid"
 )
 
 // Service encapsulates usecase logic for users.
 type Service interface {
-	Get(id int64) (User, error)
-	Delete(id int64) (User, error)
-	Create(input *CreateUserRequest) (User, error)
-	Update(id int64, input *UpdateUserRequest) (User, error)
+	Get(id int64) (entity.UserDto, error)
+	Delete(id int64) (entity.UserDto, error)
+	Create(input *CreateUserRequest) (entity.UserDto, error)
+	Update(id int64, input *UpdateUserRequest) (entity.UserDto, error)
+	Activate(activationLink string) error
 }
 
 // User represents the data about an API user.
@@ -113,68 +119,72 @@ func NewService(repo Repository) Service {
 }
 
 // Get returns User with specified id.
-func (s service) Get(id int64) (User, error) {
+func (s service) Get(id int64) (entity.UserDto, error) {
 	user, err := s.repo.Get(id)
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
-	return newUser(&user), nil
+	return entity.NewUserDto(user), nil
 }
 
 // Delete removes User with specified id.
-func (s service) Delete(id int64) (User, error) {
+func (s service) Delete(id int64) (entity.UserDto, error) {
 	user, err := s.repo.Get(id)
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
 	err = s.repo.Delete(id)
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
 	err = s.repo.CleanUserInventory(id)
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
-	return newUser(&user), nil
+	return entity.NewUserDto(user), nil
 }
 
 // Create creates User from input data.
-func (s service) Create(input *CreateUserRequest) (User, error) {
+func (s service) Create(input *CreateUserRequest) (entity.UserDto, error) {
 	err := input.validate()
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
-
-	entityUser := &entity.User{
+	activationLink, _ := uuid.NewUUID()
+	entityUser := entity.User{
 		Email:    entity.Email(input.Email),
 		Nickname: entity.Nickname(input.Nickname),
-		Password: entity.Password(input.Password),
+		Password: entity.Password(input.Password), // TODO: хеширование
 	}
-	err = s.repo.Create(entityUser)
+	err = s.repo.Create(&entityUser, activationLink.String())
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
+	}
+	err = sendActivationMail(entityUser.Email, activationLink.String())
+	if err != nil {
+		return entity.UserDto{}, err
 	}
 	err = s.repo.InitUserInventory(entityUser.Id)
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
-	return newUser(entityUser), nil
+	return entity.NewUserDto(entityUser), nil
 }
 
 // Update modifies User with given id.
-func (s service) Update(id int64, input *UpdateUserRequest) (User, error) {
+func (s service) Update(id int64, input *UpdateUserRequest) (entity.UserDto, error) {
 	err := input.validate()
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
 
 	entityUser, err := s.repo.Get(id)
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
 
 	if Password(entityUser.Password) != input.CurrentPassword {
-		return User{}, errors.ErrAuthentication
+		return entity.UserDto{}, errors.ErrAuthentication
 	}
 
 	if input.Email != nil {
@@ -188,7 +198,38 @@ func (s service) Update(id int64, input *UpdateUserRequest) (User, error) {
 	}
 	err = s.repo.Update(&entityUser)
 	if err != nil {
-		return User{}, nil
+		return entity.UserDto{}, nil
 	}
-	return newUser(&entityUser), nil
+	return entity.NewUserDto(entityUser), nil
+}
+
+func (s service) Activate(activationLink string) error {
+	err := s.repo.CheckActivationLink(activationLink)
+	if err != nil {
+		return err
+	}
+	err = s.repo.UpdateActivationStatus(activationLink)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func sendActivationMail(email entity.Email, activationLink string) error {
+	link := config.Get("API_SERVER_TEST") + "/activate/" + activationLink
+	auth := smtp.PlainAuth("", "slavatidika@gmail.com", "ojlakqwiiuvknvcx",
+		"smtp.gmail.com")
+	subject := "Subject: Activate your account!\n"
+	mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
+	body := fmt.Sprintf("<html><body><div><h1>For activation your account click the link below</h1>"+
+		"<a href='%s'>%s</a></div></body></html>", link, link)
+	to := "To: " + string(email) + "\n"
+	fmt.Println(to)
+	msg := []byte(subject + to + mime + body)
+	err := smtp.SendMail("smtp.gmail.com: 587", auth, "slavatidika@gmail.com",
+		[]string{string(email)}, msg)
+	if err != nil {
+		return err
+	}
+	return nil
 }

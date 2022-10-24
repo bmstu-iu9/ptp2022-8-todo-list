@@ -11,7 +11,7 @@ import (
 type CRUDTestCase struct {
 	Name  string
 	Input interface{}
-	Want  User
+	Want  entity.UserDto
 	IsOK  bool
 }
 
@@ -55,25 +55,25 @@ func TestCRUD(t *testing.T) {
 		{
 			Name:  "get OK",
 			Input: GetTestCase{0},
-			Want:  User{0, "slava@example.com", "slavaruswarrior"},
+			Want:  entity.UserDto{Email: "slava@example.com", Nickname: "slavaruswarrior"},
 			IsOK:  true,
 		},
 		{
 			Name:  "get OK",
 			Input: GetTestCase{5},
-			Want:  User{5, "geogreck@example.com", "geogreck"},
+			Want:  entity.UserDto{Id: 5, Email: "geogreck@example.com", Nickname: "geogreck"},
 			IsOK:  true,
 		},
 		{
 			Name:  "get negative id",
 			Input: GetTestCase{-10},
-			Want:  User{},
+			Want:  entity.UserDto{},
 			IsOK:  false,
 		},
 		{
 			Name:  "get non-existing id",
 			Input: GetTestCase{4},
-			Want:  User{},
+			Want:  entity.UserDto{},
 			IsOK:  false,
 		},
 		{
@@ -86,7 +86,7 @@ func TestCRUD(t *testing.T) {
 				},
 			},
 			IsOK: true,
-			Want: User{
+			Want: entity.UserDto{
 				Id:       6,
 				Email:    "stewkk@example.com",
 				Nickname: "stewkk",
@@ -95,7 +95,7 @@ func TestCRUD(t *testing.T) {
 		{
 			Name:  "create validate",
 			Input: GetTestCase{6},
-			Want:  User{6, "stewkk@example.com", "stewkk"},
+			Want:  entity.UserDto{Id: 6, Email: "stewkk@example.com", Nickname: "stewkk"},
 			IsOK:  true,
 		},
 		{
@@ -108,36 +108,48 @@ func TestCRUD(t *testing.T) {
 				},
 			},
 			IsOK: false,
-			Want: User{},
+			Want: entity.UserDto{},
 		},
 		{
 			Name:  "create validate",
 			Input: GetTestCase{7},
-			Want:  User{},
+			Want:  entity.UserDto{},
 			IsOK:  false,
 		},
 		{
 			Name:  "delete OK",
 			Input: DeleteTestCase{5},
-			Want:  User{5, "geogreck@example.com", "geogreck"},
+			Want:  entity.UserDto{Id: 5, Email: "geogreck@example.com", Nickname: "geogreck"},
 			IsOK:  true,
 		},
 		{
 			Name:  "delete validate",
 			Input: GetTestCase{5},
-			Want:  User{},
+			Want:  entity.UserDto{},
+			IsOK:  false,
+		},
+		{
+			Name:  "delete OK",
+			Input: DeleteTestCase{5},
+			Want:  entity.UserDto{5, "geogreck@example.com", "geogreck"},
+			IsOK:  true,
+		},
+		{
+			Name:  "delete validate",
+			Input: GetTestCase{5},
+			Want:  entity.UserDto{},
 			IsOK:  false,
 		},
 		{
 			Name:  "delete negative id",
 			Input: DeleteTestCase{-123},
-			Want:  User{},
+			Want:  entity.UserDto{},
 			IsOK:  false,
 		},
 		{
 			Name:  "delete non-existing id",
 			Input: DeleteTestCase{123},
-			Want:  User{},
+			Want:  entity.UserDto{},
 			IsOK:  false,
 		},
 		{
@@ -149,7 +161,7 @@ func TestCRUD(t *testing.T) {
 					CurrentPassword: "wasdqwertytest",
 				},
 			},
-			Want: User{
+			Want: entity.UserDto{
 				Id:       0,
 				Email:    "test@example.com",
 				Nickname: "slavaruswarrior",
@@ -159,7 +171,7 @@ func TestCRUD(t *testing.T) {
 		{
 			Name:  "update validate",
 			Input: GetTestCase{0},
-			Want: User{
+			Want: entity.UserDto{
 				Id:       0,
 				Email:    "test@example.com",
 				Nickname: "slavaruswarrior",
@@ -175,7 +187,7 @@ func TestCRUD(t *testing.T) {
 					CurrentPassword: "wasdqwertytest",
 				},
 			},
-			Want: User{
+			Want: entity.UserDto{
 				Id:       0,
 				Email:    "test@example.com",
 				Nickname: "slavaruswarrior",
@@ -191,7 +203,7 @@ func TestCRUD(t *testing.T) {
 					CurrentPassword: "test321test",
 				},
 			},
-			Want: User{
+			Want: entity.UserDto{
 				Id:       0,
 				Email:    "test@example.com",
 				Nickname: "example",
@@ -206,7 +218,7 @@ func TestCRUD(t *testing.T) {
 					CurrentPassword: "test321test",
 				},
 			},
-			Want: User{
+			Want: entity.UserDto{
 				Id:       0,
 				Email:    "test@example.com",
 				Nickname: "example",
@@ -222,7 +234,7 @@ func TestCRUD(t *testing.T) {
 					CurrentPassword: "wrongPassword",
 				},
 			},
-			Want: User{},
+			Want: entity.UserDto{},
 			IsOK: false,
 		},
 		{
@@ -234,13 +246,13 @@ func TestCRUD(t *testing.T) {
 					CurrentPassword: "test321test",
 				},
 			},
-			Want: User{},
+			Want: entity.UserDto{},
 			IsOK: false,
 		},
 		{
 			Name:  "update validate",
 			Input: GetTestCase{0},
-			Want: User{
+			Want: entity.UserDto{
 				Id:       0,
 				Email:    "test@example.com",
 				Nickname: "example",
@@ -252,7 +264,7 @@ func TestCRUD(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.Name, func(t *testing.T) {
 			var (
-				got User
+				got entity.UserDto
 				err error
 			)
 			switch tc.Input.(type) {
@@ -282,6 +294,14 @@ type mockRepository struct {
 	id    int64
 }
 
+func (repo *mockRepository) CheckActivationLink(activationLink string) error {
+	return nil
+}
+
+func (repo *mockRepository) UpdateActivationStatus(activationLink string) error {
+	return nil
+}
+
 func (repo *mockRepository) InitUserInventory(id int64) error {
 	return nil
 }
@@ -290,7 +310,7 @@ func (repo *mockRepository) CleanUserInventory(id int64) error {
 	return nil
 }
 
-func (repo *mockRepository) Create(user *entity.User) error {
+func (repo *mockRepository) Create(user *entity.User, activationLink string) error {
 	user.Id = repo.id
 	repo.id++
 	repo.items = append(repo.items, *user)
