@@ -6,7 +6,7 @@
                 ['shop', new Route('shop', 'shop.html', 'Магазин', onShopLoad)],
                 ['profile', new Route('profile', 'profile_page.html', 'Профиль', onProfileLoad)],
                 ['inventory', new Route('inventory', 'inventory.html', 'Инвентарь', onInventoryLoad)],
-            ]),
+            ])
         )
     }
     init()

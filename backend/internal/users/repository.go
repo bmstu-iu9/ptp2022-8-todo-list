@@ -83,8 +83,7 @@ func (repo repository) Get(id int64) (entity.User, error) {
 	}
 	defer row.Close()
 	user := entity.User{}
-	row.Next()
-	err = row.Scan(&user.Id, &user.Email, &user.Nickname, &user.Password)
+	err = repo.db.QueryRow("SELECT * FROM users WHERE id = $1", id).Scan(&user.Id, &user.Email, &user.Nickname, &user.Password)
 	return user, wrapSql(err)
 }
 

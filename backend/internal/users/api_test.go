@@ -51,7 +51,7 @@ func TestApi(t *testing.T) {
 	}
 
 	notFound := toJson(errors.Problem{Title: "Not found", Status: http.StatusNotFound})
-	forbidden := toJson(errors.Problem{Title: "Forbidden", Status: http.StatusForbidden, Detail: "Wrong login or password"})
+	unauthorized := toJson(errors.Problem{Title: "Unauthorized", Status: http.StatusUnauthorized, Detail: "Missing or wrong credentials"})
 
 	tests := []test.ApiTestCase{
 		{Name: "create OK", Method: "POST", Url: "/users",
@@ -94,8 +94,8 @@ func TestApi(t *testing.T) {
 		{Name: "modify current password error", Method: "PATCH", Url: "/users/1",
 			Body:     `{"email": "test@example.com", "currentPassword": "test12test"}`,
 			Header:   http.Header{"Authorization": []string{GenerateBearerAccessToken("geogreck@example.com", 1)}},
-			WantBody: forbidden,
-			WantCode: http.StatusForbidden},
+			WantBody: unauthorized,
+			WantCode: http.StatusUnauthorized},
 		{Name: "modify verify", Method: "GET", Url: "/users/1",
 			Header:   http.Header{"Authorization": []string{GenerateBearerAccessToken("geogreck@example.com", 1)}},
 			WantCode: http.StatusOK, WantBody: toJson(entity.UserDto{Id: 1, Email: "test@example.com", Nickname: "geogreck"})},

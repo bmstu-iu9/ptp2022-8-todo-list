@@ -26,6 +26,7 @@ func init() {
 	}
 }
 
+// Get returns configuration parameter named variable.
 func Get(variable string) string {
 	return config[variable]
 }
