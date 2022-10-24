@@ -129,6 +129,18 @@ func TestCRUD(t *testing.T) {
 			IsOK:  false,
 		},
 		{
+			Name:  "delete OK",
+			Input: DeleteTestCase{5},
+			Want:  entity.UserDto{5, "geogreck@example.com", "geogreck"},
+			IsOK:  true,
+		},
+		{
+			Name:  "delete validate",
+			Input: GetTestCase{5},
+			Want:  entity.UserDto{},
+			IsOK:  false,
+		},
+		{
 			Name:  "delete negative id",
 			Input: DeleteTestCase{-123},
 			Want:  entity.UserDto{},
@@ -291,13 +303,11 @@ func (repo *mockRepository) UpdateActivationStatus(activationLink string) error 
 }
 
 func (repo *mockRepository) InitUserInventory(id int64) error {
-	//TODO implement me
-	panic("implement me")
+	return nil
 }
 
 func (repo *mockRepository) CleanUserInventory(id int64) error {
-	//TODO implement me
-	panic("implement me")
+	return nil
 }
 
 func (repo *mockRepository) Create(user *entity.User, activationLink string) error {
