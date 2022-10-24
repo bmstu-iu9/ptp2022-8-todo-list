@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Славатидика API
   description: Gamified TODO-list API.
-  version: 0.5.0
+  version: 1.0.0
   contact:
     name: Starovoytov Alexandr
     url: https://t.me/stewkk
@@ -48,6 +48,10 @@ paths:
                 - properties:
                     password:
                       $ref: '#/components/schemas/Password'
+                - properties:
+                    idempotencyToken:
+                      type: string
+                      format: uuid
       tags:
         - Users
       responses:
@@ -67,7 +71,7 @@ paths:
   /users/{id}:
     parameters:
       - schema:
-          type: integer
+          $ref: '#/components/schemas/Id'
         name: id
         in: path
         required: true
@@ -136,9 +140,9 @@ paths:
           $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/UnexpectedError'
-  /tokens:
+  /auth/login:
     post:
-      summary: Create auth token
+      summary: Create access and refresh tokens
       requestBody:
         required: true
         content:
@@ -154,17 +158,96 @@ paths:
       tags:
         - Auth
       responses:
-        '201':
-          description: New token created
+        '200':
+          description: New tokens created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Token'
+              allOf:
+                - properties:
+                    accessToken:
+                      $ref: '#/components/schemas/Token'
+                - properties:
+                    refreshToken:
+                      $ref: '#/components/schemas/Token'
+                - properties:
+                    expiresIn:
+                      type: integer
+                      description: |
+                        Expire time in seconds
+                - properties:
+                    user:
+                      $ref: '#/components/schemas/User'
           headers:
-            Location:
-              description: User URI
+            Set-Cookie:
+              description: Sets refresh token
               schema:
                 type: string
+                example: |
+                  refreshToken=aboba
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+      security: []
+  /auth/refresh:
+    post:
+      summary: Update access and refresh tokens
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Updated tokens
+          content:
+            application/json:
+              schema:
+              allOf:
+                - properties:
+                    accessToken:
+                      $ref: '#/components/schemas/Token'
+                - properties:
+                    refreshToken:
+                      $ref: '#/components/schemas/Token'
+                - properties:
+                    expiresIn:
+                      type: integer
+                      description: |
+                        Expire time in seconds
+                - properties:
+                    user:
+                      $ref: '#/components/schemas/User'
+          headers:
+            Set-Cookie:
+              description: Sets refresh token
+              schema:
+                type: string
+                example: |
+                  refreshToken=aboba
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+      security: []
+  /auth/logout:
+    post:
+      summary: |
+        Deletes refresh token
+      tags:
+        - Auth
+      responses:
+        '201':
+          description: Success
+          headers:
+            Set-Cookie:
+              description: Sets refresh token to empty
+              schema:
+                type: string
+                example: |
+                  refreshToken=
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -175,7 +258,7 @@ paths:
   /users/{id}/tasks:
     parameters:
       - schema:
-          type: integer
+          $ref: '#/components/schemas/Id'
         name: id
         in: path
         required: true
@@ -204,7 +287,7 @@ paths:
   /users/{user_id}/tasks/{task_id}:
     parameters:
       - schema:
-          type: integer
+          $ref: '#/components/schemas/Id'
         name: user_id
         in: path
         required: true
@@ -312,7 +395,7 @@ paths:
   /users/{user_id}/tasks/{task_id}/complete:
     parameters:
       - schema:
-          type: integer
+          $ref: '#/components/schemas/Id'
         name: user_id
         in: path
         required: true
@@ -355,7 +438,7 @@ paths:
   /users/{id}/character:
     parameters:
       - schema:
-          type: integer
+          $ref: '#/components/schemas/Id'
         name: id
         in: path
         required: true
@@ -425,7 +508,7 @@ paths:
   /users/{id}/items:
     parameters:
       - schema:
-          type: integer
+          $ref: '#/components/schemas/Id'
         name: id
         in: path
         required: true
@@ -477,7 +560,7 @@ paths:
   /users/{userId}/items/{itemId}:
     parameters:
       - schema:
-          type: integer
+          $ref: '#/components/schemas/Id'
         name: userId
         in: path
         required: true
@@ -508,7 +591,7 @@ paths:
   /users/{userId}/items/{itemId}/buy:
     parameters:
       - schema:
-          type: integer
+          $ref: '#/components/schemas/Id'
         name: userId
         in: path
         required: true
@@ -551,7 +634,7 @@ paths:
   /users/{userId}/items/{itemId}/equip:
     parameters:
       - schema:
-          type: integer
+          $ref: '#/components/schemas/Id'
         name: userId
         in: path
         required: true
@@ -582,7 +665,7 @@ paths:
   /users/{userId}/items/{itemId}/unequip:
     parameters:
       - schema:
-          type: integer
+          $ref: '#/components/schemas/Id'
         name: userId
         in: path
         required: true
@@ -630,11 +713,14 @@ components:
       minLength: 8
       maxLength: 100
       pattern: '^[A-Za-z0-9]\w{8,}$'
+    Id:
+      type: string
+      format: uuid
     User:
       type: object
       properties:
         id:
-          type: integer
+          $ref: '#/components/schemas/Id'
         email:
           $ref: '#/components/schemas/Email'
         nickname:
@@ -643,7 +729,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
         name:
           type: string
         description:
