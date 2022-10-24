@@ -3,8 +3,6 @@ package users
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/auth"
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/config"
 	"net/http"
 	"strconv"
 
@@ -22,9 +20,9 @@ func RegisterHandlers(mux *httprouter.Router, service Service, logger log.Logger
 	mux.POST("/users", accesslog.Log(errors.Handle(res.handlePost, logger), logger))
 	// TODO неидеоматичный endpoint
 	mux.GET("/activate/:link", accesslog.Log(errors.Handle(res.handleActivate, logger), logger))
-	mux.GET("/users/:id", accesslog.Log(errors.Handle(auth.Check(res.handleGet), logger), logger))
-	mux.DELETE("/users/:id", accesslog.Log(errors.Handle(auth.Check(res.handleDelete), logger), logger))
-	mux.PATCH("/users/:id", accesslog.Log(errors.Handle(auth.Check(res.handlePatch), logger), logger))
+	mux.GET("/users/:id", accesslog.Log(errors.Handle(res.handleGet, logger), logger))
+	mux.DELETE("/users/:id", accesslog.Log(errors.Handle(res.handleDelete, logger), logger))
+	mux.PATCH("/users/:id", accesslog.Log(errors.Handle(res.handlePatch, logger), logger))
 }
 
 type resource struct {
@@ -56,12 +54,11 @@ func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httpro
 	if err != nil {
 		return wrapDecode(err)
 	}
-	_, err = res.service.Create(&data)
+	user, err := res.service.Create(&data)
 	if err != nil {
 		return err
 	}
 	w.WriteHeader(http.StatusCreated)
-	// TODO http.Redirect
 	w.Header().Set("Location", fmt.Sprintf("%v/users/%v", config.Get("API_SERVER"), strconv.FormatInt(int64(user.Id), 10)))
 	return nil
 }

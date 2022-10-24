@@ -40,10 +40,10 @@ func (repo repository) GetUser(email entity.Email, userId int) (entity.User, err
 		err error
 	)
 	if userId == -1 {
-		row, err = repo.db.Query("SELECT id,email,nickname,password,is_activated FROM users WHERE email = $1",
+		row, err = repo.db.Query("SELECT id,email,nickname,password FROM users WHERE email = $1",
 			email)
 	} else {
-		row, err = repo.db.Query("SELECT id,email,nickname,password,is_activated FROM users WHERE id = $1",
+		row, err = repo.db.Query("SELECT id,email,nickname,password FROM users WHERE id = $1",
 			userId)
 	}
 	if err != nil {
@@ -52,7 +52,7 @@ func (repo repository) GetUser(email entity.Email, userId int) (entity.User, err
 	defer row.Close()
 	user := entity.User{}
 	row.Next()
-	err = row.Scan(&user.Id, &user.Email, &user.Nickname, &user.Password, &user.IsActivated)
+	err = row.Scan(&user.Id, &user.Email, &user.Nickname, &user.Password)
 	return user, err
 }
 

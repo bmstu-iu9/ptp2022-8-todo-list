@@ -7,15 +7,6 @@ import (
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 )
 
-// Problem represents error description. Conforms RFC7807
-type Problem struct {
-	Type     string `json:"type,omitempty"`
-	Title    string `json:"title,omitempty"`
-	Status   int    `json:"status,omitempty"`
-	Detail   string `json:"detail,omitempty"`
-	Instance string `json:"instance,omitempty"`
-}
-
 func NotFound(w http.ResponseWriter, logger log.Logger) {
 	w.WriteHeader(http.StatusNotFound)
 	w.Header().Set("Content-Type", "application/json")

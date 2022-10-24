@@ -32,7 +32,7 @@ func (res *resource) handleLog(w http.ResponseWriter, r *http.Request, p httprou
 	}
 	userData, err := res.service.Login(data)
 	if err != nil {
-		return fmt.Errorf("%w: %v", errors.ErrLoginFailed, err)
+		return fmt.Errorf("%w: %v", errors.ErrAuthentication, err)
 	}
 	http.SetCookie(w, &http.Cookie{
 		Name:     "refreshToken",
@@ -50,12 +50,12 @@ func (res *resource) handleLog(w http.ResponseWriter, r *http.Request, p httprou
 func (res *resource) handleLogOut(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
 	cookie, err := r.Cookie("refreshToken")
 	if err != nil {
-		return fmt.Errorf("%w: %v", errors.ErrUnauthorized, err)
+		return fmt.Errorf("%w: %v", errors.ErrAuthentication, err)
 	}
 	refreshToken := cookie.Value
 	err = res.service.Logout(refreshToken)
 	if err != nil {
-		return fmt.Errorf("%w: %v", errors.ErrLogoutFailed, err)
+		return err
 	}
 	http.SetCookie(w, &http.Cookie{
 		Name:    "refreshToken",
@@ -70,12 +70,12 @@ func (res *resource) handleLogOut(w http.ResponseWriter, r *http.Request, p http
 func (res *resource) handleRefresh(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
 	cookie, err := r.Cookie("refreshToken")
 	if err != nil {
-		return fmt.Errorf("%w: %v", errors.ErrUnauthorized, err)
+		return fmt.Errorf("%w: %v", errors.ErrAuthentication, err)
 	}
 	refreshToken := cookie.Value
 	userData, err := res.service.Refresh(refreshToken)
 	if err != nil {
-		return fmt.Errorf("%w: %v", errors.ErrUnauthorized, err)
+		return fmt.Errorf("%w: %v", errors.ErrAuthentication, err)
 	}
 	http.SetCookie(w, &http.Cookie{
 		Name:     "refreshToken",

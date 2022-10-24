@@ -1,16 +1,14 @@
 package users
 
 import (
-	"crypto/md5"
 	"fmt"
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/config"
 	"net/smtp"
 
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/config"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
-	"github.com/google/uuid"
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/errors"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/validation"
+	"github.com/google/uuid"
 )
 
 // Service encapsulates usecase logic for users.
@@ -141,22 +139,22 @@ func (s service) Delete(id int64) (entity.UserDto, error) {
 	}
 	err = s.repo.CleanUserInventory(id)
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
 	return entity.NewUserDto(user), nil
 }
 
 // Create creates User from input data.
-func (s service) Create(input *CreateUserRequest) (User, error) {
+func (s service) Create(input *CreateUserRequest) (entity.UserDto, error) {
 	err := input.validate()
 	if err != nil {
 		return entity.UserDto{}, err
 	}
 	activationLink, _ := uuid.NewUUID()
 	entityUser := entity.User{
-		Email:    input.Email,
-		Nickname: input.Nickname,
-		Password: *entity.NewPassword(fmt.Sprintf("%x", md5.Sum([]byte(input.Password)))),
+		Email:    entity.Email(input.Email),
+		Nickname: entity.Nickname(input.Nickname),
+		Password: entity.Password(input.Password), // TODO: хеширование
 	}
 	err = s.repo.Create(&entityUser, activationLink.String())
 	if err != nil {
@@ -168,7 +166,7 @@ func (s service) Create(input *CreateUserRequest) (User, error) {
 	}
 	err = s.repo.InitUserInventory(entityUser.Id)
 	if err != nil {
-		return User{}, err
+		return entity.UserDto{}, err
 	}
 	return entity.NewUserDto(entityUser), nil
 }
@@ -186,7 +184,7 @@ func (s service) Update(id int64, input *UpdateUserRequest) (entity.UserDto, err
 	}
 
 	if Password(entityUser.Password) != input.CurrentPassword {
-		return User{}, errors.ErrAuthentication
+		return entity.UserDto{}, errors.ErrAuthentication
 	}
 
 	if input.Email != nil {

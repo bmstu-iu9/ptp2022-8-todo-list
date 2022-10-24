@@ -1,12 +1,11 @@
 package auth
 
 import (
-	"crypto/md5"
 	"errors"
-	"fmt"
+	"time"
+
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/entity"
 	jwt "github.com/golang-jwt/jwt/v4"
-	"time"
 )
 
 const JWT_ACCESS_SECRET = "secret-key"
@@ -43,6 +42,7 @@ type LoginUserRequest struct {
 	Email    entity.Email    `json:"email"`
 	Password entity.Password `json:"password"`
 }
+
 type UserData struct {
 	User   entity.UserDto
 	Tokens Token
@@ -57,21 +57,19 @@ type Claims struct {
 // Login authorizes the user.
 func (s service) Login(input LoginUserRequest) (UserData, error) {
 	err := s.repo.DeleteDeadUsers()
+		return UserData{}, err
+	if err != nil {
+	}
+	_, err = s.repo.GetUser(input.Email, -1)
 	if err != nil {
 		return UserData{}, err
 	}
-	entityUser, err := s.repo.GetUser(input.Email, -1)
-	if err != nil {
-		return UserData{}, err
-	}
-	if !entityUser.IsActivated {
-		return UserData{}, errors.New("u did not verify your email adress")
-	}
-	isPassEquals := entityUser.Password == *entity.NewPassword(fmt.Sprintf("%x", md5.Sum([]byte(input.Password))))
+	isPassEquals := true
+	// TODO: сравнение хеша пароля
 	if !isPassEquals {
 		return UserData{}, errors.New("incorrect password")
 	}
-	user := entity.NewUserDto(entityUser)
+	user := entity.UserDto{} // TODO
 	tokens, err := GenerateTokens(user.Email, int(user.Id))
 	if err != nil {
 		return UserData{}, err
@@ -99,11 +97,11 @@ func (s service) Refresh(refreshToken string) (UserData, error) {
 	if !isTokenValid || err != nil {
 		return UserData{}, errors.New("wrong token")
 	}
-	entityUser, err := s.repo.GetUser("", tokenFromDb.userId)
+	_, err = s.repo.GetUser("", tokenFromDb.userId)
 	if err != nil {
 		return UserData{}, err
 	}
-	user := entity.NewUserDto(entityUser)
+	user := entity.UserDto{}
 	tokens, err := GenerateTokens(user.Email, int(user.Id))
 	if err != nil {
 		return UserData{}, err
