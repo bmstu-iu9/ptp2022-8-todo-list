@@ -12,6 +12,7 @@ import (
 const (
 	CREATE = iota
 	REWRITE
+	DECLINE
 )
 
 // CreateTaskRequest represents task creation / complete update request
@@ -60,11 +61,7 @@ func (f *Name) validate() bool {
 		return false
 	}
 
-	if *f == "" {
-		return true
-	}
-
-	return validation.ValidateField(string(*f), 1, 255, ".*")
+	return validation.ValidateField(string(*f), 0, 255, ".*")
 }
 
 func (f *Text) validate() bool {
@@ -197,7 +194,8 @@ func (s service) Set(request *SetTaskRequest) (entity.Task, error) {
 		return entity.Task{}, fmt.Errorf("%w: %v", errors.ErrValidation, err)
 	}
 
-	task := &entity.Task{
+	newTask := &entity.Task{
+		Id:                   request.TaskId,
 		UserId:               request.UserId,
 		Name:                 entity.Name(request.Name),
 		Description:          entity.Text(request.Description),
@@ -208,24 +206,24 @@ func (s service) Set(request *SetTaskRequest) (entity.Task, error) {
 		Status:               entity.Status(request.Status),
 	}
 
-	switch request.Mode {
-	case CREATE:
-		err = s.r.Create(task)
-	case REWRITE:
-		err = s.r.Update(task)
-	}
+	_, err = s.GetById(newTask.UserId, newTask.Id)
 
-	return *task, err
+	switch err {
+	case errors.ErrPathParameter:
+		request.Mode = DECLINE
+		return entity.Task{}, err
+	case errors.ErrNotFound:
+		request.Mode = CREATE
+		err = s.r.Create(newTask)
+		return *newTask, err
+	default:
+		request.Mode = REWRITE
+		err = s.r.Update(newTask)
+		return *newTask, err
+	}
 }
 
 func (t *UpdateTaskRequest) Validate() error {
-	fmt.Println("name", t.Name.validate())
-	fmt.Println("desc", t.Description.validate())
-	fmt.Println("due", t.DueDate.validate())
-	fmt.Println("hum", t.SchtirlichHumorescue.validate())
-	fmt.Println("lbs", t.Labels.validate())
-	fmt.Println("st", t.Status.validate())
-
 	if !(t.Name.validate() &&
 		t.Description.validate() &&
 		t.DueDate.validate() &&

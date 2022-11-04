@@ -22,7 +22,7 @@ func RegisterHandlers(mux *httprouter.Router, service Service, logger log.Logger
 	mux.PUT("/users/:user_id/tasks/:task_id", accesslog.Log(errors.Handle(res.handlePut, res.logger), res.logger))
 	mux.PATCH("/users/:user_id/tasks/:task_id", accesslog.Log(errors.Handle(res.handlePatch, res.logger), res.logger))
 	mux.DELETE("/users/:user_id/tasks/:task_id", accesslog.Log(errors.Handle(res.handleDelete, res.logger), res.logger))
-	mux.POST("/users/:user_id/tasks/:task_id/complete", accesslog.Log(errors.Handle(res.handlePost, res.logger), res.logger))
+	mux.POST("/users/:user_id/tasks/:task_id/complete", accesslog.Log(errors.Handle(res.handleComplete, res.logger), res.logger))
 }
 
 type resource struct {
@@ -91,19 +91,11 @@ func (res *resource) handlePut(w http.ResponseWriter, r *http.Request, p httprou
 		return fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
 	}
 
-	request := SetTaskRequest{UserId: int64(userId)}
+	request := SetTaskRequest{UserId: int64(userId), TaskId: int64(taskId)}
 	err = json.NewDecoder(r.Body).Decode(&request)
 
 	if err != nil {
 		return fmt.Errorf("%w: %v", errors.ErrBodyDecode, err)
-	}
-
-	_, err = res.service.GetById(int64(userId), int64(taskId))
-
-	if err != nil {
-		request.Mode = CREATE
-	} else {
-		request.Mode = REWRITE
 	}
 
 	task, err := res.service.Set(&request)
@@ -186,7 +178,7 @@ func (res *resource) handleDelete(w http.ResponseWriter, r *http.Request, p http
 	return nil
 }
 
-func (res *resource) handlePost(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
+func (res *resource) handleComplete(w http.ResponseWriter, r *http.Request, p httprouter.Params) error {
 	userId, err := strconv.Atoi(p.ByName("user_id"))
 
 	if err != nil {

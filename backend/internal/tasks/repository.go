@@ -87,13 +87,27 @@ func (r repository) Get(userId int64) ([]entity.Task, error) {
 
 // Get reads the task with specified id from database.
 func (r repository) GetById(userId, taskId int64) (entity.Task, error) {
-	q := "SELECT id, user_id, name, description, created_on, due_date, schtirlich_humorescue, labels, cur_status FROM tasks WHERE id = $1 AND user_id = $2;"
+	q := "SELECT * FROM users WHERE id = $1;"
+
+	user := entity.User{}
+	err := r.db.QueryRow(q, userId).Scan(
+		&user.Id,
+		&user.Email,
+		&user.Nickname,
+		&user.Password,
+	)
+
+	if err != nil {
+		return entity.Task{}, fmt.Errorf("%w: %v", errors.ErrPathParameter, err)
+	}
+
+	q = "SELECT id, user_id, name, description, created_on, due_date, schtirlich_humorescue, labels, cur_status FROM tasks WHERE id = $1 AND user_id = $2;"
 
 	task := entity.Task{}
 	var task_created_on string
 	var task_due_date string
 
-	err := r.db.QueryRow(q, taskId, userId).Scan(
+	err = r.db.QueryRow(q, taskId, userId).Scan(
 		&task.Id,
 		&task.UserId,
 		&task.Name,

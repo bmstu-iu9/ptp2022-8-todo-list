@@ -3,7 +3,7 @@
 FROM golang:1.17-alpine AS base
 WORKDIR /src
 ENV CGO_ENABLED=0
-COPY go.* .
+COPY go.* ./
 RUN --mount=type=cache,target=/go/pkg/mod \
     go mod download
 
