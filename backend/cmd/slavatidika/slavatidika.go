@@ -2,15 +2,17 @@ package main
 
 import (
 	"fmt"
-	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/items"
 	"net/http"
 	"os"
+
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/items"
 
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/config"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/db"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/log"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/ping"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/router"
+	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/tasks"
 	"github.com/bmstu-iu9/ptp2022-8-todo-list/backend/internal/users"
 )
 
@@ -28,6 +30,10 @@ func main() {
 	users.RegisterHandlers(
 		mux,
 		users.NewService(users.NewRepository(db, logger)),
+		logger)
+	tasks.RegisterHandlers(
+		mux,
+		tasks.NewService(tasks.NewRepository(db, logger)),
 		logger)
 	items.RegisterHandlers(
 		mux,

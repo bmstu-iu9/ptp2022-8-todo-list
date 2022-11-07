@@ -3,7 +3,7 @@ test: lint unit-test-with-coverage
 
 .PHONY: build
 build:
-	@docker build -t backend .
+	@DOCKER_BUILDKIT=1 docker build -t backend .
 
 .PHONY: run
 run: build
@@ -12,14 +12,14 @@ run: build
 .PHONY: unit-test
 unit-test: db
 
-	@docker build . --target unit-test --network=host
+	@DOCKER_BUILDKIT=1 docker build . --target unit-test --network=host
 .PHONY: unit-test-with-coverage
 unit-test-with-coverage: unit-test
-	@docker build . --target coverage --output ./ --network=host
+	@DOCKER_BUILDKIT=1 docker build . --target coverage --output ./ --network=host
 
 .PHONY: lint
 lint:
-	@docker build . --target lint
+	@DOCKER_BUILDKIT=1 docker build . --target lint
 
 .PHONY: db
 db:
