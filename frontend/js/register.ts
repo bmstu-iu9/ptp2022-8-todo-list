@@ -1,6 +1,5 @@
-// @ts-check
-
 window.onload = function () {
+    if (localStorage.getItem('theme') === 'light') changeModeLogin()
     const re = new RegExp(
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     )
@@ -79,4 +78,10 @@ window.onload = function () {
             password!.setAttribute('type', 'password')
         }
     })
+}
+
+function changeModeLogin() {
+    document.body.classList.toggle('bg-dark')
+    document.body.classList.toggle('bg-light')
+    document.body.classList.toggle('text-white')
 }

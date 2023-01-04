@@ -1,37 +1,119 @@
+.dark-mode {
+  background-color: #212529;
+  color: #fff;
+
+  .background {
+    background-color: #212529;
+  }
+
+  .menu header .nav-masthead {
+    .sun-moon {
+      color: rgba(255, 255, 255, 0.5);
+
+      .moon {
+        @media screen and (max-width: 768px) {
+          height: 30px;
+          width: 30px;
+        }
+
+        @media screen and (min-width: 768px) {
+          height: 40px;
+          width: 40px;
+        }
+      }
+    }
+
+    .nav-link {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .nav-link:hover,
+    .nav-link:focus {
+      border-bottom-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .active {
+      color: #fff;
+      border-bottom-color: #fff;
+    }
+  }
+
+  footer .footer__text {
+    color: rgb(108, 117, 125);
+  }
+}
+
+.light-mode {
+  color: #212529;
+  background-color: #f8f9fa;
+
+  .background {
+    background-color: #f8f9fa;
+  }
+
+  .menu header {
+    .sun-moon {
+      color: rgba(0, 0, 0, 0.5);
+
+      .moon {
+        @media screen and (max-width: 768px) {
+          height: 27px;
+          width: 27px;
+        }
+
+        @media screen and (min-width: 768px) {
+          height: 35px;
+          width: 35px;
+        }
+      }
+    }
+
+    .nav-masthead .nav-link {
+      color: rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-masthead .nav-link:hover,
+    .nav-masthead .nav-link:focus {
+      border-bottom-color: rgba(0, 0, 0, 0.25);
+    }
+
+    .nav-masthead .active {
+      color: rgba(0, 0, 0);
+      border-bottom-color: rgba(0, 0, 0);
+    }
+  }
+
+  footer .footer__text {
+    color: rgb(43, 33, 33);
+  }
+}
+
 body {
   font: max(13px, min(26px, 6vw)) Tahoma, sans-serif;
   margin: 0;
   width: 100%;
-  background: linear-gradient(150deg, rgba(94, 0, 122, 0.6) 0%,
-      rgba(2, 0, 129, .5) 30%,
-      rgba(65, 0, 126, .5) 40%,
-      rgb(66, 0, 110, .5) 50%,
-      rgba(27, 0, 126, .5) 80%,
-      rgba(72, 0, 105, .5) 100%);
+  background: linear-gradient(
+    150deg,
+    rgba(94, 0, 122, 0.6) 0%,
+    rgba(2, 0, 129, 0.5) 30%,
+    rgba(65, 0, 126, 0.5) 40%,
+    rgb(66, 0, 110, 0.5) 50%,
+    rgba(27, 0, 126, 0.5) 80%,
+    rgba(72, 0, 105, 0.5) 100%
+  );
 
   .menu {
-
     margin-bottom: 5vw;
 
     header {
-
       padding: 20px 0 20px;
 
       @media screen and (max-width: 768px) {
         font-size: 20px;
 
-        .sun-moon {
+        .nav-masthead .sun-moon {
           height: 30px;
-
-          :not(.moon) {
-            height: 30px;
-            width: 30px;
-          }
-
-          .moon {
-            height: 27px;
-            width: 27px;
-          }
+          width: 30px;
         }
 
         .signin {
@@ -40,8 +122,9 @@ body {
       }
 
       @media screen and (min-width: 768px) {
-        .signin {
-          margin-right: 4vw;
+        .nav-masthead .sun-moon {
+          height: 40px;
+          width: 40px;
         }
 
         .logo {
@@ -49,68 +132,35 @@ body {
           margin-right: 1.5rem;
         }
 
-        .sun-moon {
-          :not(.moon) {
-            height: 40px;
-            width: 40px;
-          }
-
-          .moon {
-            height: 35px;
-            width: 35px;
-          }
+        .signin {
+          margin-right: 4vw;
         }
       }
 
-      .sun-moon {
-        color: rgba(255, 255, 255, .5);
-        margin-left: 1rem;
-      }
+      .nav-masthead {
+        .sun-moon {
+          @media screen and (min-width: 402px) {
+            margin-left: 1rem;
+          }
+          @media screen and (max-width: 401px) {
+            margin-top: 10px;
+          }
+        }
 
-      .nav-masthead .nav-link {
-        border-bottom: .25rem solid transparent;
-      }
+        .nav-link {
+          border-bottom: 0.25rem solid transparent;
+        }
 
-      .nav-masthead .nav-link+.nav-link {
-        margin-left: 1rem;
-      }
-
-      .nav-masthead .nav-link__dark {
-        color: rgba(255, 255, 255, .5);
-      }
-
-      .nav-masthead .nav-link__dark:hover,
-      .nav-masthead .nav-link__dark:focus {
-        border-bottom-color: rgba(255, 255, 255, .25);
-      }
-
-
-      .nav-masthead .active__dark {
-        color: #fff;
-        border-bottom-color: #fff;
-      }
-
-      .nav-masthead .nav-link__light {
-        color: rgba(0, 0, 0, .5);
-      }
-
-      .nav-masthead .nav-link__light:hover,
-      .nav-masthead .nav-link__light:focus {
-        border-bottom-color: rgba(0, 0, 0, .25);
-      }
-
-      .nav-masthead .active__light {
-        color: rgba(0, 0, 0);
-        border-bottom-color: rgba(0, 0, 0);
+        .nav-link + .nav-link {
+          margin-left: 1rem;
+        }
       }
 
       .logo {
         font-size: max(14px, min(30px, 6vw));
-        margin-top: -0.3vw;
+        margin-top: -0.1rem;
       }
-
     }
-
   }
 
   .main {
@@ -119,7 +169,14 @@ body {
     margin: -4.5vw auto calc(3vw + 50px);
 
     img {
-      margin: 0 0 30px //calc(3vw + 30px);
+      margin: 0 0 30px;
+      @media screen and (max-width: 768px) {
+        border-radius: 10px;
+      }
+
+      @media screen and (min-width: 768px) {
+        border-radius: 15px;
+      }
     }
 
     h1 {
@@ -132,7 +189,6 @@ body {
       border-radius: 10px;
     }
 
-
     @media screen and (min-width: 768px) {
       border-radius: 15px;
     }
@@ -142,6 +198,16 @@ body {
     .img {
       margin: 10px 20px;
       padding: 10px 10px;
+
+      img {
+        @media screen and (max-width: 768px) {
+          border-radius: 10px;
+        }
+
+        @media screen and (min-width: 768px) {
+          border-radius: 15px;
+        }
+      }
     }
 
     h1 {
@@ -159,18 +225,7 @@ body {
     font-size: max(10px, min(20px, 4vw));
   }
 
-  footer {
-    .footer__text__dark {
-      color: rgb(108, 117, 125)
-    }
-
-    .footer__text__light {
-      color: rgb(43, 33, 33)
-    }
-
-    .us:hover {
-      color: rgb(73, 188, 186);
-    }
+  footer .us:hover {
+    color: rgb(73, 188, 186);
   }
-
 }
